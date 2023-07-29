@@ -14,11 +14,11 @@ jobs:
         with:
           php-version: ${{matrix.version}}
       - name: Install sdl2
-        run: sudo apt install -y libsdl2-dev
+        run: sudo apt install -y libsdl2-dev xvfb
       - name: Build sdl2
         run: |
           phpize
-          ./configure --enable-sdl2
+          ./configure
           make
       - name: Test sdl2
         run: make test TESTS=tests
@@ -50,7 +50,7 @@ jobs:
       - name: phpize
         run: phpize
       - name: configure
-        run: configure --enable-sdl2 --with-prefix=${{steps.setup-php.outputs.prefix}}
+        run: configure --with-prefix=${{steps.setup-php.outputs.prefix}}
       - name: make
         run: nmake
       - name: test
