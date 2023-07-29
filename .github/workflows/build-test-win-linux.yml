@@ -13,6 +13,8 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{matrix.version}}
+      - name: Install sdl2
+        run: apt-get install -y libsdl2-dev
       - name: Build sdl2
         run: |
           phpize
