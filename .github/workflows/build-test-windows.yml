@@ -1,0 +1,39 @@
+name: Build and test on windows
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  main:
+    strategy:
+      matrix:
+        os: [ windows-2019, windows-2022 ]
+        php: [ "8.1", "8.0", "7.4", "7.3", "7.2", "7.1" ]
+        arch: [ x64, x86 ]
+        ts: [ ts, nts ]
+        exclude:
+          - { os: windows-2019, php: "8.1" }
+          - { os: windows-2019, php: "8.0" }
+          - { os: windows-2019, php: "7.4" }
+          - { os: windows-2019, php: "7.3" }
+          - { os: windows-2022, php: "7.2" }
+          - { os: windows-2022, php: "7.1" }
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - id: setup-php-sdk
+        uses: cmb69/setup-php-sdk@v0.5
+        with:
+          version: 8.0
+          arch: x64
+          ts: nts
+      - uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+          toolset: ${{steps.setup-php-sdk.outputs.toolset}}
+      - run: phpize
+      - run: configure --enable-dbase --with-prefix=${{steps.setup-php-sdk.outputs.prefix}}
+      - run: nmake
+      - run: nmake test TESTS=tests
