@@ -13,7 +13,6 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{matrix.version}}
-          tools: phpize
       - name: Install sdl2
         run: sudo apt install -y libsdl2-dev xvfb
       - name: Build sdl2
@@ -39,15 +38,16 @@ jobs:
       - name: Checkout sdl2
         uses: actions/checkout@v2
       - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+        id: setup-php
+        uses: cmb69/setup-php-sdk@v0.6
         with:
-          php-version: ${{matrix.version}}
-          tools: phpize
-      - name: phpize
-        run: phpize
-      - name: configure
-        run: configure --with-prefix=${{steps.setup-php.outputs.prefix}}
-      - name: make
-        run: nmake
+          version: ${{matrix.version}}
+          arch: ${{matrix.arch}}
+          ts: ${{matrix.ts}}
+      - name: Build sdl2
+        run: |
+          phpize
+          ./configure
+          nmake
       - name: test
-        run: nmake test TESTS=tests
+        run: nmake test
