@@ -55,6 +55,9 @@ jobs:
         run: |
           curl -LO https://github.com/libsdl-org/SDL/releases/download/release-2.28.1/SDL2-devel-2.28.1-VC.zip
           7z x SDL2-devel-2.28.1-VC.zip -o..\deps
+          move ..\deps\SDL2-2.28.1\include\* ..\deps\include\
+          move ..\deps\SDL2-2.28.1\lib\* ..\deps\lib\
+          move ..\deps\SDL2-2.28.1\lib\SDL2.dll ..\deps\bin\
           move .\src\* .
           rmdir .\src
           rm SDL2-devel-2.28.1-VC.zip
@@ -63,7 +66,7 @@ jobs:
       - name: Build sdl2 (phpize)
         run: phpize
       - name: Build sdl2 (configure)
-        run: configure --enable-sdl=shared --with-prefix=${{steps.sdk.outputs.prefix}} --with-php-build=..\deps\SDL2-2.28.1
+        run: configure --enable-sdl=shared --with-prefix=${{steps.sdk.outputs.prefix}}
       - name: Build sdl2 (nmake)
         run: nmake
       - name: test
