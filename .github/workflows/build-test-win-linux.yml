@@ -27,35 +27,60 @@ jobs:
           make test TESTS=tests
           killall -9 Xvfb
   windows:
+    name: "Build and Tests (Windows, PHP8)"
+
     defaults:
       run:
         shell: cmd
+
     strategy:
+      fail-fast: false
       matrix:
-          version: ['8.0', '8.1']
-          arch: [x64]
-          ts: [ts]
-    runs-on: windows-latest
+        php: ["8.2", "8.1", "8.0"]
+        arch: ["x64"] #, "x86"
+        ts: ["ts", "nts"]
+
+    runs-on: windows-2022
+
     steps:
-      - name: Checkout sdl2
-        uses: actions/checkout@v2
-      - name: Setup PHP
-        id: setup-php
-        uses: cmb69/setup-php-sdk@v0.6
+      - name: "Checkout"
+        uses: actions/checkout@v3
+
+      - name: "Install PHP SDK ${{matrix.php}}"
+        uses: codemasher/setup-php-sdk@split-file
+        id: sdk
         with:
-          version: ${{matrix.version}}
+          version: ${{matrix.php}}
           arch: ${{matrix.arch}}
           ts: ${{matrix.ts}}
-      - name: Enable Developer Command Prompt
-        uses: ilammy/msvc-dev-cmd@v1
-        with:
-          arch: ${{matrix.arch}}
-          toolset: ${{steps.setup-php.outputs.toolset}}
-      - name: Build sdl2 (phpize)
+          deps: liblzma
+
+      - name: "phpize"
         run: phpize
-      - name: Build sdl2 (configure)
-        run: configure
-      - name: Build sdl2 (nmake)
+
+      - name: "configure build"
+        run: configure --enable-sdl --with-prefix=${{steps.sdk.outputs.prefix}}
+
+      - name: "make"
         run: nmake
-      - name: test
+
+      - name: "test"
         run: nmake test
+
+      - name: "Package"
+        run: |
+          md .artifact
+          copy ${{steps.sdk.outputs.buildpath}}\php_sdl.dll .artifact\php_sdl-${{steps.sdk.outputs.file_tag}}.dll
+
+      - name: "Upload artifacts"
+        uses: actions/upload-artifact@v3
+        if: contains(github.ref_type, 'branch')
+        with:
+          name: php_sdl-php8-${{github.sha}}
+          path: .artifact
+
+      - name: "Attach file to release"
+        uses: softprops/action-gh-release@v1
+        if: contains(github.ref_type, 'tag')
+        with:
+          files: .artifact\php_sdl-${{steps.sdk.outputs.file_tag}}.dll
