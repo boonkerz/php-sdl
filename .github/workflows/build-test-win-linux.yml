@@ -58,7 +58,7 @@ jobs:
       - name: Build sdl2 (phpize)
         run: phpize
       - name: Build sdl2 (configure)
-        run: configure --enable-sdl --with--sdl --with-prefix=${{steps.sdk.outputs.prefix}}
+        run: configure --with--sdl --with-prefix=${{steps.sdk.outputs.prefix}}
       - name: Build sdl2 (nmake)
         run: nmake
       - name: test
