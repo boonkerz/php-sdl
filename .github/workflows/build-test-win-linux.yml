@@ -21,7 +21,11 @@ jobs:
           ./configure
           make
       - name: Test sdl2
-        run: make test TESTS=tests
+        run: |
+          Xvfb :99 -screen 0 800x600x24 -ac &
+          export DISPLAY=:99
+          make test TESTS=tests
+          killall -9 Xvfb
   windows:
     defaults:
       run:
