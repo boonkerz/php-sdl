@@ -46,6 +46,11 @@ jobs:
           version: ${{matrix.version}}
           arch: ${{matrix.arch}}
           ts: ${{matrix.ts}}
+      - name: Enable Developer Command Prompt
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: ${{matrix.arch}}
+          toolset: ${{steps.setup-php.outputs.toolset}}
       - name: Build sdl2 (phpize)
         run: phpize
       - name: Build sdl2 (configure)
