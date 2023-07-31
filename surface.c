@@ -276,8 +276,12 @@ PHP_FUNCTION(SDL_SaveBMP_RW)
 		php_error_docref(NULL, E_WARNING, "Invalid SDL_RWops object");
 		RETURN_LONG(-1);
 	}
-
-	result = SDLCALL SDL_SaveBMP_RW(surface, rwops, 0);
+	#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+		result = SDL_SaveBMP_RW(surface, rwops, 0);
+	#else
+		result = SDLCALL SDL_SaveBMP_RW(surface, rwops, 0);
+	#endif
+	
 
 	if (freedst)
 	{
@@ -320,7 +324,11 @@ PHP_FUNCTION(SDL_SaveBMP)
 	rwops = zval_to_sdl_rwops(&z_rwops);
 	if (rwops)
 	{
-		result = SDLCALL SDL_SaveBMP_RW(surface, rwops, 0);
+		#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+			result = SDL_SaveBMP_RW(surface, rwops, 0);
+		#else
+			result = SDLCALL SDL_SaveBMP_RW(surface, rwops, 0);
+		#endif
 	}
 	zval_dtor(&z_rwops);
 
