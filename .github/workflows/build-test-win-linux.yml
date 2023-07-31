@@ -56,7 +56,7 @@ jobs:
           curl -LO https://github.com/libsdl-org/SDL/releases/download/release-2.28.1/SDL2-devel-2.28.1-VC.zip
           7z x SDL2-devel-2.28.1-VC.zip -o..\deps
           xcopy ..\deps\SDL2-2.28.1\include\* ..\deps\include\
-          xcopy ..\deps\SDL2-2.28.1\lib\x64\* ..\deps\lib
+          xcopy ..\deps\SDL2-2.28.1\lib\x64\* ..\deps\lib\
           xcopy ..\deps\SDL2-2.28.1\lib\SDL2.dll ..\deps\bin\SDL2.dll
           rm SDL2-devel-2.28.1-VC.zip
           dir ..\deps\include
