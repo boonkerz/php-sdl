@@ -59,32 +59,32 @@ if test "$PHP_SDL" != "no"; then
     AC_DEFINE(HAVE_SDL_GETREVISIONNUMBER, 1, [ ])
   ])
 
-  SDL_SOURCE_FILES="src/blendmode.c \
-	src/cpuinfo.c \
-	src/error.c \
-	src/event.c \
-	src/filesystem.c \
-	src/glcontext.c \
-	src/joystick.c \
-	src/keyboard.c \
-	src/messagebox.c \
-	src/mouse.c \
-	src/mutex.c \
-	src/php_sdl.c \
-	src/pixels.c \
-	src/platform.c \
-	src/power.c \
-	src/rect.c \
-	src/render.c \
-	src/rwops.c \
-	src/sdl.c \
-	src/shape.c \
-	src/surface.c \
-	src/timer.c \
-	src/version.c \
-	src/video.c \
-	src/window.c"
+  SDL_SOURCE_FILES="blendmode.c \
+	cpuinfo.c \
+	error.c \
+	event.c \
+	filesystem.c \
+	glcontext.c \
+	joystick.c \
+	keyboard.c \
+	messagebox.c \
+	mouse.c \
+	mutex.c \
+	php_sdl.c \
+	pixels.c \
+	platform.c \
+	power.c \
+	rect.c \
+	render.c \
+	rwops.c \
+	sdl.c \
+	shape.c \
+	surface.c \
+	timer.c \
+	version.c \
+	video.c \
+	window.c"
 
   PHP_NEW_EXTENSION(sdl, $SDL_SOURCE_FILES, $ext_shared,, $PHP_SDL_CFLAGS)
-  PHP_ADD_BUILD_DIR($ext_builddir/src)
+  PHP_ADD_BUILD_DIR($ext_builddir)
 fi
