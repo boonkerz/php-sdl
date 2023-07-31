@@ -59,6 +59,21 @@ if test "$PHP_SDL" != "no"; then
     AC_DEFINE(HAVE_SDL_GETREVISIONNUMBER, 1, [ ])
   ])
 
+  LIBNAME=SDL2_ttf # you may want to change this
+  LIBSYMBOL=TTF_Init # you most likely want to change this
+
+   PHP_CHECK_LIBRARY($LIBNAME, $LIBSYMBOL,
+  [
+    PHP_ADD_LIBRARY_WITH_PATH($LIBNAME, $SDL_TTF_DIR/$PHP_LIBDIR, SDL_TTF_SHARED_LIBADD)
+    AC_DEFINE(HAVE_SDL_TTF_FEATURE, 1, [ ])
+  ],[
+    AC_MSG_ERROR([FEATURE not supported by your sdl_ttf library.])
+  ],[
+    -L$SDL_TTF_DIR/$PHP_LIBDIR -lm
+  ])
+  
+  PHP_SUBST(SDL_TTF_SHARED_LIBADD)
+
   SDL_SOURCE_FILES="blendmode.c \
 	cpuinfo.c \
 	error.c \

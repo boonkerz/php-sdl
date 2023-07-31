@@ -12,7 +12,13 @@ PHP_FUNCTION(SDL_TTF_OpenFont)
 	Z_PARAM_LONG(size)
 	ZEND_PARSE_PARAMETERS_END();
 
-	TTF_Font *font = TTF_OpenFont(name, size);
+	#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+		TTF_Font *font = SDLCALL TTF_OpenFont(name, size);
+	#else
+		TTF_Font *font = TTF_OpenFont(name, size);
+	#endif
+
+	
 
 	ttf_font_to_zval(font, return_value);
 }
