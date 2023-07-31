@@ -64,7 +64,7 @@ jobs:
       - name: Build sdl2 (phpize)
         run: phpize
       - name: Build sdl2 (configure)
-        run: configure --enable-sdl=shared --with-prefix=${{steps.sdk.outputs.prefix}}
+        run: configure --enable-sdl=shared --with-prefix=${{steps.sdk.outputs.prefix}} --with-php-build=..\deps
       - name: Build sdl2 (nmake)
         run: nmake
       - name: test
