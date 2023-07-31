@@ -55,9 +55,9 @@ jobs:
         run: |
           curl -LO https://github.com/libsdl-org/SDL/releases/download/release-2.28.1/SDL2-devel-2.28.1-VC.zip
           7z x SDL2-devel-2.28.1-VC.zip -o..\deps
-          move ..\deps\SDL2-2.28.1\include\* ..\deps\include\
-          move ..\deps\SDL2-2.28.1\lib\* ..\deps\lib\
-          move ..\deps\SDL2-2.28.1\lib\SDL2.dll ..\deps\bin\
+          move ..\deps\SDL2-2.28.1\include\* ..\deps\include
+          move ..\deps\SDL2-2.28.1\lib\* ..\deps\lib
+          move ..\deps\SDL2-2.28.1\lib\SDL2.dll ..\deps\bin
           rm SDL2-devel-2.28.1-VC.zip
           dir ..\deps\include
           dir .
