@@ -17,6 +17,7 @@
 
 
 #include "blendmode.h"
+#include "php_sdl.h"
 
 /* {{{ MINIT */
 PHP_MINIT_FUNCTION(sdl_blendmode)

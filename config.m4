@@ -83,6 +83,8 @@ if test "$PHP_SDL" != "no"; then
 	timer.c \
 	version.c \
 	video.c \
+  tft.c \
+  tft_font.c \
 	window.c"
 
   PHP_NEW_EXTENSION(sdl, $SDL_SOURCE_FILES, $ext_shared,, $PHP_SDL_CFLAGS)

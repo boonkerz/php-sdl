@@ -23,7 +23,7 @@
 */
 
 #include "cpuinfo.h"
-
+#include "php_sdl.h"
 
 /* {{{ proto void SDL_GetCPUCount(void )
 

@@ -23,8 +23,6 @@
 extern "C" {
 #endif
 
-#include "php_sdl.h"
-
 PHP_MINIT_FUNCTION(sdl_blendmode);
 
 #ifdef  __cplusplus

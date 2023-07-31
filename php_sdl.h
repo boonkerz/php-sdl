@@ -37,6 +37,7 @@ extern "C"
 #include <zend_exceptions.h>
 
 #define PHP_SDL_VERSION "2.7.0"
+#define PHP_SDL_TTF_VERSION "0.3.0"
 
 #if defined(__APPLE__) && defined(__MACH__)
 #include <SDL2/SDL.h>
