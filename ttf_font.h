@@ -15,12 +15,12 @@ ZEND_END_ARG_INFO()
 
 ZEND_FUNCTION(SDL_TTF_OpenFont);
 
-typedef struct TTF_Font
+typedef struct
 {
-	uint height;
     TTF_Font *internal;
     zend_object std;
 } php_sdl_ttf_font_object;
+
 
 php_sdl_ttf_font_object *php_sdl_ttf_font_object_from_zend_object(zend_object *zobj);
 zend_object *php_sdl_ttf_font_object_to_zend_object(php_sdl_ttf_font_object *obj);
@@ -31,6 +31,7 @@ zend_function *php_sdl_ttf_font_object_get_constructor(zend_object *object);
 void php_sdl_ttf_font_object_free(zend_object *zobj);
 
 void ttf_font_to_zval(TTF_Font *ttf_font, zval *zp);
+
 TTF_Font *php_ttf_font_from_zval_p(zval *zp);
 void php_ttf_font_minit_helper(void);
 
@@ -40,21 +41,16 @@ static const zend_function_entry class_TTF_Font_methods[] = {
 	ZEND_FE_END
 };
 
-
-
 static zend_class_entry *register_class_TTF_Font(void)
 {
 	zend_class_entry ce, *class_entry;
 
 	INIT_CLASS_ENTRY(ce, "TTF_Font", class_TTF_Font_methods);
 	class_entry = zend_register_internal_class_ex(&ce, NULL);
-
 	class_entry->ce_flags |= ZEND_ACC_FINAL;
 
 	return class_entry;
 }
-
-
 
 #ifdef  __cplusplus
 } // extern "C" 

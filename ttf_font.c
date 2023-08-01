@@ -13,9 +13,9 @@ PHP_FUNCTION(SDL_TTF_OpenFont)
 	ZEND_PARSE_PARAMETERS_END();
 
 	#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-		TTF_Font *font = SDLCALL TTF_OpenFont(name, size);
-	#else
 		TTF_Font *font = TTF_OpenFont(name, size);
+	#else
+		TTF_Font *font = SDLCALL TTF_OpenFont(name, size);
 	#endif
 
 	ttf_font_to_zval(font, return_value);
@@ -37,9 +37,8 @@ zend_object *php_sdl_ttf_font_object_to_zend_object(php_sdl_ttf_font_object *obj
 inline void ttf_font_to_zval(TTF_Font *ttf_font, zval *zp)
 {
     object_init_ex(zp, ttf_font_ce);
-    zend_update_property_long(ttf_font, Z_OBJ_P(zp), "height", 1, ttf_font->height);
-    //php_sdl_ttf_font_object *php_sdl_ttf_font = php_sdl_ttf_font_object_from_zend_object(Z_OBJ_P(zp));
-    //php_sdl_ttf_font->internal = ttf_font;
+    php_sdl_ttf_font_object *php_sdl_ttf_font = php_sdl_ttf_font_object_from_zend_object(Z_OBJ_P(zp));
+    php_sdl_ttf_font->internal = ttf_font;
 }
 
 TTF_Font *php_ttf_font_from_zval_p(zval *zp)
@@ -79,15 +78,9 @@ zend_function *php_sdl_ttf_font_object_get_constructor(zend_object *object)
     return NULL;
 }
 
-
-#define REGISTER_FONT_PROP(name) \
-	zend_declare_property_long(ttf_font_ce, ZEND_STRL(name), 0, ZEND_ACC_PUBLIC)
-
 void php_ttf_font_minit_helper(void)
 {
     ttf_font_ce = register_class_TTF_Font();
-
-    REGISTER_FONT_PROP("height");
     ttf_font_ce->create_object = php_ttf_font_object_create;
 
     memcpy(&php_ttf_font_object_handlers, &std_object_handlers, sizeof(zend_object_handlers));
@@ -96,3 +89,4 @@ void php_ttf_font_minit_helper(void)
     php_ttf_font_object_handlers.get_constructor = php_sdl_ttf_font_object_get_constructor;
     php_ttf_font_object_handlers.offset = XtOffsetOf(php_sdl_ttf_font_object, std);
 }
+
