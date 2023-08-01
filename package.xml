@@ -90,6 +90,8 @@
         <file role="src" name="version.h"/>
         <file role="src" name="video.c"/>
         <file role="src" name="video.h"/>
+        <file role="src" name="tft_font.c"/>
+        <file role="src" name="tft_font.h"/>
         <file role="src" name="window.c"/>
         <file role="src" name="window.h"/>
       </dir>

@@ -11,6 +11,9 @@ function initSDLOrExit() {
 	if(SDL_Init(SDL_INIT_EVERYTHING) !== 0) {
 		printSdlErrorAndExit();
 	}
+	if(SDL_TTF_Init() !== 0) {
+        printSdlErrorAndExit();
+    }
 }
 
 function printSdlErrorAndExit() {

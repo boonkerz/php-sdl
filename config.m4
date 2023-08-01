@@ -1,4 +1,4 @@
-dnl config.m4 for the PHP SDL extension
+dnl config.m4 for the PHP SDL extension_LIBAD
 
 PHP_ARG_WITH(sdl, whether to enable SDL functions,
 [  --with-sdl[=SDLCONFIG_PATH]         Enable SDL support])
@@ -61,18 +61,17 @@ if test "$PHP_SDL" != "no"; then
 
   LIBNAME=SDL2_ttf # you may want to change this
   LIBSYMBOL=TTF_Init # you most likely want to change this
-
-   PHP_CHECK_LIBRARY($LIBNAME, $LIBSYMBOL,
+  PHP_CHECK_LIBRARY($LIBNAME, $LIBSYMBOL,
   [
-    PHP_ADD_LIBRARY_WITH_PATH($LIBNAME, $SDL_TTF_DIR/$PHP_LIBDIR, SDL_TTF_SHARED_LIBADD)
-    AC_DEFINE(HAVE_SDL_TTF_FEATURE, 1, [ ])
+    PHP_EVAL_LIBLINE("-lSDL2_ttf", SDL_TTF_SHARED_LIBADD)
   ],[
     AC_MSG_ERROR([FEATURE not supported by your sdl_ttf library.])
   ],[
     -L$SDL_TTF_DIR/$PHP_LIBDIR -lm
   ])
-  
+
   PHP_SUBST(SDL_TTF_SHARED_LIBADD)
+  AC_DEFINE(HAVE_SDL_TTF_FEATURE, 1, [ ])
 
   SDL_SOURCE_FILES="blendmode.c \
 	cpuinfo.c \
@@ -98,10 +97,9 @@ if test "$PHP_SDL" != "no"; then
 	timer.c \
 	version.c \
 	video.c \
-  tft.c \
-  tft_font.c \
+	ttf_font.c \
+  ttf.c \
 	window.c"
 
   PHP_NEW_EXTENSION(sdl, $SDL_SOURCE_FILES, $ext_shared,, $PHP_SDL_CFLAGS)
-  PHP_ADD_BUILD_DIR($ext_builddir)
 fi

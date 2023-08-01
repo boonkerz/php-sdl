@@ -134,8 +134,9 @@ static zend_function_entry sdl_functions[] = {
 	ZEND_FE(SDL_TTF_WasInit, arginfo_SDL_TTF_WasInit)
 	ZEND_FE(SDL_TTF_Quit, arginfo_SDL_TTF_Quit)
 	ZEND_FE(SDL_TTF_OpenFont, arginfo_SDL_TTF_OpenFont)
-	/*ZEND_FE(SDL_TTF_CloseFont, arginfo_SDL_TTF_CloseFont)
 	ZEND_FE(SDL_TTF_RenderText_Solid, arginfo_SDL_TTF_RenderText_Solid)
+	/*ZEND_FE(SDL_TTF_CloseFont, arginfo_SDL_TTF_CloseFont)
+	
 	ZEND_FE(SDL_TTF_RenderText_Blended, arginfo_SDL_TTF_RenderText_Blended)
 	ZEND_FE(SDL_TTF_RenderText_Shaded, arginfo_SDL_TTF_RenderText_Shaded)
 */
