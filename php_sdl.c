@@ -71,13 +71,13 @@ zend_bool php_sdl_check_overflow(int a, int b, int silent)
 }
 /* }}} */
 
-#define PHP_MINIT_CALL(func) PHP_MINIT(func)(INIT_FUNC_ARGS_PASSTHRU)
-#define PHP_MSHUTDOWN_CALL(func) PHP_MSHUTDOWN(func)(SHUTDOWN_FUNC_ARGS_PASSTHRU)
+//#define PHP_MINIT_CALL(func) PHP_MINIT(func)(INIT_FUNC_ARGS_PASSTHRU)
+//#define PHP_MSHUTDOWN_CALL(func) PHP_MSHUTDOWN(func)(SHUTDOWN_FUNC_ARGS_PASSTHRU)
 
 /* {{{ PHP_MINIT_FUNCTION */
 PHP_MINIT_FUNCTION(sdl)
 {
-	if (SUCCESS == PHP_MINIT_CALL(sdl_blendmode) && SUCCESS == PHP_MINIT_CALL(sdl_cpuinfo) && SUCCESS == PHP_MINIT_CALL(sdl_error) && SUCCESS == PHP_MINIT_CALL(sdl_event) && SUCCESS == PHP_MINIT_CALL(sdl_glcontext) && SUCCESS == PHP_MINIT_CALL(sdl_keyboard) && SUCCESS == PHP_MINIT_CALL(sdl_messagebox) && SUCCESS == PHP_MINIT_CALL(sdl_mouse) && SUCCESS == PHP_MINIT_CALL(sdl_mutex) && SUCCESS == PHP_MINIT_CALL(sdl_platform) && SUCCESS == PHP_MINIT_CALL(sdl_power) && SUCCESS == PHP_MINIT_CALL(sdl_filesystem) && SUCCESS == PHP_MINIT_CALL(sdl_pixels) && SUCCESS == PHP_MINIT_CALL(sdl_rect) && SUCCESS == PHP_MINIT_CALL(sdl_render) && SUCCESS == PHP_MINIT_CALL(sdl_rwops) && SUCCESS == PHP_MINIT_CALL(sdl_sdl) && SUCCESS == PHP_MINIT_CALL(sdl_shape) && SUCCESS == PHP_MINIT_CALL(sdl_surface) && SUCCESS == PHP_MINIT_CALL(sdl_timer) && SUCCESS == PHP_MINIT_CALL(sdl_version) && SUCCESS == PHP_MINIT_CALL(sdl_video) && SUCCESS == PHP_MINIT_CALL(sdl_window) && SUCCESS == PHP_MINIT_CALL(sdl_joystick))
+	if (SUCCESS == PHP_MINIT_CALL(sdl_version))
 	{
 		return SUCCESS;
 	}
@@ -453,8 +453,8 @@ static zend_function_entry sdl_functions[] = {
 	// ZEND_FE(SDL_WriteLE64, arginfo_SDL_write)
 	// ZEND_FE(SDL_WriteBE64, arginfo_SDL_write)
 	// #endif
-
-ZEND_FE_END};
+	ZEND_FE_END
+};
 /* }}} */
 
 /* {{{ sdl_module_entry
@@ -465,8 +465,8 @@ zend_module_entry sdl_module_entry = {
 	NULL,
 	"SDL",
 	sdl_functions,
-	PHP_MINIT(sdl),		/* Replace with NULL if there is nothing to do at php startup   */
-	PHP_MSHUTDOWN(sdl), /* Replace with NULL if there is nothing to do at php shutdown  */
+	null,		/* Replace with NULL if there is nothing to do at php startup   */
+	null, /* Replace with NULL if there is nothing to do at php shutdown  */
 	NULL,				/* RINIT */
 	NULL,				/* RSHUTDOWN */
 	PHP_MINFO(sdl),
