@@ -1,5 +1,3 @@
-// vim:ft=javascript
-
 ARG_ENABLE('sdl', 'Whether to enable SDL2 support', 'no');
 
 if(PHP_SDL != 'no') {
@@ -10,10 +8,9 @@ if(PHP_SDL != 'no') {
 
     var sdl_sources = 'php_sdl.c version.c';
 
-    EXTENSION('sdl', sdl_sources, PHP_SDL_SHARED);
+    EXTENSION('sdl', sdl_sources);
 
-    var sdl_headers = 'php_sdl.h version.h';
+    PHP_INSTALL_HEADERS("ext/sdl", "version.h");
 
-    PHP_INSTALL_HEADERS('ext/sdl', sdl_headers);
     AC_DEFINE('HAVE_SDL', 1);
 }
