@@ -9,7 +9,9 @@
 #include "glcontext.h"
 #include "surface.h"
 #include "rect.h"
-#include "shape.h"
+#include "pixels.h"
+#include "mouse.h"
+#include "rwops.h"
 
 
 static const zend_function_entry sdl_functions[] = {
@@ -28,7 +30,7 @@ static const zend_function_entry sdl_functions[] = {
 	ZEND_FE(SDL_UpdateWindowSurface, arginfo_SDL_Window)
 	ZEND_FE(SDL_GetWindowTitle, arginfo_SDL_Window)
 	ZEND_FE(SDL_SetWindowTitle, arginfo_SDL_SetWindowTitle)
-	ZEND_FE(SDL_GetWindowDisplayIndex, arginfo_SDL_Window)
+	ZEND_FE(SDL_GetDisplayForWindow, arginfo_SDL_Window)
 	ZEND_FE(SDL_ShowWindow, arginfo_SDL_Window)
 	ZEND_FE(SDL_HideWindow, arginfo_SDL_Window)
 	ZEND_FE(SDL_RaiseWindow, arginfo_SDL_Window)
@@ -59,8 +61,8 @@ static const zend_function_entry sdl_functions[] = {
 	ZEND_FE(SDL_GetWindowBrightness, arginfo_SDL_Window)
 	ZEND_FE(SDL_GetWindowGammaRamp, arginfo_SDL_GetWindowGammaRamp)
 	ZEND_FE(SDL_IsShapedWindow, arginfo_SDL_Window)
-	ZEND_FE(SDL_SetWindowShape, arginfo_SDL_SetWindowShape)
-	ZEND_FE(SDL_GetShapedWindowMode, arginfo_SDL_GetShapedWindowMode)
+	//ZEND_FE(SDL_SetWindowShape, arginfo_SDL_SetWindowShape)
+	//ZEND_FE(SDL_GetShapedWindowMode, arginfo_SDL_GetShapedWindowMode)
 
 	ZEND_FE(SDL_WINDOWPOS_UNDEFINED_DISPLAY, arginfo_SDL_WINDOWPOS_DISPLAY)
 	ZEND_FE(SDL_WINDOWPOS_CENTERED_DISPLAY, arginfo_SDL_WINDOWPOS_DISPLAY)
@@ -90,7 +92,7 @@ static const zend_function_entry sdl_functions[] = {
 	ZEND_FE(SDL_GL_MakeCurrent, arginfo_SDL_GL_MakeCurrent)
 	ZEND_FE(SDL_GL_GetCurrentWindow, arginfo_none)
 	ZEND_FE(SDL_GL_GetCurrentContext, arginfo_none)
-	ZEND_FE(SDL_GL_GetDrawableSize, arginfo_SDL_GL_GetDrawableSize)
+	ZEND_FE(SDL_GetWindowSizeInPixels, arginfo_SDL_GetWindowSizeInPixels)
 	ZEND_FE(SDL_GL_SwapWindow, arginfo_SDL_Window)
 	ZEND_FE(SDL_GL_SetSwapInterval, arginfo_SDL_GL_SetSwapInterval)
 	ZEND_FE(SDL_GL_GetSwapInterval, arginfo_none)
@@ -99,7 +101,7 @@ static const zend_function_entry sdl_functions[] = {
 	ZEND_FE(SDL_CreateCursor, arginfo_SDL_Cursor__construct)
 	ZEND_FE(SDL_CreateSystemCursor, arginfo_SDL_CreateSystemCursor)
 	ZEND_FE(SDL_CreateColorCursor, arginfo_SDL_CreateColorCursor)
-	ZEND_FE(SDL_FreeCursor, arginfo_SDL_Cursor)
+	ZEND_FE(SDL_DestroyCursor, arginfo_SDL_Cursor)
 	ZEND_FE(SDL_SetCursor, arginfo_SDL_Cursor)
 	ZEND_FE(SDL_GetCursor, arginfo_none)
 	ZEND_FE(SDL_GetDefaultCursor, arginfo_none)
@@ -113,31 +115,31 @@ static const zend_function_entry sdl_functions[] = {
 
 	// Surface
 	ZEND_FE(SDL_CreateRGBSurface, arginfo_SDL_CreateRGBSurface)
-	ZEND_FE(SDL_FreeSurface, arginfo_SDL_Surface)
-	ZEND_FE(SDL_FillRect, arginfo_SDL_FillRect)
-	ZEND_FE(SDL_FillRects, arginfo_SDL_FillRects)
+	ZEND_FE(SDL_DestroySurface, arginfo_SDL_Surface)
+	ZEND_FE(SDL_FillSurfaceRect, arginfo_SDL_FillSurfaceRect)
+	ZEND_FE(SDL_FillSurfaceRects, arginfo_SDL_FillSurfaceRects)
 	ZEND_FE(SDL_MUSTLOCK, arginfo_SDL_Surface)
 	ZEND_FE(SDL_LockSurface, arginfo_SDL_Surface)
 	ZEND_FE(SDL_UnlockSurface, arginfo_SDL_Surface)
 	ZEND_FE(SDL_LoadBMP_RW, arginfo_SDL_LoadBMP_RW)
 	ZEND_FE(SDL_LoadBMP, arginfo_SDL_LoadBMP)
-	ZEND_FE(SDL_UpperBlit, arginfo_SDL_UpperBlit)
+	ZEND_FE(SDL_BlitSurface, arginfo_SDL_BlitSurface)
 	ZEND_FE(SDL_LowerBlit, arginfo_SDL_LowerBlit)
-	ZEND_FE(SDL_UpperBlitScaled, arginfo_SDL_UpperBlit)
-	ZEND_FE(SDL_LowerBlitScaled, arginfo_SDL_LowerBlit)
-	ZEND_FE(SDL_SoftStretch, arginfo_SDL_UpperBlit)
+	ZEND_FE(SDL_BlitSurfaceScaled, arginfo_SDL_BlitSurface)
+	ZEND_FE(SDL_BlitSurfaceUncheckedScaled, arginfo_SDL_LowerBlit)
+	ZEND_FE(SDL_SoftStretch, arginfo_SDL_BlitSurface)
 	ZEND_FE(SDL_SaveBMP_RW, arginfo_SDL_SaveBMP_RW)
 	ZEND_FE(SDL_SaveBMP, arginfo_SDL_SaveBMP)
 	ZEND_FE(SDL_SetSurfaceRLE, arginfo_SDL_SetSurfaceRLE)
-	ZEND_FE(SDL_SetColorKey, arginfo_SDL_SetColorKey)
-	ZEND_FE(SDL_GetColorKey, arginfo_SDL_GetColorKey)
+	ZEND_FE(SDL_SetSurfaceColorKey, arginfo_SDL_SetSurfaceColorKey)
+	ZEND_FE(SDL_GetSurfaceColorKey, arginfo_SDL_GetSurfaceColorKey)
 	ZEND_FE(SDL_SetSurfaceColorMod, arginfo_SDL_SetSurfaceColorMod)
 	ZEND_FE(SDL_GetSurfaceColorMod, arginfo_SDL_GetSurfaceColorMod)
 	ZEND_FE(SDL_SetSurfaceAlphaMod, arginfo_SDL_SetSurfaceAlphaMod)
 	ZEND_FE(SDL_GetSurfaceAlphaMod, arginfo_SDL_GetSurfaceAlphaMod)
 	ZEND_FE(SDL_SetSurfaceBlendMode, arginfo_SDL_SetSurfaceBlendMode)
 	ZEND_FE(SDL_GetSurfaceBlendMode, arginfo_SDL_GetSurfaceBlendMode)
-	ZEND_FE(SDL_SetClipRect, arginfo_SDL_SetClipRect)
+	ZEND_FE(SDL_SetSurfaceClipRect, arginfo_SDL_SetSurfaceClipRect)
 	ZEND_FE(SDL_GetClipRect, arginfo_SDL_GetClipRect)
 	ZEND_FE(SDL_ConvertSurface, arginfo_SDL_ConvertSurface)
 	ZEND_FE(SDL_ConvertSurfaceFormat, arginfo_SDL_ConvertSurfaceFormat)
@@ -147,6 +149,54 @@ static const zend_function_entry sdl_functions[] = {
 	ZEND_FE(SDL_ShowSimpleMessageBox, arginfo_SDL_ShowSimpleMessageBox)
 	ZEND_FE(SDL_ShowMessageBox, arginfo_SDL_ShowMessageBox)
 
+	// Pixels
+	ZEND_FE(SDL_GetPixelFormatName, arginfo_SDL_GetPixelFormatName)
+	ZEND_FE(SDL_GetMasksForPixelFormatEnum, arginfo_SDL_GetMasksForPixelFormatEnum)
+	ZEND_FE(SDL_GetPixelFormatEnumForMasks, arginfo_SDL_GetPixelFormatEnumForMasks)
+
+	ZEND_FE(SDL_CreatePalette, arginfo_SDL_CreatePalette)
+	ZEND_FE(SDL_DestroyPalette, arginfo_SDL_Palette)
+	ZEND_FE(SDL_SetPaletteColors, arginfo_SDL_SetPaletteColors)
+
+	ZEND_FE(SDL_CreatePixelFormat, arginfo_SDL_CreatePixelFormat)
+	ZEND_FE(SDL_DestroyPixelFormat, arginfo_SDL_PixelFormat)
+	ZEND_FE(SDL_SetPixelFormatPalette, arginfo_SDL_SetPixelFormatPalette)
+	ZEND_FE(SDL_MapRGB, arginfo_SDL_MapRGB)
+	ZEND_FE(SDL_MapRGBA, arginfo_SDL_MapRGBA)
+	ZEND_FE(SDL_GetRGB, arginfo_SDL_GetRGB)
+	ZEND_FE(SDL_GetRGBA, arginfo_SDL_GetRGBA)
+
+	// Rwops
+	ZEND_FE(SDL_AllocRW, arginfo_none)
+	ZEND_FE(SDL_FreeRW, arginfo_SDL_RWops)
+	ZEND_FE(SDL_RWFromFile, arginfo_SDL_RWFromFile)
+	ZEND_FE(SDL_RWFromFP, arginfo_SDL_RWFromFP)
+	ZEND_FE(SDL_RWFromMem, arginfo_SDL_RWFromMem)
+	ZEND_FE(SDL_RWFromConstMem, arginfo_SDL_RWFromConstMem)
+	ZEND_FE(SDL_RWsize, arginfo_SDL_RWops)
+	ZEND_FE(SDL_RWseek, arginfo_SDL_RWseek)
+	ZEND_FE(SDL_RWtell, arginfo_SDL_RWops)
+	ZEND_FE(SDL_RWread, arginfo_SDL_RWread)
+	ZEND_FE(SDL_RWwrite, arginfo_SDL_RWwrite)
+	ZEND_FE(SDL_RWclose, arginfo_SDL_RWops)
+	ZEND_FE(SDL_ReadU8, arginfo_SDL_RWops)
+	ZEND_FE(SDL_ReadU16LE, arginfo_SDL_RWops)
+	ZEND_FE(SDL_ReadU16BE, arginfo_SDL_RWops)
+	ZEND_FE(SDL_ReadU32LE, arginfo_SDL_RWops)
+	ZEND_FE(SDL_ReadU32BE, arginfo_SDL_RWops)
+	#if SIZEOF_LONG > 4
+	ZEND_FE(SDL_ReadLE64, arginfo_SDL_RWops)
+	ZEND_FE(SDL_ReadBE64, arginfo_SDL_RWops)
+	#endif
+	ZEND_FE(SDL_WriteU8, arginfo_SDL_write)
+	ZEND_FE(SDL_WriteU16LE, arginfo_SDL_write)
+	ZEND_FE(SDL_WriteU16BE, arginfo_SDL_write)
+	ZEND_FE(SDL_WriteU32LE, arginfo_SDL_write)
+	ZEND_FE(SDL_WriteU32BE, arginfo_SDL_write)
+	#if SIZEOF_LONG > 4
+	ZEND_FE(SDL_WriteLE64, arginfo_SDL_write)
+	ZEND_FE(SDL_WriteBE64, arginfo_SDL_write)
+	#endif
 
     // Version
     ZEND_FE(SDL_GetVersion, arginfo_SDL_GetVersion)

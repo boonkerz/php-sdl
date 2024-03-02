@@ -78,7 +78,7 @@ static void php_sdl_cursor_free(zend_object *object)
 
 	if (intern->cursor && !(intern->flags & SDL_DONTFREE))
 	{
-		SDL_FreeCursor(intern->cursor);
+		SDL_DestroyCursor(intern->cursor);
 	}
 
 	zend_object_std_dtor(&intern->zo);
@@ -179,7 +179,7 @@ static PHP_METHOD(SDL_Cursor, __toString)
  *                                         if not. </td></tr>
  *  </table>
  *
- *  \sa SDL_FreeCursor()
+ *  \sa SDL_DestroyCursor()
  extern DECLSPEC SDL_Cursor *SDLCALL SDL_CreateCursor(const Uint8 * data,
 													  const Uint8 * mask,
 													  int w, int h, int hot_x,
@@ -217,7 +217,7 @@ PHP_FUNCTION(SDL_CreateCursor)
 
  *  \brief Create a system cursor.
  *
- *  \sa SDL_FreeCursor()
+ *  \sa SDL_DestroyCursor()
  extern DECLSPEC SDL_Cursor *SDLCALL SDL_CreateSystemCursor(SDL_SystemCursor id);
  */
 PHP_FUNCTION(SDL_CreateSystemCursor)
@@ -238,7 +238,7 @@ PHP_FUNCTION(SDL_CreateSystemCursor)
 
  *  \brief Create a color cursor.
  *
- *  \sa SDL_FreeCursor()
+ *  \sa SDL_DestroyCursor()
  extern DECLSPEC SDL_Cursor *SDLCALL SDL_CreateColorCursor(SDL_Surface *surface,
 														   int hot_x,
 														   int hot_y);
@@ -267,14 +267,14 @@ PHP_FUNCTION(SDL_CreateColorCursor)
 }
 /* }}} */
 
-/* {{{ proto void SDL_FreeCursor(SDL_Cursor cursor)
+/* {{{ proto void SDL_DestroyCursor(SDL_Cursor cursor)
 
  *  \brief Frees a cursor created with SDL_CreateCursor().
  *
  *  \sa SDL_CreateCursor()
- extern DECLSPEC void SDLCALL SDL_FreeCursor(SDL_Cursor * cursor);
+ extern DECLSPEC void SDLCALL SDL_DestroyCursor(SDL_Cursor * cursor);
  */
-PHP_FUNCTION(SDL_FreeCursor)
+PHP_FUNCTION(SDL_DestroyCursor)
 {
 	struct php_sdl_cursor *intern;
 	zval *z_cursor;
@@ -286,7 +286,7 @@ PHP_FUNCTION(SDL_FreeCursor)
 	}
 	FETCH_CURSOR(cursor, z_cursor, 1);
 
-	SDL_FreeCursor(intern->cursor);
+	SDL_DestroyCursor(intern->cursor);
 	intern->cursor = NULL;
 }
 /* }}} */
@@ -542,7 +542,7 @@ static const zend_function_entry php_sdl_cursor_methods[] = {
 	PHP_ME(SDL_Cursor, __toString, arginfo_class_SDL_Cursor___toString, ZEND_ACC_PUBLIC)
 
 	/* non-static methods */
-	PHP_FALIAS(Free, SDL_FreeCursor, arginfo_none)
+	PHP_FALIAS(Free, SDL_DestroyCursor, arginfo_none)
 	PHP_FALIAS(Set, SDL_SetCursor, arginfo_none)
 
 	/* static methods */

@@ -384,12 +384,12 @@ PHP_FUNCTION(SDL_FRectEmpty)
 	RETURN_BOOL((rect.w <= 0.0f) || (rect.h <= 0.0f));
 }
 
-/* {{{ proto bool SDL_RectEquals(SDL_Rect a, SDL_Rect b)
+/* {{{ proto bool SDL_RectsEqual(SDL_Rect a, SDL_Rect b)
 
  *  \brief Returns true if the two rectangles are equal.
- SDL_FORCE_INLINE SDL_bool SDL_RectEquals(const SDL_Rect *a, const SDL_Rect *b)
+ SDL_FORCE_INLINE SDL_bool SDL_RectsEqual(const SDL_Rect *a, const SDL_Rect *b)
  */
-PHP_FUNCTION(SDL_RectEquals)
+PHP_FUNCTION(SDL_RectsEqual)
 {
 	zval *obj1, *obj2;
 	SDL_Rect rect1, rect2;
@@ -401,19 +401,19 @@ PHP_FUNCTION(SDL_RectEquals)
 	zval_to_sdl_rect(obj1, &rect1);
 	zval_to_sdl_rect(obj2, &rect2);
 
-	RETURN_BOOL(SDL_RectEquals(&rect1, &rect2));
+	RETURN_BOOL(SDL_RectsEqual(&rect1, &rect2));
 }
 /* }}} */
 
-/* {{{ proto bool SDL_HasIntersection(SDL_Rect a, SDL_Rect b)
+/* {{{ proto bool SDL_HasRectIntersection(SDL_Rect a, SDL_Rect b)
 
  *  \brief Determine whether two rectangles intersect.
  *
  *  \return SDL_TRUE if there is an intersection, SDL_FALSE otherwise.
- extern DECLSPEC SDL_bool SDLCALL SDL_HasIntersection(const SDL_Rect * A,
+ extern DECLSPEC SDL_bool SDLCALL SDL_HasRectIntersection(const SDL_Rect * A,
 													  const SDL_Rect * B);
  */
-PHP_FUNCTION(SDL_HasIntersection)
+PHP_FUNCTION(SDL_HasRectIntersection)
 {
 	zval *obj1, *obj2;
 	SDL_Rect rect1, rect2;
@@ -425,11 +425,11 @@ PHP_FUNCTION(SDL_HasIntersection)
 	zval_to_sdl_rect(obj1, &rect1);
 	zval_to_sdl_rect(obj2, &rect2);
 
-	RETURN_BOOL(SDL_HasIntersection(&rect1, &rect2));
+	RETURN_BOOL(SDL_HasRectIntersection(&rect1, &rect2));
 }
 /* }}} */
 
-PHP_FUNCTION(SDL_HasIntersectionF)
+PHP_FUNCTION(SDL_HasRectIntersectionF)
 {
 	zval *obj1, *obj2;
 	SDL_FRect A, B;
@@ -442,7 +442,7 @@ PHP_FUNCTION(SDL_HasIntersectionF)
 	zval_to_sdl_frect(obj1, &A);
 	zval_to_sdl_frect(obj2, &B);
 
-	/** SDL_HasIntersectionF not yet available as public API (SDL <= 2.0.20) */
+	/** SDL_HasRectIntersectionF not yet available as public API (SDL <= 2.0.20) */
 	/* Horizontal intersection */
 	Amin = A.x;
 	Amax = Amin + A.w;
@@ -480,19 +480,19 @@ PHP_FUNCTION(SDL_HasIntersectionF)
 	}
 
 	RETURN_TRUE;
-	//	RETURN_BOOL(SDL_HasIntersectionF(&rect1, &rect2));
+	//	RETURN_BOOL(SDL_HasRectIntersectionF(&rect1, &rect2));
 }
 
-/* {{{ proto bool SDL_IntersectRect(SDL_Rect a, SDL_Rect b, SDL_Rect &result)
+/* {{{ proto bool SDL_GetRectIntersection(SDL_Rect a, SDL_Rect b, SDL_Rect &result)
 
  *  \brief Calculate the intersection of two rectangles.
  *
  *  \return SDL_TRUE if there is an intersection, SDL_FALSE otherwise.
- extern DECLSPEC SDL_bool SDLCALL SDL_IntersectRect(const SDL_Rect * A,
+ extern DECLSPEC SDL_bool SDLCALL SDL_GetRectIntersection(const SDL_Rect * A,
 													const SDL_Rect * B,
 													SDL_Rect * result);
  */
-PHP_FUNCTION(SDL_IntersectRect)
+PHP_FUNCTION(SDL_GetRectIntersection)
 {
 	zval *obj1, *obj2, *result;
 	SDL_Rect rect1, rect2, rect3;
@@ -503,7 +503,7 @@ PHP_FUNCTION(SDL_IntersectRect)
 	}
 	zval_to_sdl_rect(obj1, &rect1);
 	zval_to_sdl_rect(obj2, &rect2);
-	if (SDL_IntersectRect(&rect1, &rect2, &rect3))
+	if (SDL_GetRectIntersection(&rect1, &rect2, &rect3))
 	{
 		zval_ptr_dtor(result);
 		sdl_rect_to_zval(&rect3, result);
@@ -574,14 +574,14 @@ PHP_FUNCTION(SDL_IntersectFRect)
 	RETURN_FALSE;
 }
 
-/* {{{ proto bool SDL_UnionRect(SDL_Rect a, SDL_Rect b, SDL_Rect &result)
+/* {{{ proto bool SDL_GetRectUnion(SDL_Rect a, SDL_Rect b, SDL_Rect &result)
 
  *  \brief Calculate the union of two rectangles.
- extern DECLSPEC void SDLCALL SDL_UnionRect(const SDL_Rect * A,
+ extern DECLSPEC void SDLCALL SDL_GetRectUnion(const SDL_Rect * A,
 											const SDL_Rect * B,
 											SDL_Rect * result);
  */
-PHP_FUNCTION(SDL_UnionRect)
+PHP_FUNCTION(SDL_GetRectUnion)
 {
 	zval *obj1, *obj2, *result;
 	SDL_Rect rect1, rect2, rect3;
@@ -592,23 +592,23 @@ PHP_FUNCTION(SDL_UnionRect)
 	}
 	zval_to_sdl_rect(obj1, &rect1);
 	zval_to_sdl_rect(obj2, &rect2);
-	SDL_UnionRect(&rect1, &rect2, &rect3);
+	SDL_GetRectUnion(&rect1, &rect2, &rect3);
 	zval_ptr_dtor(result);
 	sdl_rect_to_zval(&rect3, result);
 }
 /* }}} */
 
-/* {{{ proto bool SDL_EnclosePoints(array points, int count, SDL_Rect clip, SDL_Rect &result)
+/* {{{ proto bool SDL_GetRectEnclosingPoints(array points, int count, SDL_Rect clip, SDL_Rect &result)
 
  *  \brief Calculate a minimal rectangle enclosing a set of points
  *
  *  \return SDL_TRUE if any points were within the clipping rect
- extern DECLSPEC SDL_bool SDLCALL SDL_EnclosePoints(const SDL_Point * points,
+ extern DECLSPEC SDL_bool SDLCALL SDL_GetRectEnclosingPoints(const SDL_Point * points,
 													int count,
 													const SDL_Rect * clip,
 													SDL_Rect * result);
  */
-PHP_FUNCTION(SDL_EnclosePoints)
+PHP_FUNCTION(SDL_GetRectEnclosingPoints)
 {
 	zval *z_points, *z_clip, *z_result, *z_point;
 	long i;
@@ -651,7 +651,7 @@ PHP_FUNCTION(SDL_EnclosePoints)
 	{
 		php_error_docref(NULL, E_WARNING, "no point in provided array");
 	}
-	else if (SDL_EnclosePoints(points, nb, &clip, &result))
+	else if (SDL_GetRectEnclosingPoints(points, nb, &clip, &result))
 	{
 		zval_ptr_dtor(z_result);
 		sdl_rect_to_zval(&result, z_result);
@@ -661,17 +661,17 @@ PHP_FUNCTION(SDL_EnclosePoints)
 }
 /* }}} */
 
-/* {{{ proto bool SDL_IntersectRectAndLine(const SDL_Rect *, int &x1, int &y1, int &x2, int &y2)
+/* {{{ proto bool SDL_GetRectIntersectionAndLine(const SDL_Rect *, int &x1, int &y1, int &x2, int &y2)
 
  *  \brief Calculate the intersection of a rectangle and line segment.
  *
  *  \return SDL_TRUE if there is an intersection, SDL_FALSE otherwise.
- extern DECLSPEC SDL_bool SDLCALL SDL_IntersectRectAndLine(const SDL_Rect *
+ extern DECLSPEC SDL_bool SDLCALL SDL_GetRectIntersectionAndLine(const SDL_Rect *
 														   rect, int *X1,
 														   int *Y1, int *X2,
 														   int *Y2);
  */
-PHP_FUNCTION(SDL_IntersectRectAndLine)
+PHP_FUNCTION(SDL_GetRectIntersectionAndLine)
 {
 	zval *object, *z_x1, *z_x2, *z_y1, *z_y2;
 	SDL_Rect rect;
@@ -691,7 +691,7 @@ PHP_FUNCTION(SDL_IntersectRectAndLine)
 	x2 = (int)Z_LVAL_P(z_x2);
 	y2 = (int)Z_LVAL_P(z_y2);
 
-	if (SDL_IntersectRectAndLine(&rect, &x1, &y1, &x2, &y2))
+	if (SDL_GetRectIntersectionAndLine(&rect, &x1, &y1, &x2, &y2))
 	{
 		Z_LVAL_P(z_x1) = x1;
 		Z_LVAL_P(z_y1) = y1;

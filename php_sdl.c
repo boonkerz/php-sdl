@@ -16,6 +16,7 @@
 #include "glcontext.h"
 #include "mouse.h"
 #include "rect.h"
+#include "rwops.h"
 
 zend_module_entry sdl_module_entry = {
 	STANDARD_MODULE_HEADER,
@@ -48,6 +49,8 @@ PHP_MINIT_FUNCTION(sdl)
 		SUCCESS == PHP_MINIT_CALL(sdl_glcontext) &&
 		SUCCESS == PHP_MINIT_CALL(sdl_rect) &&
 		SUCCESS == PHP_MINIT_CALL(sdl_mouse) &&
+		SUCCESS == PHP_MINIT_CALL(sdl_pixels) &&
+		SUCCESS == PHP_MINIT_CALL(sdl_rwops) &&
 		SUCCESS == PHP_MINIT_CALL(sdl_video)
 )
 	{
@@ -69,3 +72,26 @@ PHP_MINFO_FUNCTION(sdl)
 	php_info_print_table_start();
 	php_info_print_table_row(2, "SDL support", "enabled");
 }
+
+/* {{{ php_sdl_check_overflow */
+zend_bool php_sdl_check_overflow(int a, int b, int silent)
+{
+	if (a <= 0 || b <= 0)
+	{
+		if (!silent)
+		{
+			php_error_docref(NULL, E_WARNING, "one parameter to a memory allocation multiplication is negative or zero, failing operation gracefully");
+		}
+		return 1;
+	}
+	if (a > INT_MAX / b)
+	{
+		if (!silent)
+		{
+			php_error_docref(NULL, E_WARNING, "product of memory allocation multiplication would exceed INT_MAX, failing operation gracefully");
+		}
+		return 1;
+	}
+	return 0;
+}
+/* }}} */

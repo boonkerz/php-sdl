@@ -5,7 +5,6 @@
 #include "glcontext.h"
 #include "mouse.h"
 #include "rect.h"
-#include "shape.h"
 #include "surface.h"
 #include "video.h"
 
@@ -102,15 +101,15 @@ static inline php_sdl_window_t *php_sdl_window_fetch_object(zend_object *obj)
 		}                                                                                          \
 	}
 
-/* {{{ proto void SDL_GetWindowDisplayIndex(SDL_Window window)
+/* {{{ proto void SDL_GetDisplayForWindow(SDL_Window window)
 
  *  \brief Get the display index associated with a window.
  *
  *  \return the display index of the display containing the center of the
  *          window, or -1 on error.
- extern DECLSPEC int SDLCALL SDL_GetWindowDisplayIndex(SDL_Window * window);
+ extern DECLSPEC int SDLCALL SDL_GetDisplayForWindow(SDL_Window * window);
  */
-PHP_FUNCTION(SDL_GetWindowDisplayIndex)
+PHP_FUNCTION(SDL_GetDisplayForWindow)
 {
 	struct php_sdl_window *intern;
 	zval *object;
@@ -122,7 +121,7 @@ PHP_FUNCTION(SDL_GetWindowDisplayIndex)
 	}
 	FETCH_WINDOW(window, object, 1);
 
-	RETURN_LONG(SDL_GetWindowDisplayIndex(window));
+	RETURN_LONG(SDL_GetDisplayForWindow(window));
 }
 /* }}} */
 
@@ -1344,7 +1343,7 @@ PHP_FUNCTION(SDL_IsShapedWindow)
  * \sa SDL_GetShapedWindowMode.
  extern DECLSPEC int SDLCALL SDL_SetWindowShape(SDL_Window *window,SDL_Surface *shape,SDL_WindowShapeMode *shape_mode);
  */
-PHP_FUNCTION(SDL_SetWindowShape)
+/*PHP_FUNCTION(SDL_SetWindowShape)
 {
 	struct php_sdl_window *intern;
 	zval *z_window, *z_surface, *z_mode;
@@ -1372,7 +1371,7 @@ PHP_FUNCTION(SDL_SetWindowShape)
 	{
 		RETVAL_LONG(SDL_SetWindowShape(window, surface, mode));
 	}
-}
+}*/
 /* }}} */
 
 /* {{{ proto int SDL_GetShapedWindowMode(SDL_Window window, SDL_WindowShapeMode &shape_mode)
@@ -1390,7 +1389,7 @@ PHP_FUNCTION(SDL_SetWindowShape)
  * \sa SDL_SetWindowShape
  extern DECLSPEC int SDLCALL SDL_GetShapedWindowMode(SDL_Window *window,SDL_WindowShapeMode *shape_mode);
  */
-PHP_FUNCTION(SDL_GetShapedWindowMode)
+/*PHP_FUNCTION(SDL_GetShapedWindowMode)
 {
 	struct php_sdl_window *intern;
 	zval *z_window, *z_mode;
@@ -1410,7 +1409,7 @@ PHP_FUNCTION(SDL_GetShapedWindowMode)
 		sdl_windowshapemode_to_zval(&mode, z_mode);
 	}
 	RETVAL_LONG(ret);
-}
+}*/
 /* }}} */
 
 static const zend_function_entry php_sdl_window_methods[] = {
@@ -1422,7 +1421,7 @@ static const zend_function_entry php_sdl_window_methods[] = {
 	PHP_FALIAS(Destroy, SDL_DestroyWindow, arginfo_window_none)
 	PHP_FALIAS(GetTitle, SDL_GetWindowTitle, arginfo_window_none)
 	PHP_FALIAS(SetTitle, SDL_SetWindowTitle, arginfo_SDL_Window_SetTitle)
-	PHP_FALIAS(GetDisplayIndex, SDL_GetWindowDisplayIndex, arginfo_window_none)
+	PHP_FALIAS(GetDisplayIndex, SDL_GetDisplayForWindow, arginfo_window_none)
 	PHP_FALIAS(Show, SDL_ShowWindow, arginfo_window_none)
 	PHP_FALIAS(Hide, SDL_HideWindow, arginfo_window_none)
 	PHP_FALIAS(Raise, SDL_RaiseWindow, arginfo_window_none)
@@ -1454,12 +1453,11 @@ static const zend_function_entry php_sdl_window_methods[] = {
 	PHP_FALIAS(GetGammaRamp, SDL_GetWindowGammaRamp, arginfo_SDL_Window_GetGammaRamp)
 	PHP_FALIAS(GL_CreateContext, SDL_GL_CreateContext, arginfo_window_none)
 	PHP_FALIAS(GL_MakeCurrent, SDL_GL_MakeCurrent, arginfo_SDL_GLContext)
-	PHP_FALIAS(GL_GetDrawableSize, SDL_GL_GetDrawableSize, arginfo_SDL_Window_GetPosition)
 	PHP_FALIAS(GL_Swap, SDL_GL_SwapWindow, arginfo_window_none)
 	PHP_FALIAS(WarpMouse, SDL_WarpMouseInWindow, arginfo_SDL_Window_SetPosition)
 	PHP_FALIAS(IsShaped, SDL_IsShapedWindow, arginfo_window_none)
-	PHP_FALIAS(SetShape, SDL_SetWindowShape, arginfo_SDL_Window_SetShape)
-	PHP_FALIAS(GetShapedMode, SDL_GetShapedWindowMode, arginfo_SDL_Window_GetShapedMode)
+	//PHP_FALIAS(SetShape, SDL_SetWindowShape, arginfo_SDL_Window_SetShape)
+	//PHP_FALIAS(GetShapedMode, SDL_GetShapedWindowMode, arginfo_SDL_Window_GetShapedMode)
 
 	/* static methods */
 	ZEND_FENTRY(GL_GetCurrent, ZEND_FN(SDL_GL_GetCurrentWindow), arginfo_window_none, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)

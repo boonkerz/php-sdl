@@ -52,7 +52,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_SaveBMP, 0, 0, 1)
 ZEND_END_ARG_INFO()
 
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_FillRect, 0, 0, 3)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_FillSurfaceRect, 0, 0, 3)
        ZEND_ARG_OBJ_INFO(0, surface, SDL_Surface, 0)
        ZEND_ARG_INFO(0, rect)
        ZEND_ARG_INFO(0, color)
@@ -65,7 +65,7 @@ ZEND_END_ARG_INFO()
 
 
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_FillRects, 0, 0, 4)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_FillSurfaceRects, 0, 0, 4)
        ZEND_ARG_OBJ_INFO(0, surface, SDL_Surface, 0)
        ZEND_ARG_INFO(0, rects)
        ZEND_ARG_INFO(0, count)
@@ -79,7 +79,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_FillRects, 0, 0, 3)
 ZEND_END_ARG_INFO()
 
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_UpperBlit, 0, 0, 3)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_BlitSurface, 0, 0, 3)
        ZEND_ARG_OBJ_INFO(0, src, SDL_Surface, 0)
        ZEND_ARG_OBJ_INFO(0, srcrect, SDL_rect, 1)
        ZEND_ARG_OBJ_INFO(0, dst, SDL_Surface, 0)
@@ -117,7 +117,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_SetRLE, 0, 0, 1)
 ZEND_END_ARG_INFO()
 
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetColorKey, 0, 0, 2)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetSurfaceColorKey, 0, 0, 2)
        ZEND_ARG_OBJ_INFO(0, surface, SDL_Surface, 0)
        ZEND_ARG_INFO(0, flag)
        ZEND_ARG_INFO(0, key)
@@ -129,7 +129,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_SetColorKey, 0, 0, 1)
 ZEND_END_ARG_INFO()
 
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetColorKey, 0, 0, 2)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetSurfaceColorKey, 0, 0, 2)
        ZEND_ARG_OBJ_INFO(0, surface, SDL_Surface, 0)
        ZEND_ARG_INFO(1, key)
 ZEND_END_ARG_INFO()
@@ -209,7 +209,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_GetBlendMode, 0, 0, 1)
 ZEND_END_ARG_INFO()
 
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetClipRect, 0, 0, 2)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetSurfaceClipRect, 0, 0, 2)
        ZEND_ARG_OBJ_INFO(0, surface, SDL_Surface, 0)
        ZEND_ARG_INFO(0, cliprect)
 ZEND_END_ARG_INFO()
@@ -280,27 +280,27 @@ PHP_FUNCTION(SDL_LoadBMP_RW);
 PHP_FUNCTION(SDL_LoadBMP);
 PHP_FUNCTION(SDL_SaveBMP_RW);
 PHP_FUNCTION(SDL_SaveBMP);
-PHP_FUNCTION(SDL_FreeSurface);
-PHP_FUNCTION(SDL_FillRect);
-PHP_FUNCTION(SDL_FillRects);
+PHP_FUNCTION(SDL_DestroySurface);
+PHP_FUNCTION(SDL_FillSurfaceRect);
+PHP_FUNCTION(SDL_FillSurfaceRects);
 PHP_FUNCTION(SDL_MUSTLOCK);
 PHP_FUNCTION(SDL_LockSurface);
 PHP_FUNCTION(SDL_UnlockSurface);
-PHP_FUNCTION(SDL_UpperBlit);
+PHP_FUNCTION(SDL_BlitSurface);
 PHP_FUNCTION(SDL_LowerBlit);
-PHP_FUNCTION(SDL_UpperBlitScaled);
-PHP_FUNCTION(SDL_LowerBlitScaled);
+PHP_FUNCTION(SDL_BlitSurfaceScaled);
+PHP_FUNCTION(SDL_BlitSurfaceUncheckedScaled);
 PHP_FUNCTION(SDL_SoftStretch);
 PHP_FUNCTION(SDL_SetSurfaceRLE);
-PHP_FUNCTION(SDL_SetColorKey);
-PHP_FUNCTION(SDL_GetColorKey);
+PHP_FUNCTION(SDL_SetSurfaceColorKey);
+PHP_FUNCTION(SDL_GetSurfaceColorKey);
 PHP_FUNCTION(SDL_SetSurfaceColorMod);
 PHP_FUNCTION(SDL_GetSurfaceColorMod);
 PHP_FUNCTION(SDL_SetSurfaceAlphaMod);
 PHP_FUNCTION(SDL_GetSurfaceAlphaMod);
 PHP_FUNCTION(SDL_SetSurfaceBlendMode);
 PHP_FUNCTION(SDL_GetSurfaceBlendMode);
-PHP_FUNCTION(SDL_SetClipRect);
+PHP_FUNCTION(SDL_SetSurfaceClipRect);
 PHP_FUNCTION(SDL_GetClipRect);
 PHP_FUNCTION(SDL_ConvertSurface);
 PHP_FUNCTION(SDL_ConvertSurfaceFormat);

@@ -169,12 +169,12 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Window_SetTitle, 0, 0, 1)
        ZEND_ARG_INFO(0, title)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetWindowShape, 0, 0, 3)
+/*ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetWindowShape, 0, 0, 3)
        ZEND_ARG_OBJ_INFO(0, window,  SDL_Window, 0)
        ZEND_ARG_OBJ_INFO(0, surface, SDL_Surface, 0)
        ZEND_ARG_OBJ_INFO(0, mode,    SDL_WindowShapeMode, 0)
 ZEND_END_ARG_INFO()
-
+*/
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Window_SetShape, 0, 0, 2)
        ZEND_ARG_OBJ_INFO(0, surface, SDL_Surface, 0)
        ZEND_ARG_OBJ_INFO(0, mode,    SDL_WindowShapeMode, 0)
@@ -196,7 +196,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Window, 0, 0, 1)
        ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
 ZEND_END_ARG_INFO()
 
-PHP_FUNCTION(SDL_GetWindowDisplayIndex);
+PHP_FUNCTION(SDL_GetDisplayForWindow);
 PHP_FUNCTION(SDL_SetWindowDisplayMode);
 PHP_FUNCTION(SDL_GetWindowDisplayMode);
 PHP_FUNCTION(SDL_GetWindowPixelFormat);
@@ -236,8 +236,8 @@ PHP_FUNCTION(SDL_DestroyWindow);
 PHP_FUNCTION(SDL_GetWindowTitle);
 PHP_FUNCTION(SDL_SetWindowTitle);
 PHP_FUNCTION(SDL_IsShapedWindow);
-PHP_FUNCTION(SDL_SetWindowShape);
-PHP_FUNCTION(SDL_GetShapedWindowMode);
+//PHP_FUNCTION(SDL_SetWindowShape);
+//PHP_FUNCTION(SDL_GetShapedWindowMode);
 
 PHP_MINIT_FUNCTION(sdl_window);
 

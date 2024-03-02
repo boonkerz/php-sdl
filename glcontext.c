@@ -350,7 +350,7 @@ PHP_FUNCTION(SDL_GL_GetCurrentContext)
 	sdl_glcontext_to_zval(SDL_GL_GetCurrentContext(), return_value, SDL_DONTFREE);
 }
 
-/* {{{ proto void SDL_GL_GetDrawableSize(SDL_Window window, int &w, int &h)
+/* {{{ proto void SDL_GetWindowSizeInPixels(SDL_Window window, int &w, int &h)
 
  *  \brief Get the size of a window's underlying drawable (for use with glViewport).
  *
@@ -365,10 +365,10 @@ PHP_FUNCTION(SDL_GL_GetCurrentContext)
  *
  *  \sa SDL_GetWindowSize()
  *  \sa SDL_CreateWindow()
- extern DECLSPEC void SDLCALL SDL_GL_GetDrawableSize(SDL_Window * window, int *w,
+ extern DECLSPEC void SDLCALL SDL_GetWindowSizeInPixels(SDL_Window * window, int *w,
 													 int *h);
  */
-PHP_FUNCTION(SDL_GL_GetDrawableSize)
+PHP_FUNCTION(SDL_GetWindowSizeInPixels)
 {
 	zval *z_w, *z_h, *z_window;
 	SDL_Window *window;
@@ -381,7 +381,7 @@ PHP_FUNCTION(SDL_GL_GetDrawableSize)
 	window = zval_to_sdl_window(z_window);
 	if (window)
 	{
-		SDL_GL_GetDrawableSize(window, &w, &h);
+		SDL_GetWindowSizeInPixels(window, &w, &h);
 		zval_dtor(z_w);
 		ZVAL_LONG(z_w, w);
 		zval_dtor(z_h);

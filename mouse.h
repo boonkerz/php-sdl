@@ -57,7 +57,7 @@ ZEND_END_ARG_INFO()
 PHP_FUNCTION(SDL_CreateCursor);
 PHP_FUNCTION(SDL_CreateSystemCursor);
 PHP_FUNCTION(SDL_CreateColorCursor);
-PHP_FUNCTION(SDL_FreeCursor);
+PHP_FUNCTION(SDL_DestroyCursor);
 PHP_FUNCTION(SDL_SetCursor);
 PHP_FUNCTION(SDL_GetCursor);
 PHP_FUNCTION(SDL_GetDefaultCursor);

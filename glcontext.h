@@ -42,7 +42,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GL_MakeCurrent, 0, 0, 1)
        ZEND_ARG_OBJ_INFO(0, context, SDL_GLContext, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GL_GetDrawableSize, 0, 0, 3)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetWindowSizeInPixels, 0, 0, 3)
        ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
        ZEND_ARG_INFO(1, w)
        ZEND_ARG_INFO(1, h)
@@ -61,9 +61,7 @@ ZEND_END_ARG_INFO()
 PHP_FUNCTION(SDL_GL_CreateContext);
 PHP_FUNCTION(SDL_GL_MakeCurrent);
 PHP_FUNCTION(SDL_GL_GetCurrentWindow);
-#if SDL_VERSION_ATLEAST(2,0,1)
-PHP_FUNCTION(SDL_GL_GetDrawableSize);
-#endif
+PHP_FUNCTION(SDL_GetWindowSizeInPixels);
 PHP_FUNCTION(SDL_GL_SwapWindow);
 
 PHP_FUNCTION(SDL_GL_ExtensionSupported);
