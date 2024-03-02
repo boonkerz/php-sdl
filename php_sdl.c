@@ -9,12 +9,19 @@
 #include "php_sdl.h"
 #include "sdl_arginfo.h"
 #include "version.h"
+#include "sdl.h"
+#include "messagebox.h"
+#include "window.h"
+#include "video.h"
+#include "glcontext.h"
+#include "mouse.h"
+#include "rect.h"
 
 zend_module_entry sdl_module_entry = {
 	STANDARD_MODULE_HEADER,
 	"sdl",
 	sdl_functions,
-	NULL,		/* Replace with NULL if there is nothing to do at php startup   */
+	PHP_MINIT(sdl),		/* Replace with NULL if there is nothing to do at php startup   */
 	NULL, /* Replace with NULL if there is nothing to do at php shutdown  */
 	PHP_RINIT(sdl),				/* RINIT */
 	NULL,				/* RSHUTDOWN */
@@ -30,7 +37,23 @@ ZEND_TSRMLS_CACHE_DEFINE()
 ZEND_GET_MODULE(sdl)
 #endif /* COMPILE_DL_SDL */
 
+#define PHP_MINIT_CALL(func) PHP_MINIT(func)(INIT_FUNC_ARGS_PASSTHRU)
 
+PHP_MINIT_FUNCTION(sdl)
+{
+	if (SUCCESS == PHP_MINIT_CALL(sdl_sdl) &&
+		SUCCESS == PHP_MINIT_CALL(sdl_version) &&
+		SUCCESS == PHP_MINIT_CALL(sdl_messagebox) &&
+		SUCCESS == PHP_MINIT_CALL(sdl_window) &&
+		SUCCESS == PHP_MINIT_CALL(sdl_glcontext) &&
+		SUCCESS == PHP_MINIT_CALL(sdl_rect) &&
+		SUCCESS == PHP_MINIT_CALL(sdl_mouse) &&
+		SUCCESS == PHP_MINIT_CALL(sdl_video)
+)
+	{
+		return SUCCESS;
+	}
+}
 
 PHP_RINIT_FUNCTION(sdl)
 {

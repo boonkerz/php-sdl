@@ -20,6 +20,11 @@ PHP_FUNCTION(SDL_GetVersion)
     RETURN_TRUE;
 }
 
+PHP_MINIT_FUNCTION(sdl_version)
+{
+	return SUCCESS;
+}
+
 zend_bool convert_sdl_version_to_php_array(SDL_Version *version, zval *version_array)
 {
 

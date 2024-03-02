@@ -1,0 +1,44 @@
+#ifndef SDL_H
+#define SDL_H
+
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Init, 0, 0, 0)
+       ZEND_ARG_INFO(0, flags)
+ZEND_END_ARG_INFO()
+
+PHP_FUNCTION(SDL_Init);
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_InitSubSystem, 0, 0, 1)
+       ZEND_ARG_INFO(0, flags)
+ZEND_END_ARG_INFO()
+
+PHP_FUNCTION(SDL_InitSubSystem);
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_QuitSubSystem, 0, 0, 1)
+       ZEND_ARG_INFO(0, flags)
+ZEND_END_ARG_INFO()
+
+PHP_FUNCTION(SDL_QuitSubSystem);
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_WasInit, 0, 0, 1)
+       ZEND_ARG_INFO(0, flags)
+ZEND_END_ARG_INFO()
+
+PHP_FUNCTION(SDL_WasInit);
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Quit, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+PHP_FUNCTION(SDL_Quit);
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetHint, 0, 0, 2)
+       ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
+       ZEND_ARG_TYPE_INFO(0, value, IS_STRING, 0)
+ZEND_END_ARG_INFO()
+
+PHP_FUNCTION(SDL_SetHint);
+
+
+PHP_MINIT_FUNCTION(sdl_sdl);
+
+#endif //SDL_H

@@ -7,6 +7,7 @@ extern zend_module_entry sdl_module_entry;
 # define phpext_sdl_ptr &sdl_module_entry
 
 PHP_RINIT_FUNCTION(sdl);
+PHP_MINIT_FUNCTION(sdl);
 PHP_MINFO_FUNCTION(sdl);
 
 # if defined(ZTS) && defined(COMPILE_DL_SDL)

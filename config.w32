@@ -6,11 +6,13 @@ if(PHP_SDL != 'no') {
     CHECK_LIB("SDL2main.lib", "sdl", PHP_SDL);
     CHECK_LIB("SDL2test.lib", "sdl", PHP_SDL);
 
-    var sdl_sources = 'php_sdl.c version.c';
+    var sdl_sources = 'php_sdl.c version.c sdl.c messagebox.c window.c video.c glcontext.c rect.c mouse.c surface.c shape.c';
 
     EXTENSION('sdl', sdl_sources);
 
-    PHP_INSTALL_HEADERS("ext/sdl", "version.h");
+    PHP_INSTALL_HEADERS("ext/sdl", "version.h sdl.h messagebox.h window.h video.h glcontext.h rect.h mouse.h surface.h shape.h");
+
+	ADD_FLAG("LIBS_SDL", "gdi32.lib imm32.lib version.lib winmm.lib cfgmgr32.lib OleAut32.lib")
 
     AC_DEFINE('HAVE_SDL', 1);
 }

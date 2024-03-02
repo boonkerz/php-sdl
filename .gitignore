@@ -61,3 +61,4 @@ configure.ac
 .DS_Store
 tags
 *.dep
+/.idea
