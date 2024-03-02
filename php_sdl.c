@@ -56,6 +56,8 @@ PHP_MINIT_FUNCTION(sdl)
 	{
 		return SUCCESS;
 	}
+
+	return FAILURE;
 }
 
 PHP_RINIT_FUNCTION(sdl)

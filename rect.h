@@ -63,14 +63,6 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_SDL_GetRectEnclosingPoints, 0, 4
 	ZEND_ARG_OBJ_INFO(1, result, SDL_Rect, 1)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_SDL_GetRectIntersectionAndLine, 0, 5, _IS_BOOL, 0)
-	ZEND_ARG_OBJ_INFO(0, rect, SDL_Rect, 0)
-	ZEND_ARG_TYPE_INFO(1, X1, IS_LONG, 0)
-	ZEND_ARG_TYPE_INFO(1, Y1, IS_LONG, 0)
-	ZEND_ARG_TYPE_INFO(1, X2, IS_LONG, 0)
-	ZEND_ARG_TYPE_INFO(1, Y2, IS_LONG, 0)
-ZEND_END_ARG_INFO()
-
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_SDL_FRectEmpty, 0, 1, _IS_BOOL, 0)
 	ZEND_ARG_OBJ_INFO(0, r, SDL_FRect, 0)
 ZEND_END_ARG_INFO()
@@ -166,7 +158,6 @@ ZEND_FUNCTION(SDL_HasRectIntersection);
 ZEND_FUNCTION(SDL_GetRectIntersection);
 ZEND_FUNCTION(SDL_GetRectUnion);
 ZEND_FUNCTION(SDL_GetRectEnclosingPoints);
-ZEND_FUNCTION(SDL_GetRectIntersectionAndLine);
 ZEND_FUNCTION(SDL_FRectEmpty);
 ZEND_FUNCTION(SDL_HasRectIntersectionF);
 ZEND_FUNCTION(SDL_IntersectFRect);
@@ -188,7 +179,6 @@ static const zend_function_entry ext_functions[] = {
 	ZEND_FE(SDL_GetRectIntersection, arginfo_SDL_GetRectIntersection)
 	ZEND_FE(SDL_GetRectUnion, arginfo_SDL_GetRectUnion)
 	ZEND_FE(SDL_GetRectEnclosingPoints, arginfo_SDL_GetRectEnclosingPoints)
-	ZEND_FE(SDL_GetRectIntersectionAndLine, arginfo_SDL_GetRectIntersectionAndLine)
 	ZEND_FE(SDL_FRectEmpty, arginfo_SDL_FRectEmpty)
 	ZEND_FE(SDL_HasRectIntersectionF, arginfo_SDL_HasRectIntersectionF)
 	ZEND_FE(SDL_IntersectFRect, arginfo_SDL_IntersectFRect)
@@ -211,7 +201,6 @@ static const zend_function_entry class_SDL_Rect_methods[] = {
 	ZEND_ME_MAPPING(HasIntersection, SDL_HasRectIntersection, arginfo_class_SDL_Rect_HasIntersection, ZEND_ACC_PUBLIC)
 	ZEND_ME_MAPPING(Intersect, SDL_GetRectIntersection, arginfo_class_SDL_Rect_Intersect, ZEND_ACC_PUBLIC)
 	ZEND_ME_MAPPING(Union, SDL_GetRectUnion, arginfo_class_SDL_Rect_Union, ZEND_ACC_PUBLIC)
-	ZEND_ME_MAPPING(IntersectLine, SDL_GetRectIntersectionAndLine, arginfo_class_SDL_Rect_IntersectLine, ZEND_ACC_PUBLIC)
 	ZEND_FE_END
 };
 

@@ -125,7 +125,7 @@ PHP_FUNCTION(SDL_GetDisplayForWindow)
 }
 /* }}} */
 
-/* {{{ proto int SDL_SetWindowDisplayMode(SDL_Window window, SDL_DisplayMode mode)
+/* {{{ proto int SDL_SetWindowFullscreenMode(SDL_Window window, SDL_DisplayMode mode)
 
  *  \brief Set the display mode used when a fullscreen window is visible.
  *
@@ -137,13 +137,13 @@ PHP_FUNCTION(SDL_GetDisplayForWindow)
  *
  *  \return 0 on success, or -1 if setting the display mode failed.
  *
- *  \sa SDL_GetWindowDisplayMode()
+ *  \sa SDL_GetWindowFullscreenMode()
  *  \sa SDL_SetWindowFullscreen()
- extern DECLSPEC int SDLCALL SDL_SetWindowDisplayMode(SDL_Window * window,
+ extern DECLSPEC int SDLCALL SDL_SetWindowFullscreenMode(SDL_Window * window,
 													  const SDL_DisplayMode
 														  * mode);
  */
-PHP_FUNCTION(SDL_SetWindowDisplayMode)
+PHP_FUNCTION(SDL_SetWindowFullscreenMode)
 {
 	struct php_sdl_window *intern;
 	zval *z_window, *z_mode;
@@ -157,22 +157,22 @@ PHP_FUNCTION(SDL_SetWindowDisplayMode)
 	FETCH_WINDOW(window, z_window, 1);
 	if (zval_to_sdl_displaymode(z_mode, &mode))
 	{
-		RETVAL_LONG(SDL_SetWindowDisplayMode(window, &mode));
+		RETVAL_LONG(SDL_SetWindowFullscreenMode(window, &mode));
 	}
 }
 /* }}} */
 
-/* {{{ proto int SDL_GetWindowDisplayMode(SDL_Window window, SDL_DisplayMode mode)
+/* {{{ proto int SDL_GetWindowFullscreenMode(SDL_Window window, SDL_DisplayMode mode)
 
  *  \brief Fill in information about the display mode used when a fullscreen
  *         window is visible.
  *
- *  \sa SDL_SetWindowDisplayMode()
+ *  \sa SDL_SetWindowFullscreenMode()
  *  \sa SDL_SetWindowFullscreen()
- extern DECLSPEC int SDLCALL SDL_GetWindowDisplayMode(SDL_Window * window,
+ extern DECLSPEC int SDLCALL SDL_GetWindowFullscreenMode(SDL_Window * window,
 													  SDL_DisplayMode * mode);
  */
-PHP_FUNCTION(SDL_GetWindowDisplayMode)
+PHP_FUNCTION(SDL_GetWindowFullscreenMode)
 {
 	struct php_sdl_window *intern;
 	zval *z_window, *z_mode;
@@ -185,7 +185,7 @@ PHP_FUNCTION(SDL_GetWindowDisplayMode)
 		return;
 	}
 	FETCH_WINDOW(window, z_window, 1);
-	res = SDL_GetWindowDisplayMode(window, &mode);
+	res = SDL_GetWindowFullscreenMode(window, &mode);
 	if (0 == res)
 	{
 		zval_dtor(z_mode);
@@ -778,8 +778,8 @@ PHP_FUNCTION(SDL_RestoreWindow)
  *
  *  \return 0 on success, or -1 if setting the display mode failed.
  *
- *  \sa SDL_SetWindowDisplayMode()
- *  \sa SDL_GetWindowDisplayMode()
+ *  \sa SDL_SetWindowFullscreenMode()
+ *  \sa SDL_GetWindowFullscreenMode()
  extern DECLSPEC int SDLCALL SDL_SetWindowFullscreen(SDL_Window * window,
 													 Uint32 flags);
  */
@@ -950,110 +950,6 @@ PHP_FUNCTION(SDL_GetWindowGrab)
 }
 /* }}} */
 
-/* {{{ proto int SDL_SetWindowBrightness(SDL Window window, float brightness)
-
- *  \brief Set the brightness (gamma correction) for a window.
- *
- *  \return 0 on success, or -1 if setting the brightness isn't supported.
- *
- *  \sa SDL_GetWindowBrightness()
- extern DECLSPEC int SDLCALL SDL_SetWindowBrightness(SDL_Window * window, float brightness);
- */
-PHP_FUNCTION(SDL_SetWindowBrightness)
-{
-	struct php_sdl_window *intern;
-	zval *z_window;
-	double brightness;
-	SDL_Window *window;
-
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Od", &z_window, php_sdl_window_ce, &brightness))
-	{
-		return;
-	}
-	FETCH_WINDOW(window, z_window, 1);
-	RETVAL_LONG(SDL_SetWindowBrightness(window, (float)brightness));
-}
-/* }}} */
-
-/* {{{ proto void SDL_GetWindowBrightness(SDL Window window)
-
- *  \brief Get the brightness (gamma correction) for a window.
- *
- *  \return The last brightness value passed to SDL_SetWindowBrightness()
- *
- *  \sa SDL_SetWindowBrightness()
- extern DECLSPEC float SDLCALL SDL_GetWindowBrightness(SDL_Window * window);
- */
-PHP_FUNCTION(SDL_GetWindowBrightness)
-{
-	struct php_sdl_window *intern;
-	zval *z_window;
-	SDL_Window *window;
-
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &z_window, php_sdl_window_ce))
-	{
-		return;
-	}
-	FETCH_WINDOW(window, z_window, 1);
-	RETVAL_DOUBLE(SDL_GetWindowBrightness(window));
-}
-/* }}} */
-
-/* {{{ proto int SDL_GetWindowGammaRamp(SDL Window window, array &red, array &green, array &blue)
-
- *  \brief Get the gamma ramp for a window.
- *
- *  \param window The window from which the gamma ramp should be queried.
- *  \param red   A pointer to a 256 element array of 16-bit quantities to hold
- *               the translation table for the red channel, or NULL.
- *  \param green A pointer to a 256 element array of 16-bit quantities to hold
- *               the translation table for the green channel, or NULL.
- *  \param blue  A pointer to a 256 element array of 16-bit quantities to hold
- *               the translation table for the blue channel, or NULL.
- *
- *  \return 0 on success, or -1 if gamma ramps are unsupported.
- *
- extern DECLSPEC int SDLCALL SDL_GetWindowGammaRamp(SDL_Window * window,
-													Uint16 * red,
-													Uint16 * green,
-													Uint16 * blue);
- */
-PHP_FUNCTION(SDL_GetWindowGammaRamp)
-{
-	struct php_sdl_window *intern;
-	zval *z_window, *z_r, *z_g, *z_b;
-	SDL_Window *window;
-	Uint16 r[256], g[256], b[256];
-	// 	zval *tmp;
-	int i, ret;
-
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Ozzz", &z_window, php_sdl_window_ce, &z_r, &z_g, &z_b))
-	{
-		return;
-	}
-	FETCH_WINDOW(window, z_window, 1);
-
-	ret = SDL_GetWindowGammaRamp(window, r, g, b);
-	if (ret == 0)
-	{
-		zval_dtor(z_r);
-		array_init(z_r);
-		zval_dtor(z_g);
-		array_init(z_g);
-		zval_dtor(z_b);
-		array_init(z_b);
-
-		for (i = 0; i < 256; i++)
-		{
-			add_next_index_long(z_r, r[i]);
-			add_next_index_long(z_g, g[i]);
-			add_next_index_long(z_b, b[i]);
-		}
-	}
-	RETVAL_LONG(ret);
-}
-/* }}} */
-
 static void php_create_window(INTERNAL_FUNCTION_PARAMETERS, int opt)
 {
 	struct php_sdl_window *intern;
@@ -1069,7 +965,9 @@ static void php_create_window(INTERNAL_FUNCTION_PARAMETERS, int opt)
 	switch (opt)
 	{
 	case 1:
-		window = SDL_CreateShapedWindow(title, x, y, w, h, flags);
+		// TODO
+		//window = SDL_CreateShapedWindow(title, x, y, w, h, flags);
+		window = SDL_CreateWindow(title, x, y, w, h, flags);
 		break;
 	default:
 		window = SDL_CreateWindow(title, x, y, w, h, flags);
@@ -1081,7 +979,8 @@ static void php_create_window(INTERNAL_FUNCTION_PARAMETERS, int opt)
 		intern->window = window;
 		intern->flags = 0;
 
-		SDL_SetWindowData(intern->window, PHP_SDL_MAGICDATA, (void *)(unsigned long)Z_OBJ_HANDLE_P(return_value));
+		SDL_SetProperty(SDL_GetWindowProperties(intern->window), PHP_SDL_MAGICDATA, (void *)(unsigned long)Z_OBJ_HANDLE_P(return_value));
+		//SDL_SetWindowData(intern->window, PHP_SDL_MAGICDATA, (void *)(unsigned long)Z_OBJ_HANDLE_P(return_value));
 	}
 }
 /* {{{ proto SDL_Window SDL_CreateShapedWindow(string title, int x, int y, int w, int h, int flags)
@@ -1166,7 +1065,8 @@ static PHP_METHOD(SDL_Window, __construct)
 	intern->flags = 0;
 	if (intern->window)
 	{
-		SDL_SetWindowData(intern->window, PHP_SDL_MAGICDATA, (void *)(unsigned long)Z_OBJ_HANDLE_P(getThis()));
+		//SDL_SetWindowData(intern->window, PHP_SDL_MAGICDATA, (void *)(unsigned long)Z_OBJ_HANDLE_P(getThis()));
+		SDL_SetProperty(SDL_GetWindowProperties(intern->window), PHP_SDL_MAGICDATA, (void *)(unsigned long)Z_OBJ_HANDLE_P(getThis()));
 	}
 	else
 	{
@@ -1313,7 +1213,7 @@ PHP_FUNCTION(SDL_SetWindowTitle)
  * \sa SDL_CreateShapedWindow
 extern DECLSPEC SDL_bool SDLCALL SDL_IsShapedWindow(const SDL_Window *window);
  */
-PHP_FUNCTION(SDL_IsShapedWindow)
+/*PHP_FUNCTION(SDL_IsShapedWindow)
 {
 	struct php_sdl_window *intern;
 	zval *object;
@@ -1325,7 +1225,7 @@ PHP_FUNCTION(SDL_IsShapedWindow)
 	}
 	FETCH_WINDOW(window, object, 1);
 	RETVAL_BOOL(SDL_IsShapedWindow(window));
-}
+}*/
 /* }}} */
 
 /* {{{ proto int SDL_SetWindowShape(SDL_Window window, SDL_Surface shape, SDL_WindowShapeMode shape_mode)
@@ -1429,8 +1329,8 @@ static const zend_function_entry php_sdl_window_methods[] = {
 	PHP_FALIAS(Minimize, SDL_MinimizeWindow, arginfo_window_none)
 	PHP_FALIAS(Restore, SDL_RestoreWindow, arginfo_window_none)
 	PHP_FALIAS(GetSurface, SDL_GetWindowSurface, arginfo_window_none)
-	PHP_FALIAS(SetDisplayMode, SDL_SetWindowDisplayMode, arginfo_SDL_Window_SetDisplayMode)
-	PHP_FALIAS(GetDisplayMode, SDL_GetWindowDisplayMode, arginfo_SDL_Window_GetDisplayMode)
+	PHP_FALIAS(SetDisplayMode, SDL_SetWindowFullscreenMode, arginfo_SDL_Window_SetDisplayMode)
+	PHP_FALIAS(GetDisplayMode, SDL_GetWindowFullscreenMode, arginfo_SDL_Window_GetDisplayMode)
 	PHP_FALIAS(GetPixelFormat, SDL_GetWindowPixelFormat, arginfo_window_none)
 	PHP_FALIAS(GetID, SDL_GetWindowID, arginfo_window_none)
 	PHP_FALIAS(GetFlags, SDL_GetWindowFlags, arginfo_window_none)
@@ -1448,14 +1348,11 @@ static const zend_function_entry php_sdl_window_methods[] = {
 	PHP_FALIAS(UpdateSurfaceRects, SDL_UpdateWindowSurfaceRects, arginfo_SDL_Window_UpdateSurfaceRects)
 	PHP_FALIAS(SetGrab, SDL_SetWindowGrab, arginfo_SDL_Window_SetGrab)
 	PHP_FALIAS(GetGrab, SDL_GetWindowGrab, arginfo_window_none)
-	PHP_FALIAS(SetBrightness, SDL_SetWindowBrightness, arginfo_SDL_Window_SetBrightness)
-	PHP_FALIAS(GetBrightness, SDL_GetWindowBrightness, arginfo_window_none)
-	PHP_FALIAS(GetGammaRamp, SDL_GetWindowGammaRamp, arginfo_SDL_Window_GetGammaRamp)
 	PHP_FALIAS(GL_CreateContext, SDL_GL_CreateContext, arginfo_window_none)
 	PHP_FALIAS(GL_MakeCurrent, SDL_GL_MakeCurrent, arginfo_SDL_GLContext)
 	PHP_FALIAS(GL_Swap, SDL_GL_SwapWindow, arginfo_window_none)
 	PHP_FALIAS(WarpMouse, SDL_WarpMouseInWindow, arginfo_SDL_Window_SetPosition)
-	PHP_FALIAS(IsShaped, SDL_IsShapedWindow, arginfo_window_none)
+	//PHP_FALIAS(IsShaped, SDL_IsShapedWindow, arginfo_window_none)
 	//PHP_FALIAS(SetShape, SDL_SetWindowShape, arginfo_SDL_Window_SetShape)
 	//PHP_FALIAS(GetShapedMode, SDL_GetShapedWindowMode, arginfo_SDL_Window_GetShapedMode)
 

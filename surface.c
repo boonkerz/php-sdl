@@ -72,7 +72,7 @@ SDL_Surface *zval_to_sdl_surface(zval *z_val)
 }
 /* }}} */
 
-/* {{{ proto SDL_Surface SDL_CreateRGBSurface(int flags, int width, int height, int depth, int Rmask, int Gmask, int Bmask, int Amask)
+/* {{{ proto SDL_Surface SDL_CreateSurface(int flags, int width, int height, int depth, int Rmask, int Gmask, int Bmask, int Amask)
 
  *  Allocate and free an RGB surface.
  *
@@ -94,7 +94,7 @@ SDL_Surface *zval_to_sdl_surface(zval *z_val)
 	 (Uint32 flags, int width, int height, int depth,
 	  Uint32 Rmask, Uint32 Gmask, Uint32 Bmask, Uint32 Amask);
 */
-PHP_FUNCTION(SDL_CreateRGBSurface)
+PHP_FUNCTION(SDL_CreateSurface)
 {
 	zend_long flags, width, height, depth, rmask, gmask, bmask, amask;
 	SDL_Surface *surface;
@@ -103,7 +103,7 @@ PHP_FUNCTION(SDL_CreateRGBSurface)
 	{
 		return;
 	}
-	surface = SDL_CreateRGBSurface((Uint32)flags, (int)width, (int)height, (int)depth, (Uint32)rmask, (Uint32)gmask, (Uint32)bmask, (Uint32)amask);
+	surface = SDL_CreateSurface((Uint32)flags, (int)width, (int)height, SDL_GetPixelFormatEnumForMasks((int)depth, (Uint32)rmask, (Uint32)gmask, (Uint32)bmask, (Uint32)amask));
 	sdl_surface_to_zval(surface, return_value);
 }
 /* }}} */
@@ -187,7 +187,7 @@ static PHP_METHOD(SDL_Surface, __construct)
 	}
 	zend_restore_error_handling(&error_handling);
 
-	intern->surface = SDL_CreateRGBSurface(flags, (int)width, (int)height, (int)depth, rmask, gmask, bmask, amask);
+	intern->surface = SDL_CreateSurface(flags, (int)width, (int)height, SDL_GetPixelFormatEnumForMasks((int)depth, rmask, gmask, bmask, amask));
 	if (intern->surface)
 	{
 		/* copy flags to be able to check before access to surface */
@@ -565,7 +565,7 @@ PHP_FUNCTION(SDL_UnlockSurface)
  define SDL_BlitSurface SDL_BlitSurface
 
  *  This is the public blit function, SDL_BlitSurface(), and it performs
- *  rectangle validation and clipping before passing it to SDL_LowerBlit()
+ *  rectangle validation and clipping before passing it to SDL_BlitSurfaceUnchecked()
  extern DECLSPEC int SDLCALL SDL_BlitSurface
 	 (SDL_Surface * src, const SDL_Rect * srcrect,
 	  SDL_Surface * dst, SDL_Rect * dstrect);
@@ -609,15 +609,15 @@ if (z_drect && !(Z_TYPE_P(z_drect)==IS_NULL || zval_to_sdl_rect(z_drect, &drect)
 }
 /* }}} */
 
-/* {{{ proto void SDL_LowerBlit(SDL_Surface src, SDL_rect &srcrect, SDL_Surface dst , SDL_rect &dstrect)
+/* {{{ proto void SDL_BlitSurfaceUnchecked(SDL_Surface src, SDL_rect &srcrect, SDL_Surface dst , SDL_rect &dstrect)
 
  *  This is a semi-private blit function and it performs low-level surface
  *  blitting only.
- extern DECLSPEC int SDLCALL SDL_LowerBlit
+ extern DECLSPEC int SDLCALL SDL_BlitSurfaceUnchecked
 	 (SDL_Surface * src, SDL_Rect * srcrect,
 	  SDL_Surface * dst, SDL_Rect * dstrect);
  */
-PHP_FUNCTION(SDL_LowerBlit)
+PHP_FUNCTION(SDL_BlitSurfaceUnchecked)
 {
 	struct php_sdl_surface *intern;
 	zval *z_src, *z_dst, *z_srect, *z_drect = NULL;
@@ -634,7 +634,7 @@ PHP_FUNCTION(SDL_LowerBlit)
 	zval_to_sdl_rect(z_srect, &srect);
 	zval_to_sdl_rect(z_srect, &srect);
 
-	result = SDL_LowerBlit(src, &srect, dst, &drect);
+	result = SDL_BlitSurfaceUnchecked(src, &srect, dst, &drect);
 
 	if (result == 0)
 	{
@@ -1115,16 +1115,16 @@ PHP_FUNCTION(SDL_SetSurfaceClipRect)
 }
 /* }}} */
 
-/* {{{ proto void SDL_GetClipRect(SDL_Surface src, SDL_Rect &rect)
+/* {{{ proto void SDL_GetSurfaceClipRect(SDL_Surface src, SDL_Rect &rect)
 
  *  Gets the clipping rectangle for the destination surface in a blit.
  *
  *  \c rect must be a pointer to a valid rectangle which will be filled
  *  with the correct values.
- extern DECLSPEC void SDLCALL SDL_GetClipRect(SDL_Surface * surface,
+ extern DECLSPEC void SDLCALL SDL_GetSurfaceClipRect(SDL_Surface * surface,
 											  SDL_Rect * rect);
  */
-PHP_FUNCTION(SDL_GetClipRect)
+PHP_FUNCTION(SDL_GetSurfaceClipRect)
 {
 	struct php_sdl_surface *intern;
 	zval *z_surface, *z_rect;
@@ -1136,7 +1136,7 @@ PHP_FUNCTION(SDL_GetClipRect)
 		return;
 	}
 	FETCH_SURFACE(surface, z_surface, 1);
-	SDL_GetClipRect(surface, &rect);
+	SDL_GetSurfaceClipRect(surface, &rect);
 	zval_dtor(z_rect);
 	sdl_rect_to_zval(&rect, z_rect);
 }
@@ -1242,7 +1242,7 @@ PHP_FUNCTION(SDL_ConvertPixels)
 #undef SDL_BlitScaled
 
 static const zend_function_entry php_sdl_surface_methods[] = {
-	PHP_ME(SDL_Surface, __construct, arginfo_SDL_CreateRGBSurface, ZEND_ACC_CTOR | ZEND_ACC_PUBLIC)
+	PHP_ME(SDL_Surface, __construct, arginfo_SDL_CreateSurface, ZEND_ACC_CTOR | ZEND_ACC_PUBLIC)
 	PHP_ME(SDL_Surface, __toString, arginfo_class_SDL_Surface___toString, ZEND_ACC_PUBLIC)
 
 	/* non-static methods */
@@ -1254,7 +1254,7 @@ static const zend_function_entry php_sdl_surface_methods[] = {
 	PHP_FALIAS(Unlock, SDL_UnlockSurface, arginfo_surface_none)
 	PHP_FALIAS(Blit, SDL_BlitSurface, arginfo_SDL_Surface_UpperBlit)
 	PHP_FALIAS(UpperBlit, SDL_BlitSurface, arginfo_SDL_Surface_UpperBlit)
-	PHP_FALIAS(LowerBlit, SDL_LowerBlit, arginfo_SDL_Surface_LowerBlit)
+	PHP_FALIAS(LowerBlit, SDL_BlitSurfaceUnchecked, arginfo_SDL_Surface_LowerBlit)
 	PHP_FALIAS(BlitScaled, SDL_BlitSurfaceScaled, arginfo_SDL_Surface_UpperBlit)
 	PHP_FALIAS(UpperBlitScaled, SDL_BlitSurfaceScaled, arginfo_SDL_Surface_UpperBlit)
 	PHP_FALIAS(LowerBlitScaled, SDL_BlitSurfaceUncheckedScaled, arginfo_SDL_Surface_LowerBlit)
@@ -1271,7 +1271,7 @@ static const zend_function_entry php_sdl_surface_methods[] = {
 	PHP_FALIAS(SetBlendMode, SDL_SetSurfaceBlendMode, arginfo_SDL_Surface_SetBlendMode)
 	PHP_FALIAS(GetBlendMode, SDL_GetSurfaceBlendMode, arginfo_SDL_Surface_GetBlendMode)
 	PHP_FALIAS(SetClipRect, SDL_SetSurfaceClipRect, arginfo_SDL_Surface_SetClipRect)
-	PHP_FALIAS(GetClipRect, SDL_GetClipRect, arginfo_SDL_Surface_GetClipRect)
+	PHP_FALIAS(GetClipRect, SDL_GetSurfaceClipRect, arginfo_SDL_Surface_GetClipRect)
 	PHP_FALIAS(Convert, SDL_ConvertSurface, arginfo_SDL_Surface_Convert)
 	PHP_FALIAS(ConvertFormat, SDL_ConvertSurfaceFormat, arginfo_SDL_Surface_ConvertFormat)
 

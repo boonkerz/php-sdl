@@ -661,48 +661,6 @@ PHP_FUNCTION(SDL_GetRectEnclosingPoints)
 }
 /* }}} */
 
-/* {{{ proto bool SDL_GetRectIntersectionAndLine(const SDL_Rect *, int &x1, int &y1, int &x2, int &y2)
-
- *  \brief Calculate the intersection of a rectangle and line segment.
- *
- *  \return SDL_TRUE if there is an intersection, SDL_FALSE otherwise.
- extern DECLSPEC SDL_bool SDLCALL SDL_GetRectIntersectionAndLine(const SDL_Rect *
-														   rect, int *X1,
-														   int *Y1, int *X2,
-														   int *Y2);
- */
-PHP_FUNCTION(SDL_GetRectIntersectionAndLine)
-{
-	zval *object, *z_x1, *z_x2, *z_y1, *z_y2;
-	SDL_Rect rect;
-	int x1, y1, x2, y2;
-
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Oz/z/z/z/", &object, php_sdl_rect_ce, &z_x1, &z_y1, &z_x2, &z_y2) == FAILURE)
-	{
-		return;
-	}
-	zval_to_sdl_rect(object, &rect);
-	convert_to_long_ex(z_x1);
-	convert_to_long_ex(z_y1);
-	convert_to_long_ex(z_x2);
-	convert_to_long_ex(z_y2);
-	x1 = (int)Z_LVAL_P(z_x1);
-	y1 = (int)Z_LVAL_P(z_y1);
-	x2 = (int)Z_LVAL_P(z_x2);
-	y2 = (int)Z_LVAL_P(z_y2);
-
-	if (SDL_GetRectIntersectionAndLine(&rect, &x1, &y1, &x2, &y2))
-	{
-		Z_LVAL_P(z_x1) = x1;
-		Z_LVAL_P(z_y1) = y1;
-		Z_LVAL_P(z_x2) = x2;
-		Z_LVAL_P(z_y2) = y2;
-		RETURN_TRUE;
-	}
-	RETURN_FALSE;
-}
-/* }}} */
-
 PHP_FUNCTION(SDL_PointInRect)
 {
 	zval *z_point, *z_rect;

@@ -20,13 +20,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetDisplayBounds, 0, 0, 2)
        ZEND_ARG_INFO(1, rect)
 ZEND_END_ARG_INFO()
 
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetDisplayMode, 0, 0, 2)
-       ZEND_ARG_INFO(0, displayIndex)
-       ZEND_ARG_INFO(0, modeIndex)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetClosestDisplayMode, 0, 0, 2)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetClosestFullscreenDisplayMode, 0, 0, 2)
        ZEND_ARG_INFO(0, displayIndex)
        ZEND_ARG_OBJ_INFO(0, desired, SDL_DisplayMode, 0)
        ZEND_ARG_INFO(1, closest)
@@ -45,13 +39,12 @@ PHP_FUNCTION(SDL_GetVideoDriver);
 PHP_FUNCTION(SDL_VideoInit);
 PHP_FUNCTION(SDL_VideoQuit);
 PHP_FUNCTION(SDL_GetCurrentVideoDriver);
-PHP_FUNCTION(SDL_GetNumVideoDisplays);
+PHP_FUNCTION(SDL_GetDisplays);
 PHP_FUNCTION(SDL_GetDisplayName);
 PHP_FUNCTION(SDL_GetDisplayBounds);
-PHP_FUNCTION(SDL_GetNumDisplayModes);
-PHP_FUNCTION(SDL_GetDisplayMode);
-PHP_FUNCTION(SDL_GetClosestDisplayMode);
-PHP_FUNCTION(SDL_IsScreenSaverEnabled);
+PHP_FUNCTION(SDL_GetFullscreenDisplayModes);
+PHP_FUNCTION(SDL_GetClosestFullscreenDisplayMode);
+PHP_FUNCTION(SDL_ScreenSaverEnabled);
 PHP_FUNCTION(SDL_EnableScreenSaver);
 PHP_FUNCTION(SDL_DisableScreenSaver);
 

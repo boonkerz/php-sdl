@@ -13,7 +13,7 @@ zend_bool sdl_surface_to_zval(SDL_Surface *surface, zval *zval);
 SDL_Surface *zval_to_sdl_surface(zval *z_val);
 
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_CreateRGBSurface, 0, 0, 6)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_CreateSurface, 0, 0, 6)
        ZEND_ARG_INFO(0, flags)
        ZEND_ARG_INFO(0, width)
        ZEND_ARG_INFO(0, height)
@@ -93,7 +93,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_UpperBlit, 0, 0, 2)
 ZEND_END_ARG_INFO()
 
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_LowerBlit, 0, 0, 4)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_BlitSurfaceUnchecked, 0, 0, 4)
        ZEND_ARG_OBJ_INFO(0, src, SDL_Surface, 0)
        ZEND_ARG_OBJ_INFO(1, srcrect, SDL_rect, 0)
        ZEND_ARG_OBJ_INFO(0, dst, SDL_Surface, 0)
@@ -219,7 +219,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_SetClipRect, 0, 0, 1)
 ZEND_END_ARG_INFO()
 
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetClipRect, 0, 0, 2)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetSurfaceClipRect, 0, 0, 2)
        ZEND_ARG_OBJ_INFO(0, surface, SDL_Surface, 0)
        ZEND_ARG_INFO(1, cliprect)
 ZEND_END_ARG_INFO()
@@ -275,7 +275,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_LoadBMP_RW, 0, 0, 2)
        ZEND_ARG_INFO(0, freesrc)
 ZEND_END_ARG_INFO()
 
-PHP_FUNCTION(SDL_CreateRGBSurface);
+PHP_FUNCTION(SDL_CreateSurface);
 PHP_FUNCTION(SDL_LoadBMP_RW);
 PHP_FUNCTION(SDL_LoadBMP);
 PHP_FUNCTION(SDL_SaveBMP_RW);
@@ -287,7 +287,7 @@ PHP_FUNCTION(SDL_MUSTLOCK);
 PHP_FUNCTION(SDL_LockSurface);
 PHP_FUNCTION(SDL_UnlockSurface);
 PHP_FUNCTION(SDL_BlitSurface);
-PHP_FUNCTION(SDL_LowerBlit);
+PHP_FUNCTION(SDL_BlitSurfaceUnchecked);
 PHP_FUNCTION(SDL_BlitSurfaceScaled);
 PHP_FUNCTION(SDL_BlitSurfaceUncheckedScaled);
 PHP_FUNCTION(SDL_SoftStretch);
@@ -301,7 +301,7 @@ PHP_FUNCTION(SDL_GetSurfaceAlphaMod);
 PHP_FUNCTION(SDL_SetSurfaceBlendMode);
 PHP_FUNCTION(SDL_GetSurfaceBlendMode);
 PHP_FUNCTION(SDL_SetSurfaceClipRect);
-PHP_FUNCTION(SDL_GetClipRect);
+PHP_FUNCTION(SDL_GetSurfaceClipRect);
 PHP_FUNCTION(SDL_ConvertSurface);
 PHP_FUNCTION(SDL_ConvertSurfaceFormat);
 PHP_FUNCTION(SDL_ConvertPixels);

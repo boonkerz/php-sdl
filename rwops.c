@@ -118,7 +118,7 @@ static PHP_METHOD(SDL_RWops, __construct)
 	}
 	zend_restore_error_handling(&error_handling);
 
-	intern->rwops = SDL_AllocRW();
+	intern->rwops = SDL_CreateRW();
 	if (intern->rwops) {
 		intern->flags = 0;
 	} else {
@@ -165,18 +165,18 @@ static PHP_METHOD(SDL_RWops, __toString)
 /* }}} */
 
 
-/* {{{ proto SDL_RWops SDL_AllocRW(void)
+/* {{{ proto SDL_RWops SDL_CreateRW(void)
 
-extern DECLSPEC SDL_RWops *SDLCALL SDL_AllocRW(void);
+extern DECLSPEC SDL_RWops *SDLCALL SDL_CreateRW(void);
  */
-PHP_FUNCTION(SDL_AllocRW)
+PHP_FUNCTION(SDL_CreateRW)
 {
 	SDL_RWops *rwops;
 
 	if (FAILURE == zend_parse_parameters_none()) {
 		return;
 	}
-	rwops = SDL_AllocRW();
+	rwops = SDL_CreateRW();
 	sdl_rwops_to_zval(rwops, return_value, 0, NULL);
 }
 /* }}} */
@@ -274,42 +274,18 @@ void php_stream_to_zval_rwops(php_stream *stream, zval *return_value, int autocl
 		if (FAILURE == php_stream_cast(stream, PHP_STREAM_AS_STDIO, (void**)&fp, REPORT_ERRORS)) {
 			RETURN_NULL();
 		}
-		rwops = SDL_RWFromFP(fp, autoclose);
+// TODO
+		//rwops = SDL_RWFromFP(fp, autoclose);
 		sdl_rwops_to_zval(rwops, return_value, 0, NULL);
 	}
 }
 /* }}} */
 
-/* {{{ proto SDL_RWops SDL_RWFromFP(resource fp, bool autoclose)
+/* {{{ proto void SDL_DestroyRW(SDL_RWops area)
 
-   PHP change: this function support PHP stream
-   * SDL_RWFromFP will be used for real file
-   * SDL_RWFromMem will be used for other stream
-     (inspired from gd extension)
-
- extern DECLSPEC SDL_RWops *SDLCALL SDL_RWFromFP(FILE * fp,
-                                                 SDL_bool autoclose);
+ extern DECLSPEC void SDLCALL SDL_DestroyRW(SDL_RWops * area);
  */
-PHP_FUNCTION(SDL_RWFromFP)
-{
-	zval *z_stream;
-	zend_long autoclose = 0;
-	php_stream *stream;
-
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "r|l", &z_stream, &autoclose)) {
-		return;
-	}
-	php_stream_from_zval(stream, z_stream);
-	php_stream_to_zval_rwops(stream, return_value, autoclose);
-}
-/* }}} */
-
-
-/* {{{ proto void SDL_FreeRW(SDL_RWops area)
-
- extern DECLSPEC void SDLCALL SDL_FreeRW(SDL_RWops * area);
- */
-PHP_FUNCTION(SDL_FreeRW)
+PHP_FUNCTION(SDL_DestroyRW)
 {
 	struct php_sdl_rwops *intern;
 	zval *z_rwops;
@@ -320,7 +296,7 @@ PHP_FUNCTION(SDL_FreeRW)
 	}
 	FETCH_RWOPS(rwops, z_rwops, 1);
 
-	SDL_FreeRW(intern->rwops);
+	SDL_DestroyRW(intern->rwops);
 	if (intern->buf) {
 		efree(intern->buf);
 	}
@@ -514,7 +490,7 @@ PHP_FUNCTION(SDL_ReadU8)
 	FETCH_RWOPS(rwops, z_rwops, 1);
 	Uint8 *value;
 	SDL_ReadU8(rwops, &value);
-	RETURN_INT(value);
+	RETURN_LONG(value);
 }
 /* }}} */
 
@@ -808,7 +784,7 @@ static const zend_function_entry php_sdl_rwops_methods[] = {
 	PHP_ME(SDL_RWops,        __toString,        arginfo_class_SDL_RWops___toString,    ZEND_ACC_PUBLIC)
 
 	/* non-static methods */
-	PHP_FALIAS(Free,         SDL_FreeRW,        arginfo_rwops_none)
+	PHP_FALIAS(Free,         SDL_DestroyRW,        arginfo_rwops_none)
 	PHP_FALIAS(Size,         SDL_RWsize,        arginfo_rwops_none)
 	PHP_FALIAS(Seek,         SDL_RWseek,        arginfo_SDL_RWops_seek)
 	PHP_FALIAS(Tell,         SDL_RWtell,        arginfo_rwops_none)
@@ -836,7 +812,6 @@ static const zend_function_entry php_sdl_rwops_methods[] = {
 
 	/* static methods */
 	ZEND_FENTRY(FromFile,      ZEND_FN(SDL_RWFromFile),      arginfo_SDL_RWFromFile,      ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
-	ZEND_FENTRY(FromFP,        ZEND_FN(SDL_RWFromFP),        arginfo_SDL_RWFromFP,        ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	ZEND_FENTRY(FromMem,       ZEND_FN(SDL_RWFromMem),       arginfo_SDL_RWFromMem,       ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	ZEND_FENTRY(FromConstMem,  ZEND_FN(SDL_RWFromConstMem),  arginfo_SDL_RWFromConstMem,  ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 

@@ -233,20 +233,21 @@ PHP_FUNCTION(SDL_GetCurrentVideoDriver)
 /* }}} */
 
 
-/* {{{ proto int SDL_GetNumVideoDisplays(void)
+/* {{{ proto int SDL_GetDisplays(void)
 
  *  \brief Returns the number of available video displays.
  *
  *  \sa SDL_GetDisplayBounds()
- extern DECLSPEC int SDLCALL SDL_GetNumVideoDisplays(void);
+ extern DECLSPEC int SDLCALL SDL_GetDisplays(void);
  */
-PHP_FUNCTION(SDL_GetNumVideoDisplays)
+PHP_FUNCTION(SDL_GetDisplays)
 {
 	if (zend_parse_parameters_none() == FAILURE) {
 		RETURN_FALSE;
 	}
-
-	RETURN_LONG(SDL_GetNumVideoDisplays());
+	int num_displays = 0;
+	SDL_GetDisplays(&num_displays);
+	RETURN_LONG(num_displays);
 }
 /* }}} */
 
@@ -257,7 +258,7 @@ PHP_FUNCTION(SDL_GetNumVideoDisplays)
  *
  *  \return The name of a display, or NULL for an invalid display index.
  *
- *  \sa SDL_GetNumVideoDisplays()
+ *  \sa SDL_GetDisplays()
  extern DECLSPEC const char * SDLCALL SDL_GetDisplayName(int displayIndex);
 */
 PHP_FUNCTION(SDL_GetDisplayName)
@@ -283,7 +284,7 @@ PHP_FUNCTION(SDL_GetDisplayName)
  *
  *  \return 0 on success, or -1 if the index is out of range.
  *
- *  \sa SDL_GetNumVideoDisplays()
+ *  \sa SDL_GetDisplays()
  extern DECLSPEC int SDLCALL SDL_GetDisplayBounds(int displayIndex, SDL_Rect * rect);
  */
 PHP_FUNCTION(SDL_GetDisplayBounds)
@@ -306,14 +307,14 @@ PHP_FUNCTION(SDL_GetDisplayBounds)
 /* }}} */
 
 
-/* {{{ proto int SDL_GetNumDisplayModes(int displayIndex)
+/* {{{ proto int SDL_GetFullscreenDisplayModes(int displayIndex)
 
  *  \brief Returns the number of available display modes.
  *
  *  \sa SDL_GetDisplayMode()
- extern DECLSPEC int SDLCALL SDL_GetNumDisplayModes(int displayIndex);
+ extern DECLSPEC int SDLCALL SDL_GetFullscreenDisplayModes(int displayIndex);
  */
-PHP_FUNCTION(SDL_GetNumDisplayModes)
+PHP_FUNCTION(SDL_GetFullscreenDisplayModes)
 {
 	zend_long display;
 
@@ -321,41 +322,14 @@ PHP_FUNCTION(SDL_GetNumDisplayModes)
 		RETURN_FALSE;
 	}
 
-	RETURN_LONG(SDL_GetNumDisplayModes((int)display));
+	int num_modes = 0;
+	SDL_GetFullscreenDisplayModes((int)display, &num_modes);
+	RETURN_LONG(num_modes);
 }
 /* }}} */
 
 
-/* {{{ proto array SDL_GetDisplayMode(int displayIndex, int modeIndex)
-
- *  \brief Fill in information about a specific display mode.
- *
- *  \note The display modes are sorted in this priority:
- *        \li bits per pixel -> more colors to fewer colors
- *        \li width -> largest to smallest
- *        \li height -> largest to smallest
- *        \li refresh rate -> highest to lowest
- *
- *  \sa SDL_GetNumDisplayModes()
- extern DECLSPEC int SDLCALL SDL_GetDisplayMode(int displayIndex, int modeIndex,
-                                               SDL_DisplayMode * mode);
- */
-PHP_FUNCTION(SDL_GetDisplayMode)
-{
-	zend_long display, mode;
-	SDL_DisplayMode dm;
-
-	if (zend_parse_parameters(ZEND_NUM_ARGS(), "ll", &display, &mode) == FAILURE) {
-		RETURN_FALSE;
-	}
-	if (SDL_GetDisplayMode((int)display, (int)mode, &dm)) {
-		RETURN_FALSE;
-	}
-	sdl_displaymode_to_zval(&dm, return_value);
-}
-/* }}} */
-
-/* {{{ proto SDL_DisplayMode SDL_GetClosestDisplayMode(int displayIndex, SDL_DisplayMode mode [, SDL_DisplayMode closest])
+/* {{{ proto SDL_DisplayMode SDL_GetClosestFullscreenDisplayMode(int displayIndex, SDL_DisplayMode mode [, SDL_DisplayMode closest])
 
  *  \brief Get the closest match to the requested display mode.
  *
@@ -374,11 +348,11 @@ PHP_FUNCTION(SDL_GetDisplayMode)
  *  finally checking the refresh_rate.  If all the available modes are too
  *  small, then NULL is returned.
  *
- *  \sa SDL_GetNumDisplayModes()
+ *  \sa SDL_GetFullscreenDisplayModes()
  *  \sa SDL_GetDisplayMode()
- extern DECLSPEC SDL_DisplayMode * SDLCALL SDL_GetClosestDisplayMode(int displayIndex, const SDL_DisplayMode * mode, SDL_DisplayMode * closest);
+ extern DECLSPEC SDL_DisplayMode * SDLCALL SDL_GetClosestFullscreenDisplayMode(int displayIndex, const SDL_DisplayMode * mode, SDL_DisplayMode * closest);
  */
-PHP_FUNCTION(SDL_GetClosestDisplayMode)
+PHP_FUNCTION(SDL_GetClosestFullscreenDisplayMode)
 {
 	zend_long display;
 	zval *z_desired, *z_closest = NULL;
@@ -389,7 +363,7 @@ PHP_FUNCTION(SDL_GetClosestDisplayMode)
 	}
 
 	zval_to_sdl_displaymode(z_desired, &desired);
-	if (SDL_GetClosestDisplayMode((int)display, &desired, &closest)==NULL) {
+	if (SDL_GetClosestFullscreenDisplayMode((int)display, desired.w, desired.h, desired.refresh_rate, true)==NULL) {
 		RETURN_NULL();
 	}
 
@@ -404,21 +378,21 @@ PHP_FUNCTION(SDL_GetClosestDisplayMode)
 /* }}} */
 
 
-/* {{{ proto bool SDL_IsScreenSaverEnabled(void)
+/* {{{ proto bool SDL_ScreenSaverEnabled(void)
 
  *  \brief Returns whether the screensaver is currently enabled (default on).
  *
  *  \sa SDL_EnableScreenSaver()
  *  \sa SDL_DisableScreenSaver()
- extern DECLSPEC SDL_bool SDLCALL SDL_IsScreenSaverEnabled(void);
+ extern DECLSPEC SDL_bool SDLCALL SDL_ScreenSaverEnabled(void);
  */
-PHP_FUNCTION(SDL_IsScreenSaverEnabled)
+PHP_FUNCTION(SDL_ScreenSaverEnabled)
 {
 	if (zend_parse_parameters_none() == FAILURE) {
 		RETURN_FALSE;
 	}
 
-	RETURN_BOOL(SDL_IsScreenSaverEnabled());
+	RETURN_BOOL(SDL_ScreenSaverEnabled());
 }
 /* }}} */
 
@@ -427,7 +401,7 @@ PHP_FUNCTION(SDL_IsScreenSaverEnabled)
 
  *  \brief Allow the screen to be blanked by a screensaver
  *
- *  \sa SDL_IsScreenSaverEnabled()
+ *  \sa SDL_ScreenSaverEnabled()
  *  \sa SDL_DisableScreenSaver()
  extern DECLSPEC void SDLCALL SDL_EnableScreenSaver(void);
  */
@@ -446,7 +420,7 @@ PHP_FUNCTION(SDL_EnableScreenSaver)
 
  *  \brief Prevent the screen from being blanked by a screensaver
  *
- *  \sa SDL_IsScreenSaverEnabled()
+ *  \sa SDL_ScreenSaverEnabled()
  *  \sa SDL_EnableScreenSaver()
  extern DECLSPEC void SDLCALL SDL_DisableScreenSaver(void);
  */
