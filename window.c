@@ -967,10 +967,10 @@ static void php_create_window(INTERNAL_FUNCTION_PARAMETERS, int opt)
 	case 1:
 		// TODO
 		//window = SDL_CreateShapedWindow(title, x, y, w, h, flags);
-		window = SDL_CreateWindow(title, x, y, w, h, flags);
+		window = SDL_CreateWindow(title, w, h, flags);
 		break;
 	default:
-		window = SDL_CreateWindow(title, x, y, w, h, flags);
+		window = SDL_CreateWindow(title, w, h, flags);
 	}
 	if (window)
 	{

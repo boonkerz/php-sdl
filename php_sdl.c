@@ -17,6 +17,8 @@
 #include "mouse.h"
 #include "rect.h"
 #include "rwops.h"
+#include "render.h"
+#include "event.h"
 
 zend_module_entry sdl_module_entry = {
 	STANDARD_MODULE_HEADER,
@@ -51,6 +53,8 @@ PHP_MINIT_FUNCTION(sdl)
 		SUCCESS == PHP_MINIT_CALL(sdl_mouse) &&
 		SUCCESS == PHP_MINIT_CALL(sdl_pixels) &&
 		SUCCESS == PHP_MINIT_CALL(sdl_rwops) &&
+		SUCCESS == PHP_MINIT_CALL(sdl_render) &&
+		SUCCESS == PHP_MINIT_CALL(sdl_event) &&
 		SUCCESS == PHP_MINIT_CALL(sdl_video)
 )
 	{

@@ -12,7 +12,8 @@
 #include "pixels.h"
 #include "mouse.h"
 #include "rwops.h"
-
+#include "render.h"
+#include "event.h"
 
 static const zend_function_entry sdl_functions[] = {
     // Core
@@ -192,6 +193,32 @@ static const zend_function_entry sdl_functions[] = {
 	ZEND_FE(SDL_WriteLE64, arginfo_SDL_write)
 	ZEND_FE(SDL_WriteBE64, arginfo_SDL_write)
 	#endif
+
+	// Render
+	ZEND_FE(SDL_CreateRenderer, arginfo_SDL_CreateRenderer)
+	ZEND_FE(SDL_CreateSoftwareRenderer, arginfo_SDL_CreateSoftwareRenderer)
+	ZEND_FE(SDL_DestroyRenderer, arginfo_SDL_DestroyRenderer)
+	ZEND_FE(SDL_DestroyTexture, arginfo_SDL_DestroyTexture)
+	ZEND_FE(SDL_SetRenderDrawColor, arginfo_SDL_SetRenderDrawColor)
+	ZEND_FE(SDL_RenderPoint, arginfo_SDL_RenderPoint)
+	ZEND_FE(SDL_RenderClear, arginfo_SDL_RenderClear)
+	ZEND_FE(SDL_RenderTexture, arginfo_SDL_RenderTexture)
+	ZEND_FE(SDL_RenderTextureRotated, arginfo_SDL_RenderTextureRotated)
+	ZEND_FE(SDL_RenderFillRect, arginfo_SDL_RenderFillRect)
+	ZEND_FE(SDL_RenderRect, arginfo_SDL_RenderRect)
+	ZEND_FE(SDL_RenderLine, arginfo_SDL_RenderLine)
+	ZEND_FE(SDL_RenderPresent, arginfo_SDL_RenderPresent)
+	ZEND_FE(SDL_CreateTextureFromSurface, arginfo_SDL_CreateTextureFromSurface)
+	ZEND_FE(SDL_CreateTexture, arginfo_SDL_CreateTexture)
+	ZEND_FE(SDL_UpdateTexture, arginfo_SDL_UpdateTexture)
+	ZEND_FE(SDL_QueryTexture, arginfo_SDL_QueryTexture)
+	ZEND_FE(SDL_SetRenderTarget, arginfo_SDL_SetRenderTarget)
+	ZEND_FE(SDL_SetRenderLogicalPresentation, arginfo_SDL_SetRenderLogicalPresentation)
+	ZEND_FE(SDL_GetCurrentRenderOutputSize, arginfo_SDL_GetCurrentRenderOutputSize)
+
+	// Events
+	ZEND_FE(SDL_WaitEvent, arginfo_SDL_WaitEvent)
+	ZEND_FE(SDL_PollEvent, arginfo_SDL_PollEvent)
 
     // Version
     ZEND_FE(SDL_GetVersion, arginfo_SDL_GetVersion)
