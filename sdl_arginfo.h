@@ -68,8 +68,6 @@ static const zend_function_entry sdl_functions[] = {
 	// Video
 	ZEND_FE(SDL_GetNumVideoDrivers, arginfo_video_none)
 	ZEND_FE(SDL_GetVideoDriver, arginfo_SDL_GetVideoDriver)
-	ZEND_FE(SDL_InitSubSystem, arginfo_SDL_InitSubSystem)
-	ZEND_FE(SDL_QuitSubSystem, arginfo_SDL_QuitSubSystem)
 	ZEND_FE(SDL_GetCurrentVideoDriver, arginfo_video_none)
 	ZEND_FE(SDL_GetDisplays, arginfo_video_none)
 	ZEND_FE(SDL_GetDisplayName, arginfo_SDL_dysplayindex)
