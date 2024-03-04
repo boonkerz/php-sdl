@@ -11,7 +11,11 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetVideoDriver, 0, 0, 1)
        ZEND_ARG_INFO(0, driverIndex)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_VideoInit, 0, 0, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_InitSubSystem, 0, 0, 0)
+       ZEND_ARG_INFO(0, drivername)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_QuitSubSystem, 0, 0, 0)
        ZEND_ARG_INFO(0, drivername)
 ZEND_END_ARG_INFO()
 
@@ -36,8 +40,8 @@ ZEND_END_ARG_INFO()
 
 PHP_FUNCTION(SDL_GetNumVideoDrivers);
 PHP_FUNCTION(SDL_GetVideoDriver);
-PHP_FUNCTION(SDL_VideoInit);
-PHP_FUNCTION(SDL_VideoQuit);
+PHP_FUNCTION(SDL_InitSubSystem);
+PHP_FUNCTION(SDL_QuitSubSystem);
 PHP_FUNCTION(SDL_GetCurrentVideoDriver);
 PHP_FUNCTION(SDL_GetDisplays);
 PHP_FUNCTION(SDL_GetDisplayName);

@@ -152,7 +152,7 @@ PHP_FUNCTION(SDL_GetVideoDriver)
 /* }}} */
 
 
-/* {{{ proto string SDL_VideoInit([string driver])
+/* {{{ proto string SDL_InitSubSystem([string driver])
 
  *  \brief Initialize the video subsystem, optionally specifying a video driver.
  *
@@ -165,10 +165,10 @@ PHP_FUNCTION(SDL_GetVideoDriver)
  *  to the window manager, etc, and determines the available display modes
  *  and pixel formats, but does not initialize a window or graphics mode.
  *
- *  \sa SDL_VideoQuit()
- extern DECLSPEC int SDLCALL SDL_VideoInit(const char *driver_name);
+ *  \sa SDL_QuitSubSystem()
+ extern DECLSPEC int SDLCALL SDL_InitSubSystem(const char *driver_name);
  */
-PHP_FUNCTION(SDL_VideoInit)
+PHP_FUNCTION(SDL_InitSubSystem)
 {
 	char *name = NULL;
 	size_t name_len = 0;
@@ -178,16 +178,16 @@ PHP_FUNCTION(SDL_VideoInit)
 		RETURN_FALSE;
 	}
 	if (name && name_len) {
-		res = SDL_VideoInit(name);
+		res = SDL_InitSubSystem(name);
 	} else {
-		res = SDL_VideoInit(NULL);
+		res = SDL_InitSubSystem(NULL);
 	}
 	RETURN_LONG(res);
 }
 /* }}} */
 
 
-/* {{{ proto void SDL_VideoQuit(void)
+/* {{{ proto void SDL_QuitSubSystem(void)
 
  *  \brief Shuts down the video subsystem.
  *
@@ -196,12 +196,20 @@ PHP_FUNCTION(SDL_VideoInit)
  *  \sa SDL_VideoInit()
  extern DECLSPEC void SDLCALL SDL_VideoQuit(void);
  */
-PHP_FUNCTION(SDL_VideoQuit)
+PHP_FUNCTION(SDL_QuitSubSystem)
 {
-	if (zend_parse_parameters_none() == FAILURE) {
+	char *name = NULL;
+	size_t name_len = 0;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS(), "|s", &name, &name_len) == FAILURE) {
 		RETURN_FALSE;
 	}
-	SDL_VideoQuit();
+	if (name && name_len) {
+		res = SDL_QuitSubSystem(name);
+	} else {
+		res = SDL_QuitSubSystem(NULL);
+	}
+	RETURN_LONG(res);
 }
 /* }}} */
 
