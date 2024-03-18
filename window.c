@@ -957,7 +957,8 @@ static void php_create_window(INTERNAL_FUNCTION_PARAMETERS, int opt)
 	char *title;
 	size_t title_len;
 	SDL_Window *window;
-
+        SDL_PropertiesID props;
+	
 	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "slllll", &title, &title_len, &x, &y, &w, &h, &flags))
 	{
 		return;
