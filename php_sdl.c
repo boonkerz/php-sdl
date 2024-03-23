@@ -16,7 +16,7 @@
 #include "glcontext.h"
 #include "mouse.h"
 #include "rect.h"
-#include "rwops.h"
+#include "iostream.h"
 #include "render.h"
 #include "event.h"
 
@@ -52,7 +52,7 @@ PHP_MINIT_FUNCTION(sdl)
 		SUCCESS == PHP_MINIT_CALL(sdl_rect) &&
 		SUCCESS == PHP_MINIT_CALL(sdl_mouse) &&
 		SUCCESS == PHP_MINIT_CALL(sdl_pixels) &&
-		SUCCESS == PHP_MINIT_CALL(sdl_rwops) &&
+		SUCCESS == PHP_MINIT_CALL(sdl_iostream) &&
 		SUCCESS == PHP_MINIT_CALL(sdl_render) &&
 		SUCCESS == PHP_MINIT_CALL(sdl_event) &&
 		SUCCESS == PHP_MINIT_CALL(sdl_video)

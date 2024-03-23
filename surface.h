@@ -1,7 +1,3 @@
-//
-// Created by info on 02.03.2024.
-//
-
 #ifndef SURFACE_H
 #define SURFACE_H
 #include "php.h"

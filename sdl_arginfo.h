@@ -11,7 +11,7 @@
 #include "rect.h"
 #include "pixels.h"
 #include "mouse.h"
-#include "rwops.h"
+#include "iostream.h"
 #include "render.h"
 #include "event.h"
 
@@ -161,36 +161,6 @@ static const zend_function_entry sdl_functions[] = {
 	ZEND_FE(SDL_GetRGB, arginfo_SDL_GetRGB)
 	ZEND_FE(SDL_GetRGBA, arginfo_SDL_GetRGBA)
 
-	// Rwops
-	ZEND_FE(SDL_CreateRW, arginfo_none)
-	ZEND_FE(SDL_DestroyRW, arginfo_SDL_RWops)
-	ZEND_FE(SDL_RWFromFile, arginfo_SDL_RWFromFile)
-	ZEND_FE(SDL_RWFromMem, arginfo_SDL_RWFromMem)
-	ZEND_FE(SDL_RWFromConstMem, arginfo_SDL_RWFromConstMem)
-	ZEND_FE(SDL_RWsize, arginfo_SDL_RWops)
-	ZEND_FE(SDL_RWseek, arginfo_SDL_RWseek)
-	ZEND_FE(SDL_RWtell, arginfo_SDL_RWops)
-	ZEND_FE(SDL_RWread, arginfo_SDL_RWread)
-	ZEND_FE(SDL_RWwrite, arginfo_SDL_RWwrite)
-	ZEND_FE(SDL_RWclose, arginfo_SDL_RWops)
-	ZEND_FE(SDL_ReadU8, arginfo_SDL_RWops)
-	ZEND_FE(SDL_ReadU16LE, arginfo_SDL_RWops)
-	ZEND_FE(SDL_ReadU16BE, arginfo_SDL_RWops)
-	ZEND_FE(SDL_ReadU32LE, arginfo_SDL_RWops)
-	ZEND_FE(SDL_ReadU32BE, arginfo_SDL_RWops)
-	#if SIZEOF_LONG > 4
-	ZEND_FE(SDL_ReadLE64, arginfo_SDL_RWops)
-	ZEND_FE(SDL_ReadBE64, arginfo_SDL_RWops)
-	#endif
-	ZEND_FE(SDL_WriteU8, arginfo_SDL_write)
-	ZEND_FE(SDL_WriteU16LE, arginfo_SDL_write)
-	ZEND_FE(SDL_WriteU16BE, arginfo_SDL_write)
-	ZEND_FE(SDL_WriteU32LE, arginfo_SDL_write)
-	ZEND_FE(SDL_WriteU32BE, arginfo_SDL_write)
-	#if SIZEOF_LONG > 4
-	ZEND_FE(SDL_WriteLE64, arginfo_SDL_write)
-	ZEND_FE(SDL_WriteBE64, arginfo_SDL_write)
-	#endif
 
 	// Render
 	ZEND_FE(SDL_CreateRenderer, arginfo_SDL_CreateRenderer)

@@ -6,7 +6,7 @@
 #include <SDL3\SDL.h>
 #include "pixels.h"
 #include "rect.h"
-#include "rwops.h"
+#include "iostream.h"
 #include "surface.h"
 
 
@@ -108,7 +108,7 @@ PHP_FUNCTION(SDL_CreateSurface)
 }
 /* }}} */
 
-/* {{{ proto SDL_Surface SDL_LoadBMP_RW(SDL_RWops src, int freesrc)
+/* {{{ proto SDL_Surface SDL_LoadBMP_RW(SDL_IOStream src, int freesrc)
 
  *  Load a surface from a seekable SDL data stream (memory or file).
  *
@@ -117,27 +117,27 @@ PHP_FUNCTION(SDL_CreateSurface)
  *  The new surface should be freed with SDL_DestroySurface().
  *
  *  \return the new surface, or NULL if there was an error.
- extern DECLSPEC SDL_Surface *SDLCALL SDL_LoadBMP_RW(SDL_RWops * src,
+ extern DECLSPEC SDL_Surface *SDLCALL SDL_LoadBMP_RW(SDL_IOStream * src,
 													 int freesrc);
  */
 PHP_FUNCTION(SDL_LoadBMP_RW)
 {
-	zval *z_rwops;
+	zval *z_iostream;
 	zend_long freesrc;
 	SDL_Surface *surface;
-	SDL_RWops *rwops;
+    SDL_IOStream *iostream;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "Ol", &z_rwops, get_php_sdl_rwops_ce(), &freesrc))
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "Ol", &z_iostream, get_php_sdl_iostream_ce(), &freesrc))
 	{
 		return;
 	}
-	rwops = zval_to_sdl_rwops(z_rwops);
-	surface = SDL_LoadBMP_RW(rwops, 0);
+	iostream = zval_to_sdl_iostream(z_iostream);
+	surface = SDL_LoadBMP_IO(iostream, 0);
 	if (freesrc)
 	{
-		/* we close the SDL_RWops ourself, to free the PHP object */
-		zval_dtor(z_rwops);
-		ZVAL_NULL(z_rwops);
+		/* we close the SDL_IOStream ourself, to free the PHP object */
+		zval_dtor(z_iostream);
+		ZVAL_NULL(z_iostream);
 	}
 	sdl_surface_to_zval(surface, return_value);
 }
@@ -234,7 +234,7 @@ static PHP_METHOD(SDL_Surface, __toString)
 }
 /* }}} */
 
-/* {{{ proto int SDL_SaveBMP_RW(SDL_Surface surface, SDL_RWops &dst, int freedst)
+/* {{{ proto int SDL_SaveBMP_RW(SDL_Surface surface, SDL_IOStream &dst, int freedst)
 
  *  Save a surface to a seekable SDL data stream (memory or file).
  *
@@ -242,37 +242,37 @@ static PHP_METHOD(SDL_Surface, __toString)
  *
  *  \return 0 if successful or -1 if there was an error.
  extern DECLSPEC int SDLCALL SDL_SaveBMP_RW
-	 (SDL_Surface * surface, SDL_RWops * dst, int freedst);
+	 (SDL_Surface * surface, SDL_IOStream * dst, int freedst);
  */
 PHP_FUNCTION(SDL_SaveBMP_RW)
 {
 	struct php_sdl_surface *intern;
-	zval *z_surface, *z_rwops;
+	zval *z_surface, *z_iostream;
 	zend_long freedst = 0;
 	SDL_Surface *surface;
-	SDL_RWops *rwops;
+	SDL_IOStream *iostream;
 	int result;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "OO|l", &z_surface, php_sdl_surface_ce, &z_rwops, get_php_sdl_rwops_ce(), &freedst) == FAILURE)
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "OO|l", &z_surface, php_sdl_surface_ce, &z_iostream, get_php_sdl_iostream_ce(), &freedst) == FAILURE)
 	{
 		return;
 	}
 	FETCH_SURFACE(surface, z_surface, 1);
-	rwops = zval_to_sdl_rwops(z_rwops);
+	iostream = zval_to_sdl_iostream(z_iostream);
 
-	if (!rwops)
+	if (!iostream)
 	{
-		php_error_docref(NULL, E_WARNING, "Invalid SDL_RWops object");
+		php_error_docref(NULL, E_WARNING, "Invalid SDL_IOStream object");
 		RETURN_LONG(-1);
 	}
 
-	result = SDL_SaveBMP_RW(surface, rwops, 0);
+	result = SDL_SaveBMP_IO(surface, iostream, 0);
 
 	if (freedst)
 	{
-		/* we close the SDL_RWops ourself, to free the PHP object */
-		zval_dtor(z_rwops);
-		ZVAL_NULL(z_rwops);
+		/* we close the SDL_IOStream ourself, to free the PHP object */
+		zval_dtor(z_iostream);
+		ZVAL_NULL(z_iostream);
 	}
 	RETURN_LONG(result);
 }
@@ -283,16 +283,16 @@ PHP_FUNCTION(SDL_SaveBMP_RW)
 	PHP note: stream are "partially" supported (only when PHP_STREAM_AS_STDIO)
 
  define SDL_SaveBMP(surface, file) \
-		 SDL_SaveBMP_RW(surface, SDL_RWFromFile(file, "wb"), 1)
+		 SDL_SaveBMP_IO(surface, SDL_RWFromFile(file, "wb"), 1)
 
  */
 PHP_FUNCTION(SDL_SaveBMP)
 {
 	struct php_sdl_surface *intern;
-	zval *z_surface, z_rwops;
+	zval *z_surface, z_iostream;
 	char *path;
 	SDL_Surface *surface;
-	SDL_RWops *rwops;
+	SDL_IOStream *iostream;
 	size_t path_len;
 	int result = -1;
 	php_stream *stream;
@@ -304,14 +304,14 @@ PHP_FUNCTION(SDL_SaveBMP)
 	FETCH_SURFACE(surface, z_surface, 1);
 
 	stream = php_stream_open_wrapper(path, "wb", REPORT_ERRORS, NULL);
-	php_stream_to_zval_rwops(stream, &z_rwops, 0);
+	php_stream_to_zval_iostream(stream, &z_iostream, 0);
 
-	rwops = zval_to_sdl_rwops(&z_rwops);
-	if (rwops)
+	iostream = zval_to_sdl_iostream(&z_iostream);
+	if (iostream)
 	{
-		result = SDL_SaveBMP_RW(surface, rwops, 0);
+		result = SDL_SaveBMP_IO(surface, iostream, 0);
 	}
-	zval_dtor(&z_rwops);
+	zval_dtor(&z_iostream);
 
 	RETURN_LONG(result);
 }
