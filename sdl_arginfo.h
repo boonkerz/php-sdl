@@ -29,6 +29,7 @@ static const zend_function_entry sdl_functions[] = {
     // TTF
     ZEND_FE(SDL_TTF_Init,					arginfo_SDL_TTF_Init)
     ZEND_FE(SDL_TTF_OpenFont,				arginfo_SDL_TTF_OpenFont)
+	ZEND_FE(SDL_TTF_RenderText_Blended,		arginfo_SDL_TTF_RenderText_Blended)
 
 	// Window
 	ZEND_FE(SDL_CreateWindow, arginfo_SDL_CreateWindow)

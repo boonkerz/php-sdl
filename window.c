@@ -922,7 +922,7 @@ PHP_FUNCTION(SDL_SetWindowGrab)
 		return;
 	}
 	FETCH_WINDOW(window, z_window, 1);
-	SDL_SetWindowGrab(window, (grabbed ? SDL_TRUE : SDL_FALSE));
+	SDL_SetWindowMouseGrab(window, (grabbed ? SDL_TRUE : SDL_FALSE));
 }
 /* }}} */
 
@@ -946,7 +946,7 @@ PHP_FUNCTION(SDL_GetWindowGrab)
 		return;
 	}
 	FETCH_WINDOW(window, z_window, 1);
-	RETVAL_BOOL(SDL_GetWindowGrab(window));
+	RETVAL_BOOL(SDL_GetWindowMouseGrab(window));
 }
 /* }}} */
 

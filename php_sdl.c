@@ -56,6 +56,7 @@ PHP_MINIT_FUNCTION(sdl)
 		SUCCESS == PHP_MINIT_CALL(sdl_pixels) &&
 		SUCCESS == PHP_MINIT_CALL(sdl_iostream) &&
 		SUCCESS == PHP_MINIT_CALL(sdl_render) &&
+		SUCCESS == PHP_MINIT_CALL(sdl_surface) &&
 		SUCCESS == PHP_MINIT_CALL(sdl_event) &&
 		SUCCESS == PHP_MINIT_CALL(sdl_ttf) &&
 		SUCCESS == PHP_MINIT_CALL(sdl_video)
