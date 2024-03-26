@@ -19,6 +19,8 @@
 #include "iostream.h"
 #include "render.h"
 #include "event.h"
+#include "ttf_font.h"
+#include "ttf.h"
 
 zend_module_entry sdl_module_entry = {
 	STANDARD_MODULE_HEADER,
@@ -55,6 +57,7 @@ PHP_MINIT_FUNCTION(sdl)
 		SUCCESS == PHP_MINIT_CALL(sdl_iostream) &&
 		SUCCESS == PHP_MINIT_CALL(sdl_render) &&
 		SUCCESS == PHP_MINIT_CALL(sdl_event) &&
+		SUCCESS == PHP_MINIT_CALL(sdl_ttf) &&
 		SUCCESS == PHP_MINIT_CALL(sdl_video)
 )
 	{

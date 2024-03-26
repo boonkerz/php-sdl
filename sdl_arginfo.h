@@ -14,6 +14,8 @@
 #include "iostream.h"
 #include "render.h"
 #include "event.h"
+#include "ttf_font.h"
+#include "ttf.h"
 
 static const zend_function_entry sdl_functions[] = {
     // Core
@@ -23,6 +25,10 @@ static const zend_function_entry sdl_functions[] = {
     ZEND_FE(SDL_QuitSubSystem,				arginfo_SDL_QuitSubSystem)
     ZEND_FE(SDL_WasInit,					arginfo_SDL_WasInit)
     ZEND_FE(SDL_SetHint,					arginfo_SDL_SetHint)
+
+    // TTF
+    ZEND_FE(SDL_TTF_Init,					arginfo_SDL_TTF_Init)
+    ZEND_FE(SDL_TTF_OpenFont,				arginfo_SDL_TTF_OpenFont)
 
 	// Window
 	ZEND_FE(SDL_CreateWindow, arginfo_SDL_CreateWindow)
