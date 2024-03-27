@@ -22,7 +22,7 @@ TTF_Font *php_ttf_font_from_zval_p(zval *zp)
     return php_ttf_font_object_from_zend_object(Z_OBJ_P(zp))->internal;
 }
 
-inline void ttf_font_to_zval(TTF_Font *ttf_font, zval *zp)
+void ttf_font_to_zval(TTF_Font *ttf_font, zval *zp)
 {
     object_init_ex(zp, ttf_font_ce);
     php_ttf_font_object *php_ttf_font = php_ttf_font_object_from_zend_object(Z_OBJ_P(zp));

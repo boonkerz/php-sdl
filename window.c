@@ -922,7 +922,7 @@ PHP_FUNCTION(SDL_SetWindowGrab)
 		return;
 	}
 	FETCH_WINDOW(window, z_window, 1);
-	SDL_SetWindowGrab(window, (grabbed ? SDL_TRUE : SDL_FALSE));
+	SDL_SetWindowMouseGrab(window, (grabbed ? SDL_TRUE : SDL_FALSE));
 }
 /* }}} */
 
@@ -946,7 +946,7 @@ PHP_FUNCTION(SDL_GetWindowGrab)
 		return;
 	}
 	FETCH_WINDOW(window, z_window, 1);
-	RETVAL_BOOL(SDL_GetWindowGrab(window));
+	RETVAL_BOOL(SDL_GetWindowMouseGrab(window));
 }
 /* }}} */
 
@@ -975,6 +975,7 @@ static void php_create_window(INTERNAL_FUNCTION_PARAMETERS, int opt)
 		SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_WIDTH_NUMBER, w);
 		SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_HEIGHT_NUMBER, h);
 		SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_RESIZABLE_BOOLEAN, true);
+		SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_HIGH_PIXEL_DENSITY_BOOLEAN, true);
 		window = SDL_CreateWindowWithProperties(props);
 		//window = SDL_CreateWindowWithPosition(title, x, y, w, h, flags);
 		break;
@@ -986,6 +987,7 @@ static void php_create_window(INTERNAL_FUNCTION_PARAMETERS, int opt)
 		SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_WIDTH_NUMBER, w);
 		SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_HEIGHT_NUMBER, h);
 		SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_RESIZABLE_BOOLEAN, true);
+		SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_HIGH_PIXEL_DENSITY_BOOLEAN, true);
 		window = SDL_CreateWindowWithProperties(props);
 	}
 	if (window)

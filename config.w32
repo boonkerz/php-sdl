@@ -8,11 +8,11 @@ if(PHP_SDL != 'no') {
 
     var sdl_sources = 'php_sdl.c version.c sdl.c messagebox.c window.c video.c glcontext.c rect.c mouse.c surface.c pixels.c iostream.c render.c event.c ttf_font.c ttf.c';
 
-    EXTENSION('sdl', sdl_sources);
+    EXTENSION('sdl', sdl_sources, null, '/DZEND_ENABLE_STATIC_TSRMLS_CACHE=1');
 
     PHP_INSTALL_HEADERS("ext/sdl", "version.h sdl.h messagebox.h window.h video.h glcontext.h rect.h mouse.h surface.h pixels.h iostream.h render.h event.h ttf_font.h ttf.h");
 
-	ADD_FLAG("LIBS_SDL", "gdi32.lib imm32.lib version.lib winmm.lib cfgmgr32.lib OleAut32.lib")
+	ADD_FLAG("LIBS_SDL", "gdi32.lib imm32.lib version.lib winmm.lib cfgmgr32.lib OleAut32.lib Setupapi.lib")
 
     AC_DEFINE('HAVE_SDL', 1);
 }
