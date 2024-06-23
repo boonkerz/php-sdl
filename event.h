@@ -6,7 +6,7 @@
 #define EVENT_H
 #include "php.h"
 #include <zend_API.h>
-#include <SDL3\SDL.h>
+#include <SDL3/SDL.h>
 zend_class_entry *get_php_sdl_event_ce(void);
 zend_bool sdl_event_to_zval(SDL_Event *event, zval *value);
 zend_bool zval_to_sdl_event(zval *value, SDL_Event *event);

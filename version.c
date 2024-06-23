@@ -1,6 +1,6 @@
 #include "php.h"
 #include <zend_API.h>
-#include <SDL3\SDL_version.h>
+#include <SDL3/SDL_version.h>
 #include "version.h"
 
 PHP_FUNCTION(SDL_GetVersion)

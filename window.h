@@ -2,7 +2,7 @@
 #define WINDOW_H
 #include "php.h"
 #include <zend_API.h>
-#include <SDL3\SDL.h>
+#include <SDL3/SDL.h>
 zend_class_entry *get_php_sdl_window_ce(void);
 zend_bool sdl_window_to_zval(SDL_Window *window, zval *z_val, int flags);
 SDL_Window *zval_to_sdl_window(zval *z_val);

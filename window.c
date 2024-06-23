@@ -1,6 +1,6 @@
 #include "php.h"
 #include <zend_API.h>
-#include <SDL3\SDL.h>
+#include <SDL3/SDL.h>
 #include "window.h"
 #include "glcontext.h"
 #include "mouse.h"

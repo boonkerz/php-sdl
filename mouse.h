@@ -6,7 +6,7 @@
 #define MOUSE_H
 #include "php.h"
 #include <zend_API.h>
-#include <SDL3\SDL.h>
+#include <SDL3/SDL.h>
 
 zend_class_entry *get_php_sdl_cursor_ce(void);
 zend_bool sdl_cursor_to_zval(SDL_Cursor *cursor, zval *z_val, Uint32 flags);

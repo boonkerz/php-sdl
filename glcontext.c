@@ -3,7 +3,7 @@
 //
 #include "php.h"
 #include <zend_API.h>
-#include <SDL3\SDL.h>
+#include <SDL3/SDL.h>
 #include "glcontext.h"
 #include "window.h"
 static zend_class_entry *php_sdl_glcontext_ce;

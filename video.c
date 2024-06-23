@@ -1,6 +1,6 @@
 #include "php.h"
 #include <zend_API.h>
-#include <SDL3\SDL.h>
+#include <SDL3/SDL.h>
 #include "video.h"
 
 static zend_class_entry *php_sdl_displaymode_ce;

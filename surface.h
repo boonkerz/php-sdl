@@ -2,7 +2,7 @@
 #define SURFACE_H
 #include "php.h"
 #include <zend_API.h>
-#include <SDL3\SDL.h>
+#include <SDL3/SDL.h>
 
 zend_class_entry *get_php_sdl_surface_ce(void);
 zend_bool sdl_surface_to_zval(SDL_Surface *surface, zval *zval);

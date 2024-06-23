@@ -2,7 +2,7 @@
 #define VIDEO_H
 #include "php.h"
 #include <zend_API.h>
-#include <SDL3\SDL.h>
+#include <SDL3/SDL.h>
 zend_class_entry *get_php_sdl_displaymode_ce(void);
 zend_bool sdl_displaymode_to_zval(SDL_DisplayMode *display, zval *value);
 zend_bool zval_to_sdl_displaymode(zval *value, SDL_DisplayMode *display);

@@ -3,8 +3,8 @@
 #include "php.h"
 #include <zend_API.h>
 #include "ttf_font.h"
-#include <SDL3\SDL.h>
-#include <SDL3_ttf\SDL_ttf.h>
+#include <SDL3/SDL.h>
+#include <SDL3_ttf/SDL_ttf.h>
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_TTF_Init, 0, 0, 0)
 ZEND_END_ARG_INFO()

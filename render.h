@@ -2,7 +2,7 @@
 #define RENDER_H
 #include "php.h"
 #include <zend_API.h>
-#include <SDL3\SDL.h>
+#include <SDL3/SDL.h>
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetRenderDrawColor, 0, 0, 5)
 	ZEND_ARG_INFO(0, renderer)
 	ZEND_ARG_INFO(0, r)

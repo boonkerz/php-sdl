@@ -2,8 +2,8 @@
 #define PHP_SRC_TTF_FONT_H
 #include "php.h"
 #include <zend_API.h>
-#include <SDL3\SDL.h>
-#include <SDL3_ttf\SDL_ttf.h>
+#include <SDL3/SDL.h>
+#include <SDL3_ttf/SDL_ttf.h>
 
 typedef struct _php_tff_font_object
 {

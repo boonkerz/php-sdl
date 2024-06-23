@@ -1,7 +1,7 @@
 #include "php.h"
 #include <zend_API.h>
-#include <SDL3\SDL.h>
-#include <SDL3_ttf\SDL_ttf.h>
+#include <SDL3/SDL.h>
+#include <SDL3_ttf/SDL_ttf.h>
 #include "ttf_font.h"
 
 zend_class_entry *ttf_font_ce = NULL;

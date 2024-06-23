@@ -3,7 +3,7 @@
 //
 #include "php.h"
 #include <zend_API.h>
-#include <SDL3\SDL.h>
+#include <SDL3/SDL.h>
 #include "event.h"
 static zend_class_entry *php_sdl_event_ce;
 static zend_object_handlers php_sdl_event_handlers;
