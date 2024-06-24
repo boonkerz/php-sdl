@@ -269,7 +269,7 @@ PHP_FUNCTION(SDL_CreateRenderer)
 		window = zval_to_sdl_window(z_window);
 	}
 
-	renderer = SDL_CreateRenderer(window, NULL, flags);
+	renderer = SDL_CreateRenderer(window, NULL);
 	RETURN_RES(zend_register_resource(renderer, le_sdl_renderer));
 }
 
@@ -394,25 +394,20 @@ PHP_FUNCTION(SDL_GetCurrentRenderOutputSize)
 	ZVAL_LONG(z_height, h);
 }
 
-PHP_FUNCTION(SDL_QueryTexture)
+PHP_FUNCTION(SDL_GetTextureSize)
 {
-	zval *z_texture, *z_format = NULL, *z_access = NULL, *z_width = NULL, *z_height = NULL;
+	zval *z_texture, *z_width = NULL, *z_height = NULL;
 	SDL_Texture *texture;
-	int w, h, access, result;
-	Uint32 format;
-
-	if( zend_parse_parameters(ZEND_NUM_ARGS(), "z|zzzz", &z_texture, &z_format, &z_access, &z_width, &z_height) == FAILURE ) {
+	float w, h;
+	uint result;
+	if( zend_parse_parameters(ZEND_NUM_ARGS(), "z|zz", &z_texture, &z_width, &z_height) == FAILURE ) {
 		return;
 	}
 
 	texture = (SDL_Texture*)zend_fetch_resource(Z_RES_P(z_texture), SDL_TEXTURE_RES_NAME, le_sdl_texture);
 
-	result = SDL_QueryTexture(texture, &format, &access, &w, &h);
+	result = SDL_GetTextureSize(texture, &w, &h);
 
-	if(z_format)
-		ZEND_TRY_ASSIGN_REF_LONG(z_format, format);
-	if(z_access)
-		ZEND_TRY_ASSIGN_REF_LONG(z_access, access);
 	if(z_width)
 		ZEND_TRY_ASSIGN_REF_LONG(z_width, w);
 	if(z_height)
@@ -425,10 +420,6 @@ PHP_FUNCTION(SDL_QueryTexture)
 /* {{{ MINIT */
 PHP_MINIT_FUNCTION(sdl_render)
 {
-	REGISTER_LONG_CONSTANT("SDL_RENDERER_SOFTWARE", SDL_RENDERER_SOFTWARE, CONST_CS | CONST_PERSISTENT);
-	REGISTER_LONG_CONSTANT("SDL_RENDERER_ACCELERATED", SDL_RENDERER_ACCELERATED, CONST_CS | CONST_PERSISTENT);
-	REGISTER_LONG_CONSTANT("SDL_RENDERER_PRESENTVSYNC", SDL_RENDERER_PRESENTVSYNC, CONST_CS | CONST_PERSISTENT);
-
 	REGISTER_LONG_CONSTANT("SDL_FLIP_NONE", SDL_FLIP_NONE, CONST_CS | CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("SDL_FLIP_HORIZONTAL", SDL_FLIP_HORIZONTAL, CONST_CS | CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("SDL_FLIP_VERTICAL", SDL_FLIP_VERTICAL, CONST_CS | CONST_PERSISTENT);

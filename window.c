@@ -177,21 +177,20 @@ PHP_FUNCTION(SDL_GetWindowFullscreenMode)
 	struct php_sdl_window *intern;
 	zval *z_window, *z_mode;
 	SDL_Window *window;
-	SDL_DisplayMode mode;
-	int res;
+	const SDL_DisplayMode *mode;
 
 	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Oz", &z_window, php_sdl_window_ce, &z_mode) == FAILURE)
 	{
 		return;
 	}
 	FETCH_WINDOW(window, z_window, 1);
-	res = SDL_GetWindowFullscreenMode(window, &mode);
-	if (0 == res)
+	mode = SDL_GetWindowFullscreenMode(window);
+	if (mode)
 	{
 		zval_dtor(z_mode);
-		sdl_displaymode_to_zval(&mode, z_mode);
+		sdl_displaymode_to_zval(mode, z_mode);
 	}
-	RETVAL_LONG(res);
+	RETVAL_LONG(1);
 }
 /* }}} */
 
@@ -1079,7 +1078,7 @@ static PHP_METHOD(SDL_Window, __construct)
 	}
 	zend_restore_error_handling(&error_handling);
 
-	intern->window = SDL_CreateWindow(title, x, y, w, h, flags);
+	intern->window = SDL_CreateWindow(title, w, h, flags);
 	intern->flags = 0;
 	if (intern->window)
 	{

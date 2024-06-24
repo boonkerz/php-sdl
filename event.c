@@ -63,7 +63,7 @@ zend_bool sdl_event_to_zval(SDL_Event *event, zval *value)
 	{
 		zval keysym;
 		object_init(&keysym);
-		add_property_long(&keysym, "sym", event->key.keysym.sym);
+		add_property_long(&keysym, "sym", event->key.key);
 
 		zval key;
 		object_init(&key);

@@ -3,14 +3,14 @@
 #include "php.h"
 #include <zend_API.h>
 #include <SDL3/SDL.h>
+#include <zend_exceptions.h>
 
 zend_class_entry *get_php_sdl_surface_ce(void);
 zend_bool sdl_surface_to_zval(SDL_Surface *surface, zval *zval);
 SDL_Surface *zval_to_sdl_surface(zval *z_val);
 
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_CreateSurface, 0, 0, 6)
-       ZEND_ARG_INFO(0, flags)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_CreateSurface, 0, 0, 5)
        ZEND_ARG_INFO(0, width)
        ZEND_ARG_INFO(0, height)
        ZEND_ARG_INFO(0, depth)
@@ -228,12 +228,10 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_ConvertSurface, 0, 0, 2)
        ZEND_ARG_OBJ_INFO(0, surface, SDL_Surface, 0)
        ZEND_ARG_OBJ_INFO(0, format, SDL_PixelFormat, 0)
-       ZEND_ARG_INFO(0, flags)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_Convert, 0, 0, 1)
        ZEND_ARG_OBJ_INFO(0, format, SDL_PixelFormat, 0)
-       ZEND_ARG_INFO(0, flags)
 ZEND_END_ARG_INFO()
 
 

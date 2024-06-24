@@ -7,6 +7,8 @@
 #include "php.h"
 #include <zend_API.h>
 #include <SDL3/SDL.h>
+#include <zend_exceptions.h>
+#include "php_sdl.h"
 /* PHP specific struct to manage memory access */
 typedef struct SDL_Pixels
 {

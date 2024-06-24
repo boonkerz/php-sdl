@@ -3,8 +3,9 @@
 #include "php.h"
 #include <zend_API.h>
 #include <SDL3/SDL.h>
+#include "rect.h"
 zend_class_entry *get_php_sdl_displaymode_ce(void);
-zend_bool sdl_displaymode_to_zval(SDL_DisplayMode *display, zval *value);
+zend_bool sdl_displaymode_to_zval(const SDL_DisplayMode *display, zval *value);
 zend_bool zval_to_sdl_displaymode(zval *value, SDL_DisplayMode *display);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetVideoDriver, 0, 0, 1)

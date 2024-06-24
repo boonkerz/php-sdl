@@ -17,7 +17,7 @@ zend_class_entry *get_php_sdl_displaymode_ce(void)
 #define update_displaymode_prop(z_value, name, value) \
 	zend_update_property_long(php_sdl_displaymode_ce, Z_OBJ_P(z_value), ZEND_STRL(name), value)
 
-zend_bool sdl_displaymode_to_zval(SDL_DisplayMode *display, zval *value)
+zend_bool sdl_displaymode_to_zval(const SDL_DisplayMode *display, zval *value)
 {
 	if (display) {
 		object_init_ex(value, php_sdl_displaymode_ce);

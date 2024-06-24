@@ -96,14 +96,14 @@ SDL_Surface *zval_to_sdl_surface(zval *z_val)
 */
 PHP_FUNCTION(SDL_CreateSurface)
 {
-	zend_long flags, width, height, depth, rmask, gmask, bmask, amask;
+	zend_long width, height, depth, rmask, gmask, bmask, amask;
 	SDL_Surface *surface;
 
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "llllllll", &flags, &width, &height, &depth, &rmask, &gmask, &bmask, &amask))
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "lllllll", &width, &height, &depth, &rmask, &gmask, &bmask, &amask))
 	{
 		return;
 	}
-	surface = SDL_CreateSurface((Uint32)flags, (int)width, (int)height, SDL_GetPixelFormatEnumForMasks((int)depth, (Uint32)rmask, (Uint32)gmask, (Uint32)bmask, (Uint32)amask));
+	surface = SDL_CreateSurface((int)width, (int)height, SDL_GetPixelFormatEnumForMasks((int)depth, (Uint32)rmask, (Uint32)gmask, (Uint32)bmask, (Uint32)amask));
 	sdl_surface_to_zval(surface, return_value);
 }
 /* }}} */
@@ -173,21 +173,21 @@ PHP_FUNCTION(SDL_LoadBMP)
 static PHP_METHOD(SDL_Surface, __construct)
 {
 	struct php_sdl_surface *intern;
-	zend_long flags, width, height, depth, rmask, gmask, bmask, amask;
+	zend_long width, height, depth, rmask, gmask, bmask, amask;
 	zend_error_handling error_handling;
 
 	zend_object *zo = Z_OBJ_P(getThis());
 	intern = (struct php_sdl_surface *)((char *)zo - zo->handlers->offset);
 
 	zend_replace_error_handling(EH_THROW, NULL, &error_handling);
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "llllllll", &flags, &width, &height, &depth, &rmask, &gmask, &bmask, &amask))
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "lllllll", &width, &height, &depth, &rmask, &gmask, &bmask, &amask))
 	{
 		zend_restore_error_handling(&error_handling);
 		return;
 	}
 	zend_restore_error_handling(&error_handling);
 
-	intern->surface = SDL_CreateSurface(flags, (int)width, (int)height, SDL_GetPixelFormatEnumForMasks((int)depth, rmask, gmask, bmask, amask));
+	intern->surface = SDL_CreateSurface((int)width, (int)height, SDL_GetPixelFormatEnumForMasks((int)depth, rmask, gmask, bmask, amask));
 	if (intern->surface)
 	{
 		/* copy flags to be able to check before access to surface */
@@ -1159,11 +1159,10 @@ PHP_FUNCTION(SDL_ConvertSurface)
 {
 	struct php_sdl_surface *intern;
 	zval *z_src, *z_format;
-	zend_long flags = 0;
 	SDL_Surface *src, *dst;
 	SDL_PixelFormat *format;
 
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "OO|l", &z_src, php_sdl_surface_ce, &z_format, get_php_sdl_pixelformat_ce(), &flags))
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "OO|l", &z_src, php_sdl_surface_ce, &z_format, get_php_sdl_pixelformat_ce()))
 	{
 		return;
 	}
@@ -1171,7 +1170,7 @@ PHP_FUNCTION(SDL_ConvertSurface)
 	format = zval_to_sdl_pixelformat(z_format);
 	if (format)
 	{
-		dst = SDL_ConvertSurface(src, format, (Uint32)flags);
+		dst = SDL_ConvertSurface(src, format);
 		sdl_surface_to_zval(dst, return_value);
 	}
 	else
@@ -1190,15 +1189,15 @@ PHP_FUNCTION(SDL_ConvertSurfaceFormat)
 {
 	struct php_sdl_surface *intern;
 	zval *z_src;
-	zend_long format, flags = 0;
+	zend_long format; 
 	SDL_Surface *src, *dst;
 
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Ol|l", &z_src, php_sdl_surface_ce, &format, &flags))
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Ol|l", &z_src, php_sdl_surface_ce, &format))
 	{
 		return;
 	}
 	FETCH_SURFACE(src, z_src, 1);
-	dst = SDL_ConvertSurfaceFormat(src, (Uint32)format, (Uint32)flags);
+	dst = SDL_ConvertSurfaceFormat(src, (Uint32)format);
 	sdl_surface_to_zval(dst, return_value);
 }
 /* }}} */
@@ -1408,7 +1407,6 @@ PHP_MINIT_FUNCTION(sdl_surface)
 	zend_declare_property_null(php_sdl_surface_ce, ZEND_STRL("clip_rect"), ZEND_ACC_PUBLIC);
 	zend_declare_property_null(php_sdl_surface_ce, ZEND_STRL("pixels"), ZEND_ACC_PUBLIC);
 
-	REGISTER_SURFACE_CLASS_CONST_LONG("SWSURFACE", SDL_SWSURFACE);
 	REGISTER_SURFACE_CLASS_CONST_LONG("PREALLOC", SDL_PREALLOC);
 	REGISTER_SURFACE_CLASS_CONST_LONG("RLEACCEL", SDL_RLEACCEL);
 	REGISTER_SURFACE_CLASS_CONST_LONG("DONTFREE", SDL_DONTFREE);

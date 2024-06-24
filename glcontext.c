@@ -448,29 +448,6 @@ PHP_FUNCTION(SDL_GL_SetSwapInterval)
 }
 /* }}} */
 
-/* {{{ proto int SDL_GL_GetSwapInterval()
-
- *  \brief Get the swap interval for the current OpenGL context.
- *
- *  \return 0 if there is no vertical retrace synchronization, 1 if the buffer
- *          swap is synchronized with the vertical retrace, and -1 if late
- *          swaps happen immediately instead of waiting for the next retrace.
- *          If the system can't determine the swap interval, or there isn't a
- *          valid current context, this will return 0 as a safe default.
- *
- *  \sa SDL_GL_SetSwapInterval()
- extern DECLSPEC int SDLCALL SDL_GL_GetSwapInterval(void);
- */
-PHP_FUNCTION(SDL_GL_GetSwapInterval)
-{
-	if (zend_parse_parameters_none() == FAILURE)
-	{
-		return;
-	}
-	RETVAL_LONG(SDL_GL_GetSwapInterval(1));
-}
-/* }}} */
-
 /* {{{ sdl_glcontext_methods[] */
 static const zend_function_entry php_sdl_glcontext_methods[] = {
 	PHP_ME(SDL_GLContext, __construct, arginfo_SDL_GLContext__construct, ZEND_ACC_CTOR | ZEND_ACC_PUBLIC)

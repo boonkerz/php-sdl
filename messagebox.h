@@ -3,6 +3,7 @@
 #include "php.h"
 #include <zend_API.h>
 #include <SDL3/SDL.h>
+#include "window.h"
 zend_class_entry *get_php_sdl_messageboxcolor_ce(void);
 zend_bool sdl_messageboxcolor_to_zval(const SDL_MessageBoxColor *color, zval *value);
 zend_bool zval_to_sdl_messageboxcolor(zval *value, SDL_MessageBoxColor *color);
