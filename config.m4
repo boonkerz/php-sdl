@@ -63,9 +63,9 @@ if test "$PHP_SDL" != "no"; then
 
   AC_MSG_RESULT([found in $SDL_DIR ($PHP_LIBDIR)])
 
-  PHP_ADD_LIBRARY_WITH_PATH(sdl, [$SDL_DIR/lib], SDL_STATIC_LIBADD)
+  PHP_ADD_LIBRARY_WITH_PATH(sdl3, [$SDL_DIR/lib], SDL_SHARED_LIBADD)
   AC_DEFINE(HAVE_SDL, 1, [Whether SDL support is enabled])
-
+  PHP_SUBST(SDL_SHARED_LIBADD)
   SDL_SOURCE_FILES="php_sdl.c \
     version.c sdl.c \
     messagebox.c \
