@@ -436,6 +436,11 @@ PHP_FUNCTION(SDL_GL_SwapWindow)
  *  \sa SDL_GL_GetSwapInterval()
  extern DECLSPEC int SDLCALL SDL_GL_SetSwapInterval(int interval);
  */
+PHP_FUNCTION(SDL_GL_GetSwapInterval)
+{
+	RETVAL_LONG(SDL_GL_GetSwapInterval(NULL));
+}
+
 PHP_FUNCTION(SDL_GL_SetSwapInterval)
 {
 	zend_long value;
