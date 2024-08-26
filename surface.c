@@ -4,7 +4,7 @@
 #include "php.h"
 #include <zend_API.h>
 #include <SDL3/SDL.h>
-#include "pixels.h"
+#include "color.h"
 #include "rect.h"
 #include "iostream.h"
 #include "surface.h"
@@ -103,7 +103,7 @@ PHP_FUNCTION(SDL_CreateSurface)
 	{
 		return;
 	}
-	surface = SDL_CreateSurface((int)width, (int)height, SDL_GetPixelFormatEnumForMasks((int)depth, (Uint32)rmask, (Uint32)gmask, (Uint32)bmask, (Uint32)amask));
+	surface = SDL_CreateSurface((int)width, (int)height, SDL_GetPixelFormatForMasks((int)depth, (Uint32)rmask, (Uint32)gmask, (Uint32)bmask, (Uint32)amask));
 	sdl_surface_to_zval(surface, return_value);
 }
 /* }}} */
@@ -187,7 +187,7 @@ static PHP_METHOD(SDL_Surface, __construct)
 	}
 	zend_restore_error_handling(&error_handling);
 
-	intern->surface = SDL_CreateSurface((int)width, (int)height, SDL_GetPixelFormatEnumForMasks((int)depth, rmask, gmask, bmask, amask));
+	intern->surface = SDL_CreateSurface((int)width, (int)height, SDL_GetPixelFormatForMasks((int)depth, rmask, gmask, bmask, amask));
 	if (intern->surface)
 	{
 		/* copy flags to be able to check before access to surface */
@@ -220,10 +220,13 @@ static PHP_METHOD(SDL_Surface, __toString)
 
 	if (intern->surface)
 	{
+		int *bpp; Uint32 *Rmask; Uint32 *Gmask; Uint32 *Bmask; Uint32 *Amask;
+		SDL_GetMasksForPixelFormat(intern->surface->format, bpp, Rmask, Gmask, Bmask, Amask);
+
 		buf_len = spprintf(&buf, 100, "SDL_Surface(%u,%d,%d,%u,0x%x,0x%x,0x%x,0x%x)",
 						   intern->surface->flags, intern->surface->w, intern->surface->h,
-						   intern->surface->format->bits_per_pixel, intern->surface->format->Rmask,
-						   intern->surface->format->Gmask, intern->surface->format->Bmask, intern->surface->format->Amask);
+						   bpp, Rmask,
+						   Gmask, Bmask, Amask);
 		RETVAL_STRINGL(buf, buf_len);
 		efree(buf);
 	}
@@ -1142,100 +1145,6 @@ PHP_FUNCTION(SDL_GetSurfaceClipRect)
 }
 /* }}} */
 
-/* {{{ proto void SDL_ConvertSurface(SDL_Surface src, SDL_PixelFormat format, int flag)
-
- *  Creates a new surface of the specified format, and then copies and maps
- *  the given surface to it so the blit of the converted surface will be as
- *  fast as possible.  If this function fails, it returns NULL.
- *
- *  The \c flags parameter is passed to SDL_CreateRGBSurface() and has those
- *  semantics.  You can also pass ::SDL_RLEACCEL in the flags parameter and
- *  SDL will try to RLE accelerate colorkey and alpha blits in the resulting
- *  surface.
- extern DECLSPEC SDL_Surface *SDLCALL SDL_ConvertSurface
-	 (SDL_Surface * src, const SDL_PixelFormat * fmt, Uint32 flags);
- */
-PHP_FUNCTION(SDL_ConvertSurface)
-{
-	struct php_sdl_surface *intern;
-	zval *z_src, *z_format;
-	SDL_Surface *src, *dst;
-	SDL_PixelFormat *format;
-
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "OO|l", &z_src, php_sdl_surface_ce, &z_format, get_php_sdl_pixelformat_ce()))
-	{
-		return;
-	}
-	FETCH_SURFACE(src, z_src, 1);
-	format = zval_to_sdl_pixelformat(z_format);
-	if (format)
-	{
-		dst = SDL_ConvertSurface(src, format);
-		sdl_surface_to_zval(dst, return_value);
-	}
-	else
-	{
-		RETVAL_NULL();
-	}
-}
-/* }}} */
-
-/* {{{ proto void SDL_ConvertSurfaceFormat(SDL_Surface src, int format [, int flags])
-
- extern DECLSPEC SDL_Surface *SDLCALL SDL_ConvertSurfaceFormat
-	 (SDL_Surface * src, Uint32 pixel_format, Uint32 flags);
- */
-PHP_FUNCTION(SDL_ConvertSurfaceFormat)
-{
-	struct php_sdl_surface *intern;
-	zval *z_src;
-	zend_long format; 
-	SDL_Surface *src, *dst;
-
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "Ol|l", &z_src, php_sdl_surface_ce, &format))
-	{
-		return;
-	}
-	FETCH_SURFACE(src, z_src, 1);
-	dst = SDL_ConvertSurfaceFormat(src, (Uint32)format);
-	sdl_surface_to_zval(dst, return_value);
-}
-/* }}} */
-
-/* {{{ proto int SDL_ConvertPixels(int width, int height, int src_format, SDL_Pixels src, int src_pitch, int dst_format, SDL_Pixels dst, int dst_pitch)
-
- * \brief Copy a block of pixels of one format to another format
- *
- *  \return 0 on success, or -1 if there was an error
- extern DECLSPEC int SDLCALL SDL_ConvertPixels(int width, int height,
-											   Uint32 src_format,
-											   const void * src, int src_pitch,
-											   Uint32 dst_format,
-											   void * dst, int dst_pitch);
- */
-PHP_FUNCTION(SDL_ConvertPixels)
-{
-	zval *z_src, *z_dst;
-	zend_long w, h, src_format, src_pitch, dst_format, dst_pitch;
-	SDL_Pixels *src, *dst;
-
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "lllOllOl", &w, &h, &src_format, &z_src, get_php_sdl_pixels_ce(), &src_pitch, &dst_format, &z_dst, get_php_sdl_pixels_ce(), &dst_pitch))
-	{
-		return;
-	}
-	if (!(src = zval_to_sdl_pixels(z_src)))
-	{
-		php_error_docref(NULL, E_WARNING, "Invalid source SDL_Pixels object");
-	}
-	if (!(dst = zval_to_sdl_pixels(z_dst)))
-	{
-		php_error_docref(NULL, E_WARNING, "Invalid destination SDL_Pixels object");
-	}
-
-	RETVAL_LONG(SDL_ConvertPixels(w, h, src_format, src->pixels, src_pitch, dst_format, dst->pixels, dst_pitch));
-}
-/* }}} */
-
 /* we need to undefine this macros to avoid substitution in list behind */
 #undef SDL_BlitSurface
 #undef SDL_BlitScaled
@@ -1271,8 +1180,6 @@ static const zend_function_entry php_sdl_surface_methods[] = {
 	PHP_FALIAS(GetBlendMode, SDL_GetSurfaceBlendMode, arginfo_SDL_Surface_GetBlendMode)
 	PHP_FALIAS(SetClipRect, SDL_SetSurfaceClipRect, arginfo_SDL_Surface_SetClipRect)
 	PHP_FALIAS(GetClipRect, SDL_GetSurfaceClipRect, arginfo_SDL_Surface_GetClipRect)
-	PHP_FALIAS(Convert, SDL_ConvertSurface, arginfo_SDL_Surface_Convert)
-	PHP_FALIAS(ConvertFormat, SDL_ConvertSurfaceFormat, arginfo_SDL_Surface_ConvertFormat)
 
 	/* static methods */
 	ZEND_FENTRY(LoadRW, ZEND_FN(SDL_LoadBMP_RW), arginfo_SDL_LoadBMP_RW, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
@@ -1287,10 +1194,7 @@ static void php_sdl_surface_free(zend_object *object)
 	struct php_sdl_surface *intern = (struct php_sdl_surface *)((char *)object - object->handlers->offset);
 	if (intern->surface)
 	{
-		if (!(intern->flags & SDL_DONTFREE))
-		{
-			SDL_DestroySurface(intern->surface);
-		}
+		SDL_DestroySurface(intern->surface);
 	}
 
 	zend_object_std_dtor(&intern->zo);
@@ -1351,23 +1255,15 @@ zval *sdl_surface_read_property(zend_object *object, zend_string *member, int ty
 	{
 		ZVAL_LONG(retval, intern->surface->pitch);
 	}
-	else if (!strcmp(member_val, "locked"))
-	{
-		ZVAL_LONG(retval, intern->surface->locked);
-	}
 	else if (!strcmp(member_val, "format"))
 	{
-		sdl_pixelformat_to_zval(intern->surface->format, retval, SDL_DONTFREE);
-	}
-	else if (!strcmp(member_val, "clip_rect"))
-	{
-		sdl_rect_to_zval(&intern->surface->clip_rect, retval);
+		sdl_pixelformat_to_zval(intern->surface->format, retval, NULL);
 	}
 	else if (!strcmp(member_val, "pixels"))
 	{
 		SDL_Pixels pix;
 		pix.pixels = (Uint8 *)intern->surface->pixels;
-		sdl_pixels_to_zval(&pix, retval, SDL_DONTFREE);
+		sdl_pixels_to_zval(&pix, retval, NULL);
 	}
 	else
 	{
@@ -1404,12 +1300,7 @@ PHP_MINIT_FUNCTION(sdl_surface)
 	REGISTER_SURFACE_PROP("h");
 	REGISTER_SURFACE_PROP("pitch");
 	zend_declare_property_null(php_sdl_surface_ce, ZEND_STRL("format"), ZEND_ACC_PUBLIC);
-	zend_declare_property_null(php_sdl_surface_ce, ZEND_STRL("clip_rect"), ZEND_ACC_PUBLIC);
 	zend_declare_property_null(php_sdl_surface_ce, ZEND_STRL("pixels"), ZEND_ACC_PUBLIC);
-
-	REGISTER_SURFACE_CLASS_CONST_LONG("PREALLOC", SDL_PREALLOC);
-	REGISTER_SURFACE_CLASS_CONST_LONG("RLEACCEL", SDL_RLEACCEL);
-	REGISTER_SURFACE_CLASS_CONST_LONG("DONTFREE", SDL_DONTFREE);
 
 	return SUCCESS;
 }

@@ -297,8 +297,6 @@ PHP_FUNCTION(SDL_GetSurfaceBlendMode);
 PHP_FUNCTION(SDL_SetSurfaceClipRect);
 PHP_FUNCTION(SDL_GetSurfaceClipRect);
 PHP_FUNCTION(SDL_ConvertSurface);
-PHP_FUNCTION(SDL_ConvertSurfaceFormat);
-PHP_FUNCTION(SDL_ConvertPixels);
 
 PHP_MINIT_FUNCTION(sdl_surface);
 

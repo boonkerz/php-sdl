@@ -35,6 +35,21 @@ PHP_FUNCTION(SDL_Quit)
 	SDL_Quit();
 }
 
+PHP_FUNCTION(SDL_GetError)
+{
+	const char *error;
+
+	if (zend_parse_parameters_none() == FAILURE) {
+		RETURN_FALSE;
+	}
+
+	error = SDL_GetError();
+	if (error) {
+		RETURN_STRING(error);
+	}
+}
+
+
 PHP_FUNCTION(SDL_QuitSubSystem) {
 	zend_long flags;
 

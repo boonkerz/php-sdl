@@ -77,10 +77,7 @@ static void php_sdl_glcontext_free(zend_object *zo)
 
 	if (intern->glcontext)
 	{
-		if (!(intern->flags & SDL_DONTFREE))
-		{
-			SDL_GL_DeleteContext(intern->glcontext);
-		}
+		SDL_GL_DeleteContext(intern->glcontext);
 	}
 
 	zend_object_std_dtor(&intern->zo);
@@ -256,7 +253,7 @@ PHP_FUNCTION(SDL_GL_CreateContext)
 	if (window)
 	{
 		context = SDL_GL_CreateContext(window);
-		sdl_glcontext_to_zval(context, return_value, SDL_DONTFREE);
+		sdl_glcontext_to_zval(context, return_value, NULL);
 	}
 	else
 	{
@@ -333,7 +330,7 @@ PHP_FUNCTION(SDL_GL_GetCurrentWindow)
 	{
 		return;
 	}
-	sdl_window_to_zval(SDL_GL_GetCurrentWindow(), return_value, SDL_DONTFREE);
+	sdl_window_to_zval(SDL_GL_GetCurrentWindow(), return_value, NULL);
 }
 
 /* {{{ proto SDL_GLContext SDL_GL_GetCurrentContext(void)
@@ -347,7 +344,7 @@ PHP_FUNCTION(SDL_GL_GetCurrentContext)
 	{
 		return;
 	}
-	sdl_glcontext_to_zval(SDL_GL_GetCurrentContext(), return_value, SDL_DONTFREE);
+	sdl_glcontext_to_zval(SDL_GL_GetCurrentContext(), return_value, NULL);
 }
 
 /* {{{ proto void SDL_GetWindowSizeInPixels(SDL_Window window, int &w, int &h)

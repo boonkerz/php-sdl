@@ -7,6 +7,6 @@ if (!extension_loaded('sdl')) {
     exit(1);
 }
 
-SDL_GetVersion($info);
+var_dump(SDL_GetVersion());
 
-var_dump($info);
+SDL_Quit();

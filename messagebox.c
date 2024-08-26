@@ -180,20 +180,18 @@ static void php_sdl_messageboxdata_free(zend_object *object)
 
 	if (intern->data)
 	{
-		if (!(intern->flags & SDL_DONTFREE))
+		efree((void *)intern->data->title);
+		efree((void *)intern->data->message);
+		if (intern->data->buttons)
 		{
-			efree((void *)intern->data->title);
-			efree((void *)intern->data->message);
-			if (intern->data->buttons)
-			{
-				efree((void *)intern->data->buttons);
-			}
-			if (intern->data->colorScheme)
-			{
-				efree((void *)intern->data->colorScheme);
-			}
-			efree(intern->data);
+			efree((void *)intern->data->buttons);
 		}
+		if (intern->data->colorScheme)
+		{
+			efree((void *)intern->data->colorScheme);
+		}
+		efree(intern->data);
+
 	}
 
 	zend_object_std_dtor(&intern->zo);
@@ -544,20 +542,7 @@ PHP_FUNCTION(SDL_ShowMessageBox)
 }
 /* }}} */
 
-/* {{{ proto bool SDL_ShowSimpleMessageBox(int flags, string title, string message, SDL_Window window)
 
- *  \brief Create a simple modal message box
- *
- *  \param flags    ::SDL_MessageBoxFlags
- *  \param title    UTF-8 title text
- *  \param message  UTF-8 message text
- *  \param window   The parent window, or NULL for no parent
- *
- *  \return 0 on success, -1 on error
- *
- *  \sa SDL_ShowMessageBox
- extern DECLSPEC int SDLCALL SDL_ShowSimpleMessageBox(Uint32 flags, const char *title, const char *message, SDL_Window *window);
- */
 PHP_FUNCTION(SDL_ShowSimpleMessageBox)
 {
 	zend_long flags;
@@ -577,7 +562,7 @@ PHP_FUNCTION(SDL_ShowSimpleMessageBox)
 	}
 	RETVAL_LONG(SDL_ShowSimpleMessageBox(flags, title, msg, window));
 }
-/* }}} */
+
 
 /* {{{ php_sdl_messageboxcolor_methods[] */
 static const zend_function_entry php_sdl_messageboxcolor_methods[] = {

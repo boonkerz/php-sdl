@@ -8,19 +8,7 @@
 
 #include "php_sdl.h"
 #include "sdl_arginfo.h"
-#include "version.h"
-#include "sdl.h"
-#include "messagebox.h"
-#include "window.h"
-#include "video.h"
-#include "glcontext.h"
-#include "mouse.h"
-#include "rect.h"
-#include "iostream.h"
-#include "render.h"
-#include "event.h"
-#include "ttf_font.h"
-#include "ttf.h"
+
 
 zend_module_entry sdl_module_entry = {
 	STANDARD_MODULE_HEADER,
@@ -50,16 +38,17 @@ PHP_MINIT_FUNCTION(sdl)
 		SUCCESS == PHP_MINIT_CALL(sdl_version) &&
 		SUCCESS == PHP_MINIT_CALL(sdl_messagebox) &&
 		SUCCESS == PHP_MINIT_CALL(sdl_window) &&
-		SUCCESS == PHP_MINIT_CALL(sdl_glcontext) &&
-		SUCCESS == PHP_MINIT_CALL(sdl_rect) &&
-		SUCCESS == PHP_MINIT_CALL(sdl_mouse) &&
-		SUCCESS == PHP_MINIT_CALL(sdl_pixels) &&
-		SUCCESS == PHP_MINIT_CALL(sdl_iostream) &&
 		SUCCESS == PHP_MINIT_CALL(sdl_render) &&
-		SUCCESS == PHP_MINIT_CALL(sdl_surface) &&
 		SUCCESS == PHP_MINIT_CALL(sdl_event) &&
 		SUCCESS == PHP_MINIT_CALL(sdl_ttf) &&
-		SUCCESS == PHP_MINIT_CALL(sdl_video)
+		SUCCESS == PHP_MINIT_CALL(sdl_color) &&
+		SUCCESS == PHP_MINIT_CALL(sdl_surface) &&
+		SUCCESS == PHP_MINIT_CALL(sdl_rect) &&
+		SUCCESS == PHP_MINIT_CALL(sdl_glcontext)/* &&
+		SUCCESS == PHP_MINIT_CALL(sdl_mouse) &&
+		SUCCESS == PHP_MINIT_CALL(sdl_iostream) &&
+
+		SUCCESS == PHP_MINIT_CALL(sdl_video)*/
 )
 	{
 		return SUCCESS;

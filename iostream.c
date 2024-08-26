@@ -73,9 +73,7 @@ static void php_sdl_iostream_free(zend_object *object)
     struct php_sdl_iostream *intern = (struct php_sdl_iostream *) object;
 
     if (intern->iostream) {
-        if (!(intern->flags & SDL_DONTFREE)) {
-            SDL_CloseIO(intern->iostream);
-        }
+        SDL_CloseIO(intern->iostream);
         if (intern->buf) {
             efree(intern->buf);
         }

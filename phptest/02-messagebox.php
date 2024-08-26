@@ -20,9 +20,9 @@ function printSdlErrorAndExit() {
 
 initSDLOrExit();
 
-SDL_GetVersion($info);
+$version = SDL_GetVersion();
 
-if(SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, 'SDL Version', sprintf("%d.%d.%d", $info['major'], $info['minor'], $info['patch']), null) !== 0) {
+if(SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, 'SDL Version', sprintf("Version: %s", $version), null) !== 0) {
 	printSdlErrorAndExit();
 }
 

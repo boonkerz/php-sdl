@@ -9,7 +9,7 @@
 #include "glcontext.h"
 #include "surface.h"
 #include "rect.h"
-#include "pixels.h"
+#include "color.h"
 #include "mouse.h"
 #include "iostream.h"
 #include "render.h"
@@ -20,21 +20,47 @@
 static const zend_function_entry sdl_functions[] = {
     // Core
     ZEND_FE(SDL_Init,						arginfo_SDL_Init)
-    ZEND_FE(SDL_InitSubSystem,				arginfo_SDL_InitSubSystem)
-    ZEND_FE(SDL_Quit,						arginfo_SDL_Quit)
+	ZEND_FE(SDL_Quit,						arginfo_SDL_Quit)
+	ZEND_FE(SDL_GetError,						arginfo_SDL_GetError)
+
+	// Message box
+	ZEND_FE(SDL_ShowSimpleMessageBox, arginfo_SDL_ShowSimpleMessageBox)
+	ZEND_FE(SDL_ShowMessageBox, arginfo_SDL_ShowMessageBox)
+
+	// Window
+	ZEND_FE(SDL_CreateWindow, arginfo_SDL_CreateWindow)
+	ZEND_FE(SDL_DestroyWindow, arginfo_SDL_Window)
+
+	// Render
+	ZEND_FE(SDL_CreateRenderer, arginfo_SDL_CreateRenderer)
+	ZEND_FE(SDL_DestroyRenderer, arginfo_SDL_DestroyRenderer)
+	ZEND_FE(SDL_SetRenderDrawColor, arginfo_SDL_SetRenderDrawColor)
+	ZEND_FE(SDL_RenderPresent, arginfo_SDL_RenderPresent)
+	ZEND_FE(SDL_RenderClear, arginfo_SDL_RenderClear)
+	ZEND_FE(SDL_RenderPoint, arginfo_SDL_RenderPoint)
+	ZEND_FE(SDL_CreateTextureFromSurface, arginfo_SDL_CreateTextureFromSurface)
+	ZEND_FE(SDL_RenderTexture, arginfo_SDL_RenderTexture)
+
+	// TTF
+	ZEND_FE(SDL_TTF_Init,					arginfo_SDL_TTF_Init)
+	ZEND_FE(SDL_TTF_OpenFont,				arginfo_SDL_TTF_OpenFont)
+	ZEND_FE(SDL_TTF_RenderText_Blended,		arginfo_SDL_TTF_RenderText_Blended)
+
+	// Events
+	ZEND_FE(SDL_WaitEvent, arginfo_SDL_WaitEvent)
+	ZEND_FE(SDL_PollEvent, arginfo_SDL_PollEvent)
+
+    /*ZEND_FE(SDL_InitSubSystem,				arginfo_SDL_InitSubSystem)
+
     ZEND_FE(SDL_QuitSubSystem,				arginfo_SDL_QuitSubSystem)
     ZEND_FE(SDL_WasInit,					arginfo_SDL_WasInit)
     ZEND_FE(SDL_SetHint,					arginfo_SDL_SetHint)
 
     // TTF
-    ZEND_FE(SDL_TTF_Init,					arginfo_SDL_TTF_Init)
-    ZEND_FE(SDL_TTF_OpenFont,				arginfo_SDL_TTF_OpenFont)
-	ZEND_FE(SDL_TTF_RenderText_Blended,		arginfo_SDL_TTF_RenderText_Blended)
 
-	// Window
-	ZEND_FE(SDL_CreateWindow, arginfo_SDL_CreateWindow)
+
 	ZEND_FE(SDL_CreateShapedWindow, arginfo_SDL_CreateWindow)
-	ZEND_FE(SDL_DestroyWindow, arginfo_SDL_Window)
+
 	ZEND_FE(SDL_UpdateWindowSurface, arginfo_SDL_Window)
 	ZEND_FE(SDL_GetWindowTitle, arginfo_SDL_Window)
 	ZEND_FE(SDL_SetWindowTitle, arginfo_SDL_SetWindowTitle)
@@ -147,9 +173,7 @@ static const zend_function_entry sdl_functions[] = {
 	ZEND_FE(SDL_ConvertSurfaceFormat, arginfo_SDL_ConvertSurfaceFormat)
 	ZEND_FE(SDL_ConvertPixels, arginfo_SDL_ConvertPixels)
 
-	// Message box
-	ZEND_FE(SDL_ShowSimpleMessageBox, arginfo_SDL_ShowSimpleMessageBox)
-	ZEND_FE(SDL_ShowMessageBox, arginfo_SDL_ShowMessageBox)
+
 
 	// Pixels
 	ZEND_FE(SDL_GetPixelFormatName, arginfo_SDL_GetPixelFormatName)
@@ -170,20 +194,19 @@ static const zend_function_entry sdl_functions[] = {
 
 
 	// Render
-	ZEND_FE(SDL_CreateRenderer, arginfo_SDL_CreateRenderer)
 	ZEND_FE(SDL_CreateSoftwareRenderer, arginfo_SDL_CreateSoftwareRenderer)
-	ZEND_FE(SDL_DestroyRenderer, arginfo_SDL_DestroyRenderer)
+
 	ZEND_FE(SDL_DestroyTexture, arginfo_SDL_DestroyTexture)
-	ZEND_FE(SDL_SetRenderDrawColor, arginfo_SDL_SetRenderDrawColor)
-	ZEND_FE(SDL_RenderPoint, arginfo_SDL_RenderPoint)
-	ZEND_FE(SDL_RenderClear, arginfo_SDL_RenderClear)
-	ZEND_FE(SDL_RenderTexture, arginfo_SDL_RenderTexture)
+
+
+
+
 	ZEND_FE(SDL_RenderTextureRotated, arginfo_SDL_RenderTextureRotated)
 	ZEND_FE(SDL_RenderFillRect, arginfo_SDL_RenderFillRect)
 	ZEND_FE(SDL_RenderRect, arginfo_SDL_RenderRect)
 	ZEND_FE(SDL_RenderLine, arginfo_SDL_RenderLine)
-	ZEND_FE(SDL_RenderPresent, arginfo_SDL_RenderPresent)
-	ZEND_FE(SDL_CreateTextureFromSurface, arginfo_SDL_CreateTextureFromSurface)
+
+
 	ZEND_FE(SDL_CreateTexture, arginfo_SDL_CreateTexture)
 	ZEND_FE(SDL_UpdateTexture, arginfo_SDL_UpdateTexture)
 	ZEND_FE(SDL_GetTextureSize, arginfo_SDL_GetTextureSize)
@@ -191,10 +214,8 @@ static const zend_function_entry sdl_functions[] = {
 	ZEND_FE(SDL_SetRenderLogicalPresentation, arginfo_SDL_SetRenderLogicalPresentation)
 	ZEND_FE(SDL_GetCurrentRenderOutputSize, arginfo_SDL_GetCurrentRenderOutputSize)
 
-	// Events
-	ZEND_FE(SDL_WaitEvent, arginfo_SDL_WaitEvent)
-	ZEND_FE(SDL_PollEvent, arginfo_SDL_PollEvent)
 
+*/
     // Version
     ZEND_FE(SDL_GetVersion, arginfo_SDL_GetVersion)
     PHP_FE_END

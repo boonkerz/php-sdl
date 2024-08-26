@@ -127,8 +127,6 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_CreateWindow, 0, 0, 6)
        ZEND_ARG_INFO(0, title)
-       ZEND_ARG_INFO(0, x)
-       ZEND_ARG_INFO(0, y)
        ZEND_ARG_INFO(0, w)
        ZEND_ARG_INFO(0, h)
        ZEND_ARG_INFO(0, flags)
@@ -200,15 +198,8 @@ PHP_FUNCTION(SDL_GetWindowSurface);
 PHP_FUNCTION(SDL_UpdateWindowSurfaceRects);
 PHP_FUNCTION(SDL_SetWindowGrab);
 PHP_FUNCTION(SDL_GetWindowGrab);
-PHP_FUNCTION(SDL_CreateShapedWindow);
 PHP_FUNCTION(SDL_CreateWindow);
-PHP_FUNCTION(SDL_UpdateWindowSurface);
 PHP_FUNCTION(SDL_DestroyWindow);
-PHP_FUNCTION(SDL_GetWindowTitle);
-PHP_FUNCTION(SDL_SetWindowTitle);
-//PHP_FUNCTION(SDL_IsShapedWindow);
-//PHP_FUNCTION(SDL_SetWindowShape);
-//PHP_FUNCTION(SDL_GetShapedWindowMode);
 
 PHP_MINIT_FUNCTION(sdl_window);
 

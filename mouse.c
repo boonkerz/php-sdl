@@ -76,7 +76,7 @@ static void php_sdl_cursor_free(zend_object *object)
 {
 	struct php_sdl_cursor *intern = (struct php_sdl_cursor *)((char *)object - object->handlers->offset);
 
-	if (intern->cursor && !(intern->flags & SDL_DONTFREE))
+	if (intern->cursor && !(intern->flags & NULL))
 	{
 		SDL_DestroyCursor(intern->cursor);
 	}
@@ -326,7 +326,7 @@ PHP_FUNCTION(SDL_GetCursor)
 		return;
 	}
 	cursor = SDL_GetCursor();
-	sdl_cursor_to_zval(cursor, return_value, SDL_DONTFREE);
+	sdl_cursor_to_zval(cursor, return_value, NULL);
 }
 /* }}} */
 
@@ -344,7 +344,7 @@ PHP_FUNCTION(SDL_GetDefaultCursor)
 		return;
 	}
 	cursor = SDL_GetDefaultCursor();
-	sdl_cursor_to_zval(cursor, return_value, SDL_DONTFREE);
+	sdl_cursor_to_zval(cursor, return_value, NULL);
 }
 /* }}} */
 
@@ -375,7 +375,7 @@ PHP_FUNCTION(SDL_GetMouseFocus)
 	{
 		return;
 	}
-	sdl_window_to_zval(SDL_GetMouseFocus(), return_value, SDL_DONTFREE);
+	sdl_window_to_zval(SDL_GetMouseFocus(), return_value, NULL);
 }
 
 /* {{{ proto int SDL_GetMouseState(int &x, int &y)

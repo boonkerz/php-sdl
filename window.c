@@ -949,46 +949,27 @@ PHP_FUNCTION(SDL_GetWindowGrab)
 }
 /* }}} */
 
-static void php_create_window(INTERNAL_FUNCTION_PARAMETERS, int opt)
+static void php_create_window(INTERNAL_FUNCTION_PARAMETERS)
 {
 	struct php_sdl_window *intern;
-	zend_long x, y, w, h, flags;
+	zend_long w, h, flags;
 	char *title;
 	size_t title_len;
 	SDL_Window *window;
-        SDL_PropertiesID props;
+	SDL_PropertiesID props;
 	
-	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "slllll", &title, &title_len, &x, &y, &w, &h, &flags))
+	if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "slll", &title, &title_len, &w, &h, &flags))
 	{
 		return;
 	}
-	switch (opt)
-	{
-	case 1:
-		// TODO
-		//window = SDL_CreateShapedWindow(title, x, y, w, h, flags);
-		props = SDL_CreateProperties();
-		SDL_SetStringProperty(props, SDL_PROP_WINDOW_CREATE_TITLE_STRING, title);
-		SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_X_NUMBER, x);
-		SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_Y_NUMBER, y);
-		SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_WIDTH_NUMBER, w);
-		SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_HEIGHT_NUMBER, h);
-		SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_RESIZABLE_BOOLEAN, true);
-		SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_HIGH_PIXEL_DENSITY_BOOLEAN, true);
-		window = SDL_CreateWindowWithProperties(props);
-		//window = SDL_CreateWindowWithPosition(title, x, y, w, h, flags);
-		break;
-	default:
-		props = SDL_CreateProperties();
-		SDL_SetStringProperty(props, SDL_PROP_WINDOW_CREATE_TITLE_STRING, title);
-		SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_X_NUMBER, x);
-		SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_Y_NUMBER, y);
-		SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_WIDTH_NUMBER, w);
-		SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_HEIGHT_NUMBER, h);
-		SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_RESIZABLE_BOOLEAN, true);
-		SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_HIGH_PIXEL_DENSITY_BOOLEAN, true);
-		window = SDL_CreateWindowWithProperties(props);
-	}
+	props = SDL_CreateProperties();
+	SDL_SetStringProperty(props, SDL_PROP_WINDOW_CREATE_TITLE_STRING, title);
+	SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_WIDTH_NUMBER, w);
+	SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_HEIGHT_NUMBER, h);
+	SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_RESIZABLE_BOOLEAN, true);
+	SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_HIGH_PIXEL_DENSITY_BOOLEAN, true);
+	window = SDL_CreateWindowWithProperties(props);
+
 	if (window)
 	{
 		object_init_ex(return_value, php_sdl_window_ce);
@@ -996,68 +977,16 @@ static void php_create_window(INTERNAL_FUNCTION_PARAMETERS, int opt)
 		intern->window = window;
 		intern->flags = 0;
 
-		SDL_SetProperty(SDL_GetWindowProperties(intern->window), PHP_SDL_MAGICDATA, (void *)(unsigned long)Z_OBJ_HANDLE_P(return_value));
-		//SDL_SetWindowData(intern->window, PHP_SDL_MAGICDATA, (void *)(unsigned long)Z_OBJ_HANDLE_P(return_value));
+		SDL_SetPointerProperty(SDL_GetWindowProperties(intern->window), PHP_SDL_MAGICDATA, (void *)(unsigned long)Z_OBJ_HANDLE_P(return_value));
 	}
 }
-/* {{{ proto SDL_Window SDL_CreateShapedWindow(string title, int x, int y, int w, int h, int flags)
 
- *  \brief Create a window that can be shaped with the specified position, dimensions, and flags.
- *
- *  \param title The title of the window, in UTF-8 encoding.
- *  \param x     The x position of the window, ::SDL_WINDOWPOS_CENTERED, or
- *               ::SDL_WINDOWPOS_UNDEFINED.
- *  \param y     The y position of the window, ::SDL_WINDOWPOS_CENTERED, or
- *               ::SDL_WINDOWPOS_UNDEFINED.
- *  \param w     The width of the window.
- *  \param h     The height of the window.
- *  \param flags The flags for the window, a mask of SDL_WINDOW_BORDERLESS with any of the following:
- *               ::SDL_WINDOW_OPENGL,     ::SDL_WINDOW_INPUT_GRABBED,
- *               ::SDL_WINDOW_HIDDEN,     ::SDL_WINDOW_RESIZABLE,
- *               ::SDL_WINDOW_MAXIMIZED,  ::SDL_WINDOW_MINIMIZED,
- *       ::SDL_WINDOW_BORDERLESS is always set, and ::SDL_WINDOW_FULLSCREEN is always unset.
- *
- *  \return The window created, or NULL if window creation failed.
- *
- *  \sa SDL_DestroyWindow()
- extern DECLSPEC SDL_Window * SDLCALL SDL_CreateShapedWindow(const char *title,unsigned int x,unsigned int y,unsigned int w,unsigned int h,Uint32 flags);
-*/
-PHP_FUNCTION(SDL_CreateShapedWindow)
-{
-	php_create_window(INTERNAL_FUNCTION_PARAM_PASSTHRU, 1);
-}
-/* }}} */
 
-/* {{{ proto SDL_Window SDL_CreateWindow(string title, int x, int y, int w, int h, int flags)
 
- *  \brief Create a window with the specified position, dimensions, and flags.
- *
- *  \param title The title of the window, in UTF-8 encoding.
- *  \param x     The x position of the window, ::SDL_WINDOWPOS_CENTERED, or
- *               ::SDL_WINDOWPOS_UNDEFINED.
- *  \param y     The y position of the window, ::SDL_WINDOWPOS_CENTERED, or
- *               ::SDL_WINDOWPOS_UNDEFINED.
- *  \param w     The width of the window.
- *  \param h     The height of the window.
- *  \param flags The flags for the window, a mask of any of the following:
- *               ::SDL_WINDOW_FULLSCREEN,    ::SDL_WINDOW_OPENGL,
- *               ::SDL_WINDOW_HIDDEN,        ::SDL_WINDOW_BORDERLESS,
- *               ::SDL_WINDOW_RESIZABLE,     ::SDL_WINDOW_MAXIMIZED,
- *               ::SDL_WINDOW_MINIMIZED,     ::SDL_WINDOW_INPUT_GRABBED,
- *               ::SDL_WINDOW_ALLOW_HIGHDPI.
- *
- *  \return The id of the window created, or zero if window creation failed.
- *
- *  \sa SDL_DestroyWindow()
- extern DECLSPEC SDL_Window * SDLCALL SDL_CreateWindow(const char *title,
-													   int x, int y, int w,
-													   int h, Uint32 flags);
-*/
 PHP_FUNCTION(SDL_CreateWindow)
 {
-	php_create_window(INTERNAL_FUNCTION_PARAM_PASSTHRU, 0);
+	php_create_window(INTERNAL_FUNCTION_PARAM_PASSTHRU);
 }
-/* }}} */
 
 /* {{{ proto SDL_Window::__construct(string title, int x, int y, int w, int h, int flags) */
 static PHP_METHOD(SDL_Window, __construct)
@@ -1082,7 +1011,6 @@ static PHP_METHOD(SDL_Window, __construct)
 	intern->flags = 0;
 	if (intern->window)
 	{
-		//SDL_SetWindowData(intern->window, PHP_SDL_MAGICDATA, (void *)(unsigned long)Z_OBJ_HANDLE_P(getThis()));
 		SDL_SetProperty(SDL_GetWindowProperties(intern->window), PHP_SDL_MAGICDATA, (void *)(unsigned long)Z_OBJ_HANDLE_P(getThis()));
 	}
 	else
@@ -1147,13 +1075,7 @@ PHP_FUNCTION(SDL_UpdateWindowSurface)
 	FETCH_WINDOW(window, z_window, 1);
 	RETURN_LONG(SDL_UpdateWindowSurface(window));
 }
-/* }}} */
 
-/* {{{ proto SDL_DestroyWindow(SDL_Window window)
-
- *  \brief Destroy a window.
- extern DECLSPEC void SDLCALL SDL_DestroyWindow(SDL_Window * window);
- */
 PHP_FUNCTION(SDL_DestroyWindow)
 {
 	struct php_sdl_window *intern;
@@ -1169,7 +1091,6 @@ PHP_FUNCTION(SDL_DestroyWindow)
 	SDL_DestroyWindow(intern->window);
 	intern->window = NULL;
 }
-/* }}} */
 
 /* {{{ proto string SDL_GetWindowTitle(SDL_Window window)
 
@@ -1368,14 +1289,14 @@ static const zend_function_entry php_sdl_window_methods[] = {
 	PHP_FALIAS(GL_CreateContext, SDL_GL_CreateContext, arginfo_window_none)
 	PHP_FALIAS(GL_MakeCurrent, SDL_GL_MakeCurrent, arginfo_SDL_GLContext)
 	PHP_FALIAS(GL_Swap, SDL_GL_SwapWindow, arginfo_window_none)
-	PHP_FALIAS(WarpMouse, SDL_WarpMouseInWindow, arginfo_SDL_Window_SetPosition)
+	//PHP_FALIAS(WarpMouse, SDL_WarpMouseInWindow, arginfo_SDL_Window_SetPosition)
 	//PHP_FALIAS(IsShaped, SDL_IsShapedWindow, arginfo_window_none)
 	//PHP_FALIAS(SetShape, SDL_SetWindowShape, arginfo_SDL_Window_SetShape)
 	//PHP_FALIAS(GetShapedMode, SDL_GetShapedWindowMode, arginfo_SDL_Window_GetShapedMode)
 
 	/* static methods */
 	ZEND_FENTRY(GL_GetCurrent, ZEND_FN(SDL_GL_GetCurrentWindow), arginfo_window_none, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
-	ZEND_FENTRY(GetMouseFocus, ZEND_FN(SDL_GetMouseFocus), arginfo_window_none, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
+	//ZEND_FENTRY(GetMouseFocus, ZEND_FN(SDL_GetMouseFocus), arginfo_window_none, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
 
 	PHP_FE_END};
 
@@ -1386,10 +1307,7 @@ static void php_sdl_window_free(zend_object *zo)
 	struct php_sdl_window *intern = (struct php_sdl_window *)((char *)zo - zo->handlers->offset);
 	if (intern->window)
 	{
-		if (!(intern->flags & SDL_DONTFREE))
-		{
-			SDL_DestroyWindow(intern->window);
-		}
+		SDL_DestroyWindow(intern->window);
 	}
 
 	zend_object_std_dtor(&intern->zo);

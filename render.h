@@ -64,13 +64,6 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_CreateTexture, 0, 0, 5)
 	ZEND_ARG_INFO(0, h)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_UpdateTexture, 0, 0, 4)
-	ZEND_ARG_OBJ_INFO(0, texture, SDL_Texture, 0)
-	ZEND_ARG_OBJ_INFO(0, rect, SDL_Rect, 1)
-    ZEND_ARG_OBJ_INFO(0, pixels, SDL_Pixels, 0)
-	ZEND_ARG_TYPE_INFO(0, pitch, IS_LONG, 0)
-ZEND_END_ARG_INFO()
-
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetTextureSize, 0, 0, 1)
 	ZEND_ARG_OBJ_INFO(0, texture, SDL_Texture, 0)
 	ZEND_ARG_TYPE_INFO(1, w, IS_LONG, 1)
@@ -82,10 +75,8 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetRenderTarget, 0, 0, 2)
 	ZEND_ARG_INFO(0, texture)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_CreateRenderer, 0, 0, 3)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_CreateRenderer, 0, 0, 1)
 	ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
-	ZEND_ARG_INFO(0, index)
-	ZEND_ARG_INFO(0, flags)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_CreateSoftwareRenderer, 0, 0, 1)
@@ -133,7 +124,6 @@ PHP_FUNCTION(SDL_RenderPresent);
 PHP_FUNCTION(SDL_RenderPoint);
 PHP_FUNCTION(SDL_CreateTextureFromSurface);
 PHP_FUNCTION(SDL_CreateTexture);
-PHP_FUNCTION(SDL_UpdateTexture);
 PHP_FUNCTION(SDL_GetTextureSize);
 PHP_FUNCTION(SDL_SetRenderTarget);
 PHP_FUNCTION(SDL_CreateRenderer);
