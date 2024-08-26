@@ -364,7 +364,7 @@ PHP_FUNCTION(SDL_GetTextureSize)
 	zval *z_texture, *z_width = NULL, *z_height = NULL;
 	SDL_Texture *texture;
 	float w, h;
-	uint result;
+	int result;
 	if( zend_parse_parameters(ZEND_NUM_ARGS(), "z|zz", &z_texture, &z_width, &z_height) == FAILURE ) {
 		return;
 	}
