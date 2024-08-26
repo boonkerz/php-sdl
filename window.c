@@ -6,7 +6,6 @@
 #include "mouse.h"
 #include "rect.h"
 #include "surface.h"
-#include "video.h"
 
 /* used to associate PHP object handle to SDL_Window */
 #define PHP_SDL_MAGICDATA "__php__handle"
@@ -150,7 +149,9 @@ PHP_FUNCTION(SDL_SetWindowFullscreenMode)
 	SDL_Window *window;
 	SDL_DisplayMode mode;
 
-	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "OO", &z_window, php_sdl_window_ce, &z_mode, get_php_sdl_displaymode_ce()) == FAILURE)
+	/*
+	 * TODO
+	 * if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "OO", &z_window, php_sdl_window_ce, &z_mode, get_php_sdl_displaymode_ce()) == FAILURE)
 	{
 		return;
 	}
@@ -158,7 +159,7 @@ PHP_FUNCTION(SDL_SetWindowFullscreenMode)
 	if (zval_to_sdl_displaymode(z_mode, &mode))
 	{
 		RETVAL_LONG(SDL_SetWindowFullscreenMode(window, &mode));
-	}
+	}*/
 }
 /* }}} */
 
@@ -188,7 +189,7 @@ PHP_FUNCTION(SDL_GetWindowFullscreenMode)
 	if (mode)
 	{
 		zval_dtor(z_mode);
-		sdl_displaymode_to_zval(mode, z_mode);
+		//TODO: sdl_displaymode_to_zval(mode, z_mode);
 	}
 	RETVAL_LONG(1);
 }
