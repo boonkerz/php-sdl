@@ -284,7 +284,6 @@ PHP_FUNCTION(SDL_BlitSurface);
 PHP_FUNCTION(SDL_BlitSurfaceUnchecked);
 PHP_FUNCTION(SDL_BlitSurfaceScaled);
 PHP_FUNCTION(SDL_BlitSurfaceUncheckedScaled);
-PHP_FUNCTION(SDL_SoftStretch);
 PHP_FUNCTION(SDL_SetSurfaceRLE);
 PHP_FUNCTION(SDL_SetSurfaceColorKey);
 PHP_FUNCTION(SDL_GetSurfaceColorKey);

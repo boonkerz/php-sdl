@@ -78,14 +78,14 @@ PHP_FUNCTION(SDL_RenderFillRect)
 {
 	zval *z_renderer = NULL;
 	zval *z_rect = NULL;
-	SDL_Rect rect;
+	SDL_FRect rect;
 	SDL_Renderer *renderer = NULL;
 
 	if( zend_parse_parameters(ZEND_NUM_ARGS(), "zO", &z_renderer, &z_rect, get_php_sdl_rect_ce()) == FAILURE ) {
 		WRONG_PARAM_COUNT;
 	}
 
-	zval_to_sdl_rect(z_rect, &rect);
+	zval_to_sdl_frect(z_rect, &rect);
 
     renderer = (SDL_Renderer*)zend_fetch_resource(Z_RES_P(z_renderer), SDL_RENDERER_RES_NAME, le_sdl_renderer);
 
@@ -96,14 +96,14 @@ PHP_FUNCTION(SDL_RenderRect)
 {
 	zval *z_renderer = NULL;
 	zval *z_rect = NULL;
-	SDL_Rect rect;
+	SDL_FRect rect;
 	SDL_Renderer *renderer = NULL;
 
 	if( zend_parse_parameters(ZEND_NUM_ARGS(), "zO", &z_renderer, &z_rect, get_php_sdl_rect_ce()) == FAILURE ) {
 		WRONG_PARAM_COUNT;
 	}
 
-	zval_to_sdl_rect(z_rect, &rect);
+	zval_to_sdl_frect(z_rect, &rect);
 
 	renderer = (SDL_Renderer*)zend_fetch_resource(Z_RES_P(z_renderer), SDL_RENDERER_RES_NAME, le_sdl_renderer);
 
@@ -294,11 +294,11 @@ PHP_FUNCTION(SDL_RenderTextureRotated)
 	zval *z_center;
 	SDL_Renderer *renderer = NULL;
 	SDL_Texture *texture = NULL;
-	SDL_Rect *srcrect = NULL, *dstrect = NULL;
-	SDL_Rect def_srcrect, def_dstrect;
+	SDL_FRect *srcrect = NULL, *dstrect = NULL;
+	SDL_FRect def_srcrect, def_dstrect;
 	double angle;
-	SDL_Point *center = NULL;
-	SDL_Point def_center;
+	SDL_FPoint *center = NULL;
+	SDL_FPoint def_center;
 	zend_long flip;
 
 	if( zend_parse_parameters(ZEND_NUM_ARGS(), "zzO!O!dO!l", &z_renderer, &z_texture, &z_srcrect, get_php_sdl_rect_ce(), &z_dstrect, get_php_sdl_rect_ce(), &angle, &z_center, get_php_sdl_point_ce(), &flip) == FAILURE ) {
@@ -310,15 +310,15 @@ PHP_FUNCTION(SDL_RenderTextureRotated)
 
 	if(z_srcrect != NULL && Z_TYPE_P(z_srcrect) != IS_NULL) {
 		srcrect = &def_srcrect;
-		zval_to_sdl_rect(z_srcrect, srcrect);
+		zval_to_sdl_frect(z_srcrect, srcrect);
 	}
 	if(z_dstrect != NULL && Z_TYPE_P(z_dstrect) != IS_NULL) {
 		dstrect = &def_dstrect;
-		zval_to_sdl_rect(z_dstrect, dstrect);
+		zval_to_sdl_frect(z_dstrect, dstrect);
 	}
 	if(z_center != NULL && Z_TYPE_P(z_center) != IS_NULL) {
 		center = &def_center;
-		zval_to_sdl_point(z_center, center);
+		zval_to_sdl_fpoint(z_center, center);
 	}
 
 	RETURN_LONG(SDL_RenderTextureRotated(renderer, texture, srcrect, dstrect, angle, center, (Uint32)flip));

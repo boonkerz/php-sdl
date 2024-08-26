@@ -223,10 +223,10 @@ static PHP_METHOD(SDL_Surface, __toString)
 		int *bpp; Uint32 *Rmask; Uint32 *Gmask; Uint32 *Bmask; Uint32 *Amask;
 		SDL_GetMasksForPixelFormat(intern->surface->format, bpp, Rmask, Gmask, Bmask, Amask);
 
-		buf_len = spprintf(&buf, 100, "SDL_Surface(%u,%d,%d,%u,0x%x,0x%x,0x%x,0x%x)",
+		buf_len = spprintf(&buf, 100, "SDL_Surface(%u,%d,%d,%ls,%ui,0x%x,0x%x,0x%x)",
 						   intern->surface->flags, intern->surface->w, intern->surface->h,
-						   bpp, Rmask,
-						   Gmask, Bmask, Amask);
+						   bpp, *Rmask,
+						   *Gmask, *Bmask, *Amask);
 		RETVAL_STRINGL(buf, buf_len);
 		efree(buf);
 	}
@@ -736,53 +736,6 @@ PHP_FUNCTION(SDL_BlitSurfaceUncheckedScaled)
 }
 /* }}} */
 
-/* {{{ proto void SDL_SoftStretch(SDL_Surface src, SDL_rect srcrect, SDL_Surface dst [, SDL_rect dstrect])
-
- *  \brief Perform a fast, low quality, stretch blit between two surfaces of the
- *         same pixel format.
- *
- *  \note This function uses a static buffer, and is not thread-safe.
- extern DECLSPEC int SDLCALL SDL_SoftStretch(SDL_Surface * src,
-											 const SDL_Rect * srcrect,
-											 SDL_Surface * dst,
-											 const SDL_Rect * dstrect);
-
- */
-PHP_FUNCTION(SDL_SoftStretch)
-{
-	struct php_sdl_surface *intern;
-	zval *z_src, *z_dst, *z_srect, *z_drect = NULL;
-	SDL_Surface *src, *dst;
-	SDL_Rect srect, drect;
-	int result;
-
-	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "OzO|z", &z_src, php_sdl_surface_ce, &z_srect, &z_dst, php_sdl_surface_ce, &z_drect))
-	{
-		return;
-	}
-	FETCH_SURFACE(src, z_src, 1);
-	FETCH_SURFACE(dst, z_dst, 1);
-	if (!(Z_TYPE_P(z_srect) == IS_NULL || zval_to_sdl_rect(z_srect, &srect)))
-	{
-		php_error_docref(NULL, E_ERROR, "srcrect is not a SDL_Rect object");
-		return;
-	}
-	if (z_drect && !(Z_TYPE_P(z_drect) == IS_NULL || zval_to_sdl_rect(z_drect, &drect)))
-	{
-		php_error_docref(NULL, E_ERROR, "dstrect is not a SDL_Rect object");
-		return;
-	}
-	else if (z_drect && Z_TYPE_P(z_drect) == IS_NULL)
-	{
-		php_error_docref(NULL, E_NOTICE, "dstrect is not a SDL_Rect object, so is ignored");
-	}
-
-	result = SDL_SoftStretch(src, (Z_TYPE_P(z_srect) == IS_NULL ? NULL : &srect),
-							 dst, (z_drect == NULL || Z_TYPE_P(z_drect) == IS_NULL ? NULL : &drect), SDL_SCALEMODE_NEAREST);
-
-	RETURN_LONG(result);
-}
-/* }}} */
 
 /* {{{ proto void SDL_SetSurfaceRLE(SDL_Surface src, int flag)
 
@@ -1166,7 +1119,6 @@ static const zend_function_entry php_sdl_surface_methods[] = {
 	PHP_FALIAS(BlitScaled, SDL_BlitSurfaceScaled, arginfo_SDL_Surface_UpperBlit)
 	PHP_FALIAS(UpperBlitScaled, SDL_BlitSurfaceScaled, arginfo_SDL_Surface_UpperBlit)
 	PHP_FALIAS(LowerBlitScaled, SDL_BlitSurfaceUncheckedScaled, arginfo_SDL_Surface_LowerBlit)
-	PHP_FALIAS(SoftStretch, SDL_SoftStretch, arginfo_SDL_Surface_UpperBlit)
 	PHP_FALIAS(SaveBMP_RW, SDL_SaveBMP_RW, arginfo_SDL_Surface_SaveBMP_RW)
 	PHP_FALIAS(SaveBMP, SDL_SaveBMP, arginfo_SDL_Surface_SaveBMP)
 	PHP_FALIAS(SetRLE, SDL_SetSurfaceRLE, arginfo_SDL_Surface_SetRLE)
@@ -1257,13 +1209,13 @@ zval *sdl_surface_read_property(zend_object *object, zend_string *member, int ty
 	}
 	else if (!strcmp(member_val, "format"))
 	{
-		sdl_pixelformat_to_zval(intern->surface->format, retval, NULL);
+		//sdl_pixelformat_to_zval(intern->surface->format, retval, NULL);
 	}
 	else if (!strcmp(member_val, "pixels"))
 	{
 		SDL_Pixels pix;
 		pix.pixels = (Uint8 *)intern->surface->pixels;
-		sdl_pixels_to_zval(&pix, retval, NULL);
+		//sdl_pixels_to_zval(&pix, retval, NULL);
 	}
 	else
 	{

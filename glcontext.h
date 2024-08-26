@@ -15,7 +15,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GLContext, 0, 0, 1)
        ZEND_ARG_OBJ_INFO(0, GLcontext, SDL_GLContext, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GL_DeleteContext, 0, 0, 1)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GL_DestroyContext, 0, 0, 1)
        ZEND_ARG_OBJ_INFO(0, GLcontext, SDL_GLContext, 0)
 ZEND_END_ARG_INFO()
 
@@ -67,7 +67,7 @@ PHP_FUNCTION(SDL_GL_SwapWindow);
 PHP_FUNCTION(SDL_GL_ExtensionSupported);
 PHP_FUNCTION(SDL_GL_SetAttribute);
 PHP_FUNCTION(SDL_GL_GetAttribute);
-PHP_FUNCTION(SDL_GL_DeleteContext);
+PHP_FUNCTION(SDL_GL_DestroyContext);
 PHP_FUNCTION(SDL_GL_GetCurrentContext);
 PHP_FUNCTION(SDL_GL_SetSwapInterval);
 PHP_FUNCTION(SDL_GL_GetSwapInterval);

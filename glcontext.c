@@ -230,15 +230,6 @@ PHP_METHOD(SDL_GLContext, __toString)
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_class_SDL_GLContext__toString, 0, 0, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
-/* {{{ proto SDL_GLContext SDL_GL_CreateContext(SDL_Window window)
-
- *  \brief Create an OpenGL context for use with an OpenGL window, and make it
- *         current.
- *
- *  \sa SDL_GL_DeleteContext()
- extern DECLSPEC SDL_GLContext SDLCALL SDL_GL_CreateContext(SDL_Window *
-															window);
- */
 PHP_FUNCTION(SDL_GL_CreateContext)
 {
 	SDL_GLContext context;
@@ -253,23 +244,15 @@ PHP_FUNCTION(SDL_GL_CreateContext)
 	if (window)
 	{
 		context = SDL_GL_CreateContext(window);
-		sdl_glcontext_to_zval(context, return_value, NULL);
-	}
+                sdl_glcontext_to_zval(context, return_value, 0);
+        }
 	else
 	{
 		php_error_docref(NULL, E_WARNING, "Invalid SDL_Window object");
 	}
 }
-/* }}} */
 
-/* {{{ proto void SDL_GL_DeleteContext(SDL_GLContext context)
-
- *  \brief Delete an OpenGL context.
- *
- *  \sa SDL_GL_CreateContext()
- extern DECLSPEC void SDLCALL SDL_GL_DeleteContext(SDL_GLContext context);
- */
-PHP_FUNCTION(SDL_GL_DeleteContext)
+PHP_FUNCTION(SDL_GL_DestroyContext)
 {
 	struct php_sdl_glcontext *intern;
 	zval *z_context;
@@ -281,10 +264,9 @@ PHP_FUNCTION(SDL_GL_DeleteContext)
 	}
 	FETCH_GLCONTEXT(context, z_context, 1);
 
-	SDL_GL_DeleteContext(intern->glcontext);
+	SDL_GL_DestroyContext(intern->glcontext);
 	intern->glcontext = NULL;
 }
-/* }}} */
 
 #if SDL_VERSION_ATLEAST(2, 0, 1)
 /* {{{ proto int SDL_GL_MakeCurrent(SDL_Window window, SDL_GLContext context)
@@ -330,7 +312,7 @@ PHP_FUNCTION(SDL_GL_GetCurrentWindow)
 	{
 		return;
 	}
-	sdl_window_to_zval(SDL_GL_GetCurrentWindow(), return_value, NULL);
+	sdl_window_to_zval(SDL_GL_GetCurrentWindow(), return_value, 0);
 }
 
 /* {{{ proto SDL_GLContext SDL_GL_GetCurrentContext(void)
@@ -344,7 +326,7 @@ PHP_FUNCTION(SDL_GL_GetCurrentContext)
 	{
 		return;
 	}
-	sdl_glcontext_to_zval(SDL_GL_GetCurrentContext(), return_value, NULL);
+	sdl_glcontext_to_zval(SDL_GL_GetCurrentContext(), return_value, 0);
 }
 
 /* {{{ proto void SDL_GetWindowSizeInPixels(SDL_Window window, int &w, int &h)
@@ -456,7 +438,7 @@ static const zend_function_entry php_sdl_glcontext_methods[] = {
 		PHP_ME(SDL_GLContext, __toString, arginfo_class_SDL_GLContext__toString, ZEND_ACC_PUBLIC)
 
 	/* non-static method */
-	PHP_FALIAS(Delete, SDL_GL_DeleteContext, arginfo_none)
+	PHP_FALIAS(Delete, SDL_GL_DestroyContext, arginfo_none)
 
 	/* static functions */
 	ZEND_FENTRY(GL_GetCurrent, ZEND_FN(SDL_GL_GetCurrentContext), arginfo_none, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)

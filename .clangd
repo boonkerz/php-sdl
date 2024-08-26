@@ -1,0 +1,8 @@
+CompileFlags:
+  Add:
+    - "-I/usr/local/include/php"
+    - "-I/usr/local/include/php/main"
+    - "-I/usr/local/include/php/Zend"
+    - "-I/usr/local/include/php/TSRM"
+    - "-I/usr/local/include/php/sapi"
+    - "-I/usr/local/include/php/ext"

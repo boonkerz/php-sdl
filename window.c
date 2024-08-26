@@ -1011,7 +1011,7 @@ static PHP_METHOD(SDL_Window, __construct)
 	intern->flags = 0;
 	if (intern->window)
 	{
-		SDL_SetProperty(SDL_GetWindowProperties(intern->window), PHP_SDL_MAGICDATA, (void *)(unsigned long)Z_OBJ_HANDLE_P(getThis()));
+		SDL_SetPointerProperty(SDL_GetWindowProperties(intern->window), PHP_SDL_MAGICDATA, (void *)(unsigned long)Z_OBJ_HANDLE_P(getThis()));
 	}
 	else
 	{
@@ -1042,7 +1042,7 @@ static PHP_METHOD(SDL_Window, __toString)
 
 		SDL_GetWindowPosition(intern->window, &x, &y);
 		SDL_GetWindowSize(intern->window, &w, &h);
-		buf_len = spprintf(&buf, 0, "SDL_Window(\"%s\",%d,%d,%d,%d,%u)", SDL_GetWindowTitle(intern->window), x, y, w, h, SDL_GetWindowFlags(intern->window));
+		buf_len = spprintf(&buf, 0, "SDL_Window(\"%s\",%d,%d,%d,%d,%lu)", SDL_GetWindowTitle(intern->window), x, y, w, h, SDL_GetWindowFlags(intern->window));
 		RETURN_STRINGL(buf, buf_len);
 	}
 	else
