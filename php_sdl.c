@@ -44,9 +44,11 @@ PHP_MINIT_FUNCTION(sdl)
 		SUCCESS == PHP_MINIT_CALL(sdl_color) &&
 		SUCCESS == PHP_MINIT_CALL(sdl_surface) &&
 		SUCCESS == PHP_MINIT_CALL(sdl_rect) &&
-		SUCCESS == PHP_MINIT_CALL(sdl_glcontext)/* &&
-		SUCCESS == PHP_MINIT_CALL(sdl_mouse) &&
 		SUCCESS == PHP_MINIT_CALL(sdl_iostream) &&
+		SUCCESS == PHP_MINIT_CALL(sdl_glcontext)/* &&
+
+		SUCCESS == PHP_MINIT_CALL(sdl_mouse) &&
+
 
 		SUCCESS == PHP_MINIT_CALL(sdl_video)*/
 )

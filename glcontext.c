@@ -77,7 +77,7 @@ static void php_sdl_glcontext_free(zend_object *zo)
 
 	if (intern->glcontext)
 	{
-		SDL_GL_DeleteContext(intern->glcontext);
+		SDL_GL_DestroyContext(intern->glcontext);
 	}
 
 	zend_object_std_dtor(&intern->zo);

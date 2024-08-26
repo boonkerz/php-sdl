@@ -69,7 +69,7 @@ if test "$PHP_SDL" != "no"; then
   AC_DEFINE(HAVE_SDL, 1, [Whether SDL support is enabled])
   PHP_SUBST(SDL_SHARED_LIBADD)
   SDL_SOURCE_FILES="php_sdl.c \
-    version.c sdl.c window.c messagebox.c glcontext.c render.c event.c ttf.c ttf_font.c color.c surface.c rect.c"
+    version.c sdl.c window.c messagebox.c glcontext.c render.c event.c ttf.c ttf_font.c color.c surface.c rect.c iostream.c"
 
   PHP_NEW_EXTENSION(sdl, $SDL_SOURCE_FILES, $ext_shared)
   PHP_ADD_INCLUDE([$SDL_DIR/include])
