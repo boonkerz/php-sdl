@@ -12,7 +12,7 @@ if(PHP_SDL != 'no') {
 
     PHP_INSTALL_HEADERS("ext/sdl", "version.h sdl.h messagebox.h window.h glcontext.h rect.h surface.h color.h render.h event.h ttf_font.h ttf.h iostream.h");
 
-	ADD_FLAG("LIBS_SDL", "SDL3.lib SDL3_ttf.lib gdi32.lib imm32.lib version.lib winmm.lib cfgmgr32.lib OleAut32.lib Setupapi.lib")
+	ADD_FLAG("LIBS_SDL", "gdi32.lib imm32.lib version.lib winmm.lib cfgmgr32.lib OleAut32.lib Setupapi.lib SDL3.lib SDL3_ttf.lib freetype.lib")
 
     AC_DEFINE('HAVE_SDL', 1);
 }
