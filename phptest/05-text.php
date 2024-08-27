@@ -23,6 +23,7 @@ SDL_SetRenderDrawColor($renderer, 255, 255, 255, 100);
 SDL_RenderClear($renderer);
 
 
+
 $font = SDL_TTF_OpenFont(__DIR__ . DIRECTORY_SEPARATOR . 'segoe-ui.ttf' , 20);
 var_dump($font);
 
@@ -36,16 +37,26 @@ var_dump($texture);
 //SDL_TTF_SizeText($this->font, $actWidget->getText(), \FFI::addr($rect->w), \FFI::addr($rect->h));
 $rect = new SDL_FRect(40,40,$surface->w,$surface->h);
 var_dump($rect);
+
 SDL_RenderTexture($renderer, $texture, null, $rect);
+
+SDL_SetRenderDrawColor($renderer, 128, 128, 128, 100);
+SDL_RenderFillRect($renderer, $rect);
+SDL_SetRenderDrawColor($renderer, 255, 128, 128, 100);
+SDL_RenderRect($renderer, $rect);
+
+
+
 SDL_RenderPresent($renderer);
+
 // Wait for quit event
 $event = new SDL_Event;
 while (true) {
     if (SDL_PollEvent($event) && $event->type == SDL_EVENT_QUIT) {
         break;
     }
-    if (SDL_PollEvent($event) && $event->type == SDL_EVENT_QUIT) {
-
+    if (SDL_PollEvent($event) && $event->type == SDL_EVENT_WINDOW_RESIZED) {
+        var_dump($event->window);
     }
 }
 

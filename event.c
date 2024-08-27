@@ -36,84 +36,85 @@ zend_bool sdl_event_to_zval(SDL_Event *event, zval *value)
 
 	switch (event->type)
 	{
-	case SDL_EVENT_MOUSE_MOTION:
-	{
-		zval motion;
-		object_init(&motion);
-		add_property_long(&motion, "state", event->motion.state);
-		add_property_long(&motion, "x", event->motion.x);
-		add_property_long(&motion, "y", event->motion.y);
-		add_property_zval(value, "motion", &motion);
-		zval_ptr_dtor(&motion);
-	}
-	break;
-	case SDL_EVENT_MOUSE_BUTTON_DOWN:
-	{
-		zval button;
-		object_init(&button);
-		add_property_long(&button, "button", event->button.button);
-		add_property_long(&button, "x", event->button.x);
-		add_property_long(&button, "y", event->button.y);
-		add_property_zval(value, "button", &button);
-		zval_ptr_dtor(&button);
-	}
-	break;
-	case SDL_EVENT_KEY_DOWN:
-	case SDL_EVENT_KEY_UP:
-	{
-		zval keysym;
-		object_init(&keysym);
-		add_property_long(&keysym, "sym", event->key.key);
+		case SDL_EVENT_MOUSE_MOTION:
+		{
+			zval motion;
+			object_init(&motion);
+			add_property_long(&motion, "state", event->motion.state);
+			add_property_long(&motion, "x", event->motion.x);
+			add_property_long(&motion, "y", event->motion.y);
+			add_property_zval(value, "motion", &motion);
+			zval_ptr_dtor(&motion);
+		}
+		break;
+		case SDL_EVENT_MOUSE_BUTTON_DOWN:
+		{
+			zval button;
+			object_init(&button);
+			add_property_long(&button, "button", event->button.button);
+			add_property_long(&button, "x", event->button.x);
+			add_property_long(&button, "y", event->button.y);
+			add_property_zval(value, "button", &button);
+			zval_ptr_dtor(&button);
+		}
+		break;
+		case SDL_EVENT_KEY_DOWN:
+		case SDL_EVENT_KEY_UP:
+		{
+			zval keysym;
+			object_init(&keysym);
+			add_property_long(&keysym, "sym", event->key.key);
 
-		zval key;
-		object_init(&key);
-		add_property_zval(&key, "keysym", &keysym);
+			zval key;
+			object_init(&key);
+			add_property_zval(&key, "keysym", &keysym);
 
-		add_property_zval(value, "key", &key);
-		zval_ptr_dtor(&key);
-		zval_ptr_dtor(&keysym);
-	}
-	break;
-	case SDL_EVENT_WINDOW_CLOSE_REQUESTED:
-	{
-		zval window;
-		object_init(&window);
-		//add_property_long(&window, "event", event->window.event);
-		add_property_long(&window, "timestamp", event->window.timestamp);
-		add_property_long(&window, "windowID", event->window.windowID);
-		add_property_long(&window, "data1", event->window.data1);
-		add_property_long(&window, "data2", event->window.data2);
-		add_property_zval(value, "window", &window);
-		zval_ptr_dtor(&window);
-	}
-	break;
-	case SDL_EVENT_JOYSTICK_BUTTON_DOWN:
-	case SDL_EVENT_JOYSTICK_BUTTON_UP:
-	{
-		zval joybutton;
-		object_init(&joybutton);
-		add_property_long(&joybutton, "type", event->jbutton.type);
-		add_property_long(&joybutton, "timestamp", event->jbutton.timestamp);
-		add_property_long(&joybutton, "which", event->jbutton.which);
-		add_property_long(&joybutton, "button", event->jbutton.button);
-		add_property_long(&joybutton, "state", event->jbutton.state);
-		add_property_zval(value, "jbutton", &joybutton);
-		zval_ptr_dtor(&joybutton);
-	}
-	break;
-	case SDL_EVENT_JOYSTICK_AXIS_MOTION:
-	{
-		zval jaxis;
-		object_init(&jaxis);
-		add_property_long(&jaxis, "type", event->jaxis.type);
-		add_property_long(&jaxis, "timestamp", event->jaxis.timestamp);
-		add_property_long(&jaxis, "which", event->jaxis.which);
-		add_property_long(&jaxis, "axis", event->jaxis.axis);
-		add_property_long(&jaxis, "value", event->jaxis.value);
-		add_property_zval(value, "jaxis", &jaxis);
-		zval_ptr_dtor(&jaxis);
-	}
-	break;
+			add_property_zval(value, "key", &key);
+			zval_ptr_dtor(&key);
+			zval_ptr_dtor(&keysym);
+		}
+		break;
+		case SDL_EVENT_WINDOW_RESIZED:
+		case SDL_EVENT_WINDOW_CLOSE_REQUESTED:
+		{
+			zval window;
+			object_init(&window);
+			//add_property_long(&window, "event", event->window.event);
+			add_property_long(&window, "timestamp", event->window.timestamp);
+			add_property_long(&window, "windowID", event->window.windowID);
+			add_property_long(&window, "data1", event->window.data1);
+			add_property_long(&window, "data2", event->window.data2);
+			add_property_zval(value, "window", &window);
+			zval_ptr_dtor(&window);
+		}
+		break;
+		case SDL_EVENT_JOYSTICK_BUTTON_DOWN:
+		case SDL_EVENT_JOYSTICK_BUTTON_UP:
+		{
+			zval joybutton;
+			object_init(&joybutton);
+			add_property_long(&joybutton, "type", event->jbutton.type);
+			add_property_long(&joybutton, "timestamp", event->jbutton.timestamp);
+			add_property_long(&joybutton, "which", event->jbutton.which);
+			add_property_long(&joybutton, "button", event->jbutton.button);
+			add_property_long(&joybutton, "state", event->jbutton.state);
+			add_property_zval(value, "jbutton", &joybutton);
+			zval_ptr_dtor(&joybutton);
+		}
+		break;
+		case SDL_EVENT_JOYSTICK_AXIS_MOTION:
+		{
+			zval jaxis;
+			object_init(&jaxis);
+			add_property_long(&jaxis, "type", event->jaxis.type);
+			add_property_long(&jaxis, "timestamp", event->jaxis.timestamp);
+			add_property_long(&jaxis, "which", event->jaxis.which);
+			add_property_long(&jaxis, "axis", event->jaxis.axis);
+			add_property_long(&jaxis, "value", event->jaxis.value);
+			add_property_zval(value, "jaxis", &jaxis);
+			zval_ptr_dtor(&jaxis);
+		}
+		break;
 	}
 
 	return 1;

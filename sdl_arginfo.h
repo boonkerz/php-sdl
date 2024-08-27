@@ -40,6 +40,9 @@ static const zend_function_entry sdl_functions[] = {
 	ZEND_FE(SDL_RenderPoint, arginfo_SDL_RenderPoint)
 	ZEND_FE(SDL_CreateTextureFromSurface, arginfo_SDL_CreateTextureFromSurface)
 	ZEND_FE(SDL_RenderTexture, arginfo_SDL_RenderTexture)
+	ZEND_FE(SDL_RenderFillRect, arginfo_SDL_RenderFillRect)
+	ZEND_FE(SDL_RenderRect, arginfo_SDL_RenderRect)
+	ZEND_FE(SDL_RenderLine, arginfo_SDL_RenderLine)
 
 	// TTF
 	ZEND_FE(SDL_TTF_Init,					arginfo_SDL_TTF_Init)
@@ -202,9 +205,7 @@ static const zend_function_entry sdl_functions[] = {
 
 
 	ZEND_FE(SDL_RenderTextureRotated, arginfo_SDL_RenderTextureRotated)
-	ZEND_FE(SDL_RenderFillRect, arginfo_SDL_RenderFillRect)
-	ZEND_FE(SDL_RenderRect, arginfo_SDL_RenderRect)
-	ZEND_FE(SDL_RenderLine, arginfo_SDL_RenderLine)
+
 
 
 	ZEND_FE(SDL_CreateTexture, arginfo_SDL_CreateTexture)

@@ -81,7 +81,7 @@ PHP_FUNCTION(SDL_RenderFillRect)
 	SDL_FRect rect;
 	SDL_Renderer *renderer = NULL;
 
-	if( zend_parse_parameters(ZEND_NUM_ARGS(), "zO", &z_renderer, &z_rect, get_php_sdl_rect_ce()) == FAILURE ) {
+	if( zend_parse_parameters(ZEND_NUM_ARGS(), "zO", &z_renderer, &z_rect, get_php_sdl_frect_ce()) == FAILURE ) {
 		WRONG_PARAM_COUNT;
 	}
 
@@ -99,7 +99,7 @@ PHP_FUNCTION(SDL_RenderRect)
 	SDL_FRect rect;
 	SDL_Renderer *renderer = NULL;
 
-	if( zend_parse_parameters(ZEND_NUM_ARGS(), "zO", &z_renderer, &z_rect, get_php_sdl_rect_ce()) == FAILURE ) {
+	if( zend_parse_parameters(ZEND_NUM_ARGS(), "zO", &z_renderer, &z_rect, get_php_sdl_frect_ce()) == FAILURE ) {
 		WRONG_PARAM_COUNT;
 	}
 

@@ -25,12 +25,12 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RenderFillRect, 0, 0, 2)
 	ZEND_ARG_INFO(0, renderer)
-	ZEND_ARG_OBJ_INFO(0, rect, SDL_Rect, 0)
+	ZEND_ARG_OBJ_INFO(0, rect, SDL_FRect, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RenderRect, 0, 0, 2)
 	ZEND_ARG_INFO(0, renderer)
-	ZEND_ARG_OBJ_INFO(0, rect, SDL_Rect, 0)
+	ZEND_ARG_OBJ_INFO(0, rect, SDL_FRect, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_RenderLine, 0, 0, 4)
