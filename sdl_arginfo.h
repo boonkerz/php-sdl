@@ -30,6 +30,7 @@ static const zend_function_entry sdl_functions[] = {
 	// Window
 	ZEND_FE(SDL_CreateWindow, arginfo_SDL_CreateWindow)
 	ZEND_FE(SDL_DestroyWindow, arginfo_SDL_Window)
+	ZEND_FE(SDL_GetWindowSize, arginfo_SDL_GetWindowPosition)
 
 	// Render
 	ZEND_FE(SDL_CreateRenderer, arginfo_SDL_CreateRenderer)
@@ -84,7 +85,6 @@ static const zend_function_entry sdl_functions[] = {
 	ZEND_FE(SDL_SetWindowPosition, arginfo_SDL_SetWindowPosition)
 	ZEND_FE(SDL_GetWindowPosition, arginfo_SDL_GetWindowPosition)
 	ZEND_FE(SDL_SetWindowSize, arginfo_SDL_SetWindowPosition)
-	ZEND_FE(SDL_GetWindowSize, arginfo_SDL_GetWindowPosition)
 	ZEND_FE(SDL_SetWindowMinimumSize, arginfo_SDL_SetWindowPosition)
 	ZEND_FE(SDL_GetWindowMinimumSize, arginfo_SDL_GetWindowPosition)
 	ZEND_FE(SDL_SetWindowMaximumSize, arginfo_SDL_SetWindowPosition)
