@@ -20,20 +20,25 @@ $renderer = SDL_CreateRenderer($window);
 SDL_SetRenderDrawColor($renderer, 255, 255, 255, 100);
 SDL_RenderClear($renderer);
 
-$font = SDL_TTF_OpenFont(__DIR__ . DIRECTORY_SEPARATOR . 'segoe-ui.ttf' , 20);
+$font = SDL_TTF_OpenFont(__DIR__ . DIRECTORY_SEPARATOR . 'segoe-ui.ttf' , 30);
 
 $color = new SDL_Color(0,0,0,0);
 
 $surface = SDL_TTF_RenderText_Blended($font, "Hello World", $color);
+$width = 0;
+$height = 0;
+SDL_TTF_SizeText($font, "Hello World", $width, $height);
+var_dump($surface->w);
+$rect = new SDL_FRect(10,10,$surface->w,$surface->h);
 $texture = SDL_CreateTextureFromSurface($renderer, $surface);
-$rect = new SDL_FRect(40,40,$surface->w,$surface->h);
 
-SDL_RenderTexture($renderer, $texture, null, $rect);
 
-SDL_SetRenderDrawColor($renderer, 128, 128, 128, 100);
+
+SDL_SetRenderDrawColor($renderer, 255, 100, 128, 100);
 SDL_RenderFillRect($renderer, $rect);
 SDL_SetRenderDrawColor($renderer, 255, 128, 128, 100);
 SDL_RenderRect($renderer, $rect);
+SDL_RenderTexture($renderer, $texture, null, $rect);
 SDL_RenderPresent($renderer);
 
 // Wait for quit event

@@ -47,6 +47,7 @@ zend_bool sdl_event_to_zval(SDL_Event *event, zval *value)
 			zval_ptr_dtor(&motion);
 		}
 		break;
+		case SDL_EVENT_MOUSE_BUTTON_UP:
 		case SDL_EVENT_MOUSE_BUTTON_DOWN:
 		{
 			zval button;

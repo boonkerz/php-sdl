@@ -52,6 +52,38 @@ PHP_FUNCTION(SDL_TTF_RenderText_Blended)
     sdl_surface_to_zval(surface, return_value);
 }
 
+PHP_FUNCTION(SDL_TTF_SizeText)
+{
+    char *text;
+    size_t text_len;
+
+    zval *z_font, *z_width = NULL, *z_height = NULL;
+    int width, height;
+
+    ZEND_PARSE_PARAMETERS_START(4, 4)
+    Z_PARAM_OBJECT_OF_CLASS(z_font, ttf_font_ce)
+    Z_PARAM_STRING(text, text_len)
+    Z_PARAM_ZVAL(z_width)
+    Z_PARAM_ZVAL(z_height)
+    ZEND_PARSE_PARAMETERS_END();
+
+    TTF_Font *font;
+    font = php_ttf_font_from_zval_p(z_font);
+
+    TTF_SizeText(font, text, &width, &height);
+
+    if (z_width)
+    {
+        zval_dtor(z_width);
+        ZVAL_LONG(z_width, width);
+    }
+    if (z_height)
+    {
+        zval_dtor(z_height);
+        ZVAL_LONG(z_height, height);
+    }
+}
+
 PHP_MINIT_FUNCTION(sdl_ttf)
 {
     php_ttf_font_minit_helper();
