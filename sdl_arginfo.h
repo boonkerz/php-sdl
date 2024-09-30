@@ -16,24 +16,33 @@
 #include "event.h"
 #include "ttf_font.h"
 #include "ttf.h"
+#include "image.h"
 
 static const zend_function_entry sdl_functions[] = {
     // Core
     ZEND_FE(SDL_Init,						arginfo_SDL_Init)
 	ZEND_FE(SDL_Quit,						arginfo_SDL_Quit)
-	ZEND_FE(SDL_GetError,						arginfo_SDL_GetError)
+	ZEND_FE(SDL_GetError,					arginfo_SDL_GetError)
+	ZEND_FE(SDL_GetTicks, 					arginfo_SDL_GetTicks)
 
 	// Message box
-	ZEND_FE(SDL_ShowSimpleMessageBox, arginfo_SDL_ShowSimpleMessageBox)
-	ZEND_FE(SDL_ShowMessageBox, arginfo_SDL_ShowMessageBox)
+	ZEND_FE(SDL_ShowSimpleMessageBox, 		arginfo_SDL_ShowSimpleMessageBox)
+	ZEND_FE(SDL_ShowMessageBox, 			arginfo_SDL_ShowMessageBox)
 
 	// Window
 	ZEND_FE(SDL_CreateWindow, arginfo_SDL_CreateWindow)
 	ZEND_FE(SDL_DestroyWindow, arginfo_SDL_Window)
 	ZEND_FE(SDL_GetWindowSize, arginfo_SDL_GetWindowPosition)
+	ZEND_FE(SDL_GetWindowID, arginfo_SDL_Window)
 
 	// Render
 	ZEND_FE(SDL_CreateRenderer, arginfo_SDL_CreateRenderer)
+	ZEND_FE(SDL_CreateTexture, arginfo_SDL_CreateTexture)
+	ZEND_FE(SDL_DestroyTexture, arginfo_SDL_DestroyTexture)
+	ZEND_FE(SDL_GetTextureSize, arginfo_SDL_GetTextureSize)
+	ZEND_FE(SDL_SetRenderTarget, arginfo_SDL_SetRenderTarget)
+	ZEND_FE(SDL_SetRenderTargetWindow, arginfo_SDL_SetRenderTargetWindow)
+	ZEND_FE(SDL_SetRenderDrawBlendMode, arginfo_SDL_SetRenderDrawBlendMode)
 	ZEND_FE(SDL_DestroyRenderer, arginfo_SDL_DestroyRenderer)
 	ZEND_FE(SDL_SetRenderDrawColor, arginfo_SDL_SetRenderDrawColor)
 	ZEND_FE(SDL_RenderPresent, arginfo_SDL_RenderPresent)
@@ -45,15 +54,30 @@ static const zend_function_entry sdl_functions[] = {
 	ZEND_FE(SDL_RenderRect, arginfo_SDL_RenderRect)
 	ZEND_FE(SDL_RenderLine, arginfo_SDL_RenderLine)
 
+	// Surface
+	ZEND_FE(SDL_SetSurfaceColorMod, arginfo_SDL_SetSurfaceColorMod)
+
+	// Texture
+	ZEND_FE(SDL_SetTextureColorMod, arginfo_SDL_SetTextureColorMod)
+
+
 	// TTF
 	ZEND_FE(SDL_TTF_Init,					arginfo_SDL_TTF_Init)
 	ZEND_FE(SDL_TTF_OpenFont,				arginfo_SDL_TTF_OpenFont)
 	ZEND_FE(SDL_TTF_SizeText,				arginfo_SDL_TTF_SizeText)
 	ZEND_FE(SDL_TTF_RenderText_Blended,		arginfo_SDL_TTF_RenderText_Blended)
 
+	ZEND_FE(SDL_TTF_RenderGlyph_Blended,		arginfo_SDL_TTF_RenderGlyph_Blended)
+
 	// Events
 	ZEND_FE(SDL_WaitEvent, arginfo_SDL_WaitEvent)
 	ZEND_FE(SDL_PollEvent, arginfo_SDL_PollEvent)
+	ZEND_FE(SDL_StopTextInput,				arginfo_SDL_StopTextInput)
+	ZEND_FE(SDL_StartTextInput,				arginfo_SDL_StartTextInput)
+
+	// Image
+	ZEND_FE(SDL_IMG_Load, 					arginfo_SDL_IMG_Load)
+
 
     /*ZEND_FE(SDL_InitSubSystem,				arginfo_SDL_InitSubSystem)
 
@@ -80,7 +104,7 @@ static const zend_function_entry sdl_functions[] = {
 	ZEND_FE(SDL_SetWindowFullscreenMode, arginfo_SDL_SetWindowFullscreenMode)
 	ZEND_FE(SDL_GetWindowFullscreenMode, arginfo_SDL_GetWindowFullscreenMode)
 	ZEND_FE(SDL_GetWindowPixelFormat, arginfo_SDL_Window)
-	ZEND_FE(SDL_GetWindowID, arginfo_SDL_Window)
+
 	ZEND_FE(SDL_GetWindowFlags, arginfo_SDL_Window)
 	ZEND_FE(SDL_SetWindowIcon, arginfo_SDL_SetWindowIcon)
 	ZEND_FE(SDL_SetWindowPosition, arginfo_SDL_SetWindowPosition)
@@ -165,7 +189,7 @@ static const zend_function_entry sdl_functions[] = {
 	ZEND_FE(SDL_SetSurfaceRLE, arginfo_SDL_SetSurfaceRLE)
 	ZEND_FE(SDL_SetSurfaceColorKey, arginfo_SDL_SetSurfaceColorKey)
 	ZEND_FE(SDL_GetSurfaceColorKey, arginfo_SDL_GetSurfaceColorKey)
-	ZEND_FE(SDL_SetSurfaceColorMod, arginfo_SDL_SetSurfaceColorMod)
+
 	ZEND_FE(SDL_GetSurfaceColorMod, arginfo_SDL_GetSurfaceColorMod)
 	ZEND_FE(SDL_SetSurfaceAlphaMod, arginfo_SDL_SetSurfaceAlphaMod)
 	ZEND_FE(SDL_GetSurfaceAlphaMod, arginfo_SDL_GetSurfaceAlphaMod)
@@ -200,7 +224,7 @@ static const zend_function_entry sdl_functions[] = {
 	// Render
 	ZEND_FE(SDL_CreateSoftwareRenderer, arginfo_SDL_CreateSoftwareRenderer)
 
-	ZEND_FE(SDL_DestroyTexture, arginfo_SDL_DestroyTexture)
+
 
 
 
@@ -220,6 +244,7 @@ static const zend_function_entry sdl_functions[] = {
 */
     // Version
     ZEND_FE(SDL_GetVersion, arginfo_SDL_GetVersion)
+
     PHP_FE_END
 };
 

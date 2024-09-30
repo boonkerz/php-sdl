@@ -40,10 +40,18 @@ zend_bool sdl_event_to_zval(SDL_Event *event, zval *value)
 		{
 			zval motion;
 			object_init(&motion);
+			zval window;
+			object_init(&window);
 			add_property_long(&motion, "state", event->motion.state);
 			add_property_long(&motion, "x", event->motion.x);
 			add_property_long(&motion, "y", event->motion.y);
 			add_property_zval(value, "motion", &motion);
+			add_property_long(&window, "timestamp", event->window.timestamp);
+			add_property_long(&window, "windowID", event->window.windowID);
+			add_property_long(&window, "data1", event->window.data1);
+			add_property_long(&window, "data2", event->window.data2);
+			add_property_zval(value, "window", &window);
+			zval_ptr_dtor(&window);
 			zval_ptr_dtor(&motion);
 		}
 		break;
@@ -52,11 +60,35 @@ zend_bool sdl_event_to_zval(SDL_Event *event, zval *value)
 		{
 			zval button;
 			object_init(&button);
+			zval window;
+			object_init(&window);
 			add_property_long(&button, "button", event->button.button);
 			add_property_long(&button, "x", event->button.x);
 			add_property_long(&button, "y", event->button.y);
 			add_property_zval(value, "button", &button);
+			add_property_long(&window, "timestamp", event->window.timestamp);
+			add_property_long(&window, "windowID", event->window.windowID);
+			add_property_long(&window, "data1", event->window.data1);
+			add_property_long(&window, "data2", event->window.data2);
+			add_property_zval(value, "window", &window);
+			zval_ptr_dtor(&window);
 			zval_ptr_dtor(&button);
+		}
+		break;
+		case SDL_EVENT_TEXT_INPUT:
+		{
+			zval window;
+			object_init(&window);
+			zval text;
+			object_init(&text);
+			add_property_string(&text, "text", (char*)event->text.text);
+			add_property_long(&window, "timestamp", event->window.timestamp);
+			add_property_long(&window, "windowID", event->window.windowID);
+			add_property_long(&window, "data1", event->window.data1);
+			add_property_long(&window, "data2", event->window.data2);
+			add_property_zval(value, "window", &window);
+			add_property_zval(value, "text", &text);
+			zval_ptr_dtor(&window);
 		}
 		break;
 		case SDL_EVENT_KEY_DOWN:
@@ -64,14 +96,16 @@ zend_bool sdl_event_to_zval(SDL_Event *event, zval *value)
 		{
 			zval keysym;
 			object_init(&keysym);
-			add_property_long(&keysym, "sym", event->key.key);
-
-			zval key;
-			object_init(&key);
-			add_property_zval(&key, "keysym", &keysym);
-
-			add_property_zval(value, "key", &key);
-			zval_ptr_dtor(&key);
+			zval window;
+			object_init(&window);
+			add_property_long(&keysym, "key", event->key.key);
+			add_property_long(&window, "timestamp", event->window.timestamp);
+			add_property_long(&window, "windowID", event->window.windowID);
+			add_property_long(&window, "data1", event->window.data1);
+			add_property_long(&window, "data2", event->window.data2);
+			add_property_zval(value, "window", &window);
+			add_property_zval(value, "key", &keysym);
+			zval_ptr_dtor(&window);
 			zval_ptr_dtor(&keysym);
 		}
 		break;
@@ -98,7 +132,7 @@ zend_bool sdl_event_to_zval(SDL_Event *event, zval *value)
 			add_property_long(&joybutton, "timestamp", event->jbutton.timestamp);
 			add_property_long(&joybutton, "which", event->jbutton.which);
 			add_property_long(&joybutton, "button", event->jbutton.button);
-			add_property_long(&joybutton, "state", event->jbutton.state);
+			add_property_long(&joybutton, "down", event->jbutton.down);
 			add_property_zval(value, "jbutton", &joybutton);
 			zval_ptr_dtor(&joybutton);
 		}
@@ -274,6 +308,7 @@ PHP_MINIT_FUNCTION(sdl_event)
 
 	zend_declare_property_null(php_sdl_event_ce, ZEND_STRL("type"), ZEND_ACC_PUBLIC);
 	zend_declare_property_null(php_sdl_event_ce, ZEND_STRL("key"), ZEND_ACC_PUBLIC);
+	zend_declare_property_null(php_sdl_event_ce, ZEND_STRL("text"), ZEND_ACC_PUBLIC);
 	zend_declare_property_null(php_sdl_event_ce, ZEND_STRL("motion"), ZEND_ACC_PUBLIC);
 	zend_declare_property_null(php_sdl_event_ce, ZEND_STRL("window"), ZEND_ACC_PUBLIC);
 	zend_declare_property_null(php_sdl_event_ce, ZEND_STRL("button"), ZEND_ACC_PUBLIC);

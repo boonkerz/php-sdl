@@ -791,7 +791,7 @@ PHP_FUNCTION(SDL_SetSurfaceColorKey)
 		return;
 	}
 	FETCH_SURFACE(surface, z_surface, 1);
-	RETURN_LONG(SDL_SetSurfaceColorKey(surface, flag ? SDL_TRUE : SDL_FALSE, (Uint32)key));
+	RETURN_LONG(SDL_SetSurfaceColorKey(surface, flag ? true : false, (Uint32)key));
 }
 /* }}} */
 

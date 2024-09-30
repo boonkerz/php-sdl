@@ -47,10 +47,31 @@ PHP_FUNCTION(SDL_TTF_RenderText_Blended)
     font = php_ttf_font_from_zval_p(z_font);
     SDL_Color color;
     zval_to_sdl_color(z_color, &color);
-    SDL_Surface *surface = TTF_RenderText_Blended(font, text, color);
+    SDL_Surface *surface = TTF_RenderUTF8_Blended(font, text, color);
 
     sdl_surface_to_zval(surface, return_value);
 }
+
+PHP_FUNCTION(SDL_TTF_RenderGlyph_Blended)
+{
+    zend_long ch;
+    zval *z_font, *z_ch, *z_color;
+
+    ZEND_PARSE_PARAMETERS_START(3, 3)
+    Z_PARAM_OBJECT_OF_CLASS(z_font, ttf_font_ce)
+    Z_PARAM_LONG(ch)
+    Z_PARAM_ZVAL(z_color)
+    ZEND_PARSE_PARAMETERS_END();
+
+    TTF_Font *font;
+    font = php_ttf_font_from_zval_p(z_font);
+    SDL_Color color;
+    zval_to_sdl_color(z_color, &color);
+    SDL_Surface *surface = TTF_RenderGlyph_Blended(font, (Uint32)ch, color);
+
+    sdl_surface_to_zval(surface, return_value);
+}
+
 
 PHP_FUNCTION(SDL_TTF_SizeText)
 {

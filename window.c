@@ -163,6 +163,36 @@ PHP_FUNCTION(SDL_SetWindowFullscreenMode)
 }
 /* }}} */
 
+PHP_FUNCTION(SDL_StartTextInput)
+{
+	struct php_sdl_window *intern;
+	zval *object;
+	SDL_Window *window;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &object, php_sdl_window_ce) == FAILURE)
+	{
+		return;
+	}
+	FETCH_WINDOW(window, object, 1);
+
+	RETURN_LONG(SDL_StartTextInput(window));
+}
+
+PHP_FUNCTION(SDL_StopTextInput)
+{
+	struct php_sdl_window *intern;
+	zval *object;
+	SDL_Window *window;
+
+	if (zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "O", &object, php_sdl_window_ce) == FAILURE)
+	{
+		return;
+	}
+	FETCH_WINDOW(window, object, 1);
+
+	RETURN_LONG(SDL_StopTextInput(window));
+}
+
 /* {{{ proto int SDL_GetWindowFullscreenMode(SDL_Window window, SDL_DisplayMode mode)
 
  *  \brief Fill in information about the display mode used when a fullscreen
@@ -631,7 +661,7 @@ PHP_FUNCTION(SDL_SetWindowBordered)
 		return;
 	}
 	FETCH_WINDOW(window, z_window, 1);
-	SDL_SetWindowBordered(window, (bordered ? SDL_TRUE : SDL_FALSE));
+	SDL_SetWindowBordered(window, (bordered ? true : false));
 }
 /* }}} */
 
@@ -922,7 +952,7 @@ PHP_FUNCTION(SDL_SetWindowGrab)
 		return;
 	}
 	FETCH_WINDOW(window, z_window, 1);
-	SDL_SetWindowMouseGrab(window, (grabbed ? SDL_TRUE : SDL_FALSE));
+	SDL_SetWindowMouseGrab(window, (grabbed ? true : false));
 }
 /* }}} */
 

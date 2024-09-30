@@ -48,7 +48,7 @@ void php_ttf_font_object_free(zend_object *zobj)
 
     if (obj->internal)
     {
-        // TTF_CloseFont(obj->internal);
+        TTF_CloseFont(obj->internal);
         obj->internal = NULL;
     }
 

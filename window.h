@@ -168,6 +168,15 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Window, 0, 0, 1)
        ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_StopTextInput, 0, 0, 1)
+ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_StartTextInput, 0, 0, 1)
+ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
+ZEND_END_ARG_INFO()
+
+
 PHP_FUNCTION(SDL_GetDisplayForWindow);
 PHP_FUNCTION(SDL_SetWindowFullscreenMode);
 PHP_FUNCTION(SDL_GetWindowFullscreenMode);
@@ -200,6 +209,9 @@ PHP_FUNCTION(SDL_SetWindowGrab);
 PHP_FUNCTION(SDL_GetWindowGrab);
 PHP_FUNCTION(SDL_CreateWindow);
 PHP_FUNCTION(SDL_DestroyWindow);
+
+PHP_FUNCTION(SDL_StopTextInput);
+PHP_FUNCTION(SDL_StartTextInput);
 
 PHP_MINIT_FUNCTION(sdl_window);
 

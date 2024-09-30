@@ -119,7 +119,7 @@ PHP_FUNCTION(SDL_GL_ExtensionSupported)
 	{
 		return;
 	}
-	RETVAL_BOOL(SDL_GL_ExtensionSupported(ext) == SDL_TRUE);
+	RETVAL_BOOL(SDL_GL_ExtensionSupported(ext) == true);
 }
 /* }}} */
 

@@ -43,7 +43,7 @@ PHP_FUNCTION(SDL_RenderClear)
 
     renderer = (SDL_Renderer*)zend_fetch_resource(Z_RES_P(z_renderer), SDL_RENDERER_RES_NAME, le_sdl_renderer);
 
-	RETURN_LONG(SDL_RenderClear(renderer));
+	RETURN_LONG(SDL_RenderClear(renderer)==true?1:2);
 }
 
 PHP_FUNCTION(SDL_DestroyRenderer)
@@ -215,7 +215,23 @@ PHP_FUNCTION(SDL_SetRenderTarget)
 	texture = (SDL_Texture*)zend_fetch_resource(Z_RES_P(z_texture), SDL_TEXTURE_RES_NAME, le_sdl_texture);
 
 	if( renderer && texture ) {
-		RETURN_LONG(SDL_SetRenderTarget(renderer, texture));
+		RETURN_LONG(SDL_SetRenderTarget(renderer, texture)==true?1:2);
+	}
+}
+
+PHP_FUNCTION(SDL_SetRenderTargetWindow)
+{
+	zval *z_renderer;
+	SDL_Renderer *renderer = NULL;
+
+	if( zend_parse_parameters(ZEND_NUM_ARGS(), "z", &z_renderer ) == FAILURE ) {
+		WRONG_PARAM_COUNT;
+	}
+
+	renderer = (SDL_Renderer*)zend_fetch_resource(Z_RES_P(z_renderer), SDL_RENDERER_RES_NAME, le_sdl_renderer);
+
+	if( renderer ) {
+		RETURN_LONG(SDL_SetRenderTarget(renderer, NULL)==true?1:2);
 	}
 }
 
@@ -284,7 +300,40 @@ PHP_FUNCTION(SDL_RenderTexture)
 		zval_to_sdl_frect(z_dstrect, dstrect);
 	}
 
+
 	RETURN_LONG(SDL_RenderTexture(renderer, texture, srcrect, dstrect));
+}
+
+PHP_FUNCTION(SDL_SetTextureColorMod)
+{
+	zval *z_texture;
+	zend_long r, g, b;
+	SDL_Texture *texture;
+
+	if (FAILURE == zend_parse_method_parameters(ZEND_NUM_ARGS(), getThis(), "zlll", &z_texture, &r, &g, &b))
+	{
+		return;
+	}
+	texture = (SDL_Texture*)zend_fetch_resource(Z_RES_P(z_texture), SDL_TEXTURE_RES_NAME, le_sdl_texture);
+	RETURN_LONG(SDL_SetTextureColorMod(texture, (Uint8)r, (Uint8)g, (Uint8)b));
+}
+
+PHP_FUNCTION(SDL_SetRenderDrawBlendMode)
+{
+	zval *z_renderer;
+	SDL_Renderer *renderer = NULL;
+	zend_long z_blendmode = (zend_long)SDL_BLENDMODE_NONE;
+
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+	Z_PARAM_ZVAL(z_renderer)
+	Z_PARAM_LONG(z_blendmode)
+	ZEND_PARSE_PARAMETERS_END();
+
+	renderer = (SDL_Renderer*)zend_fetch_resource(Z_RES_P(z_renderer), SDL_RENDERER_RES_NAME, le_sdl_renderer);
+
+	Uint32 blendmode = (Uint32)z_blendmode;
+
+	RETURN_LONG(SDL_SetRenderDrawBlendMode(renderer, blendmode));
 }
 
 PHP_FUNCTION(SDL_RenderTextureRotated)
@@ -381,7 +430,6 @@ PHP_FUNCTION(SDL_GetTextureSize)
 	RETURN_LONG(result);
 }
 
-
 /* {{{ MINIT */
 PHP_MINIT_FUNCTION(sdl_render)
 {
@@ -392,6 +440,19 @@ PHP_MINIT_FUNCTION(sdl_render)
 	REGISTER_LONG_CONSTANT("SDL_TEXTUREACCESS_STATIC", SDL_TEXTUREACCESS_STATIC, CONST_CS | CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("SDL_TEXTUREACCESS_STREAMING", SDL_TEXTUREACCESS_STREAMING, CONST_CS | CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("SDL_TEXTUREACCESS_TARGET", SDL_TEXTUREACCESS_TARGET, CONST_CS | CONST_PERSISTENT);
+
+	REGISTER_LONG_CONSTANT("SDL_PIXELFORMAT_RGBA8888", SDL_PIXELFORMAT_RGBA8888, CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("SDL_PIXELFORMAT_ARGB8888", SDL_PIXELFORMAT_ARGB8888, CONST_CS | CONST_PERSISTENT);
+
+
+	REGISTER_LONG_CONSTANT("SDL_BLENDMODE_NONE", SDL_BLENDMODE_NONE, CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("SDL_BLENDMODE_BLEND", SDL_BLENDMODE_BLEND, CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("SDL_BLENDMODE_BLEND_PREMULTIPLIED", SDL_BLENDMODE_BLEND_PREMULTIPLIED, CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("SDL_BLENDMODE_ADD", SDL_BLENDMODE_ADD, CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("SDL_BLENDMODE_ADD_PREMULTIPLIED", SDL_BLENDMODE_ADD_PREMULTIPLIED, CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("SDL_BLENDMODE_MOD", SDL_BLENDMODE_MOD, CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("SDL_BLENDMODE_MUL", SDL_BLENDMODE_MUL, CONST_CS | CONST_PERSISTENT);
+	REGISTER_LONG_CONSTANT("SDL_BLENDMODE_INVALID", SDL_BLENDMODE_INVALID, CONST_CS | CONST_PERSISTENT);
 
 	le_sdl_renderer = zend_register_list_destructors_ex(NULL, NULL, SDL_RENDERER_RES_NAME, module_number);
 	le_sdl_texture = zend_register_list_destructors_ex(NULL, NULL, SDL_TEXTURE_RES_NAME, module_number);

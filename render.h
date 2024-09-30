@@ -75,6 +75,15 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetRenderTarget, 0, 0, 2)
 	ZEND_ARG_INFO(0, texture)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetRenderTargetWindow, 0, 0, 1)
+ZEND_ARG_INFO(0, renderer)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetRenderDrawBlendMode, 0, 0, 2)
+ZEND_ARG_INFO(0, renderer)
+ZEND_ARG_INFO(0, blendMode)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_CreateRenderer, 0, 0, 1)
 	ZEND_ARG_OBJ_INFO(0, window, SDL_Window, 0)
 ZEND_END_ARG_INFO()
@@ -112,6 +121,13 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_GetCurrentRenderOutputSize, 0, 0, 3)
 	ZEND_ARG_INFO(1, h)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SetTextureColorMod, 0, 0, 4)
+ZEND_ARG_OBJ_INFO(0, texture, SDL_Texture, 0)
+ZEND_ARG_INFO(0, red)
+ZEND_ARG_INFO(0, green)
+ZEND_ARG_INFO(0, blue)
+ZEND_END_ARG_INFO()
+
 
 PHP_FUNCTION(SDL_SetRenderDrawColor);
 PHP_FUNCTION(SDL_RenderClear);
@@ -126,6 +142,9 @@ PHP_FUNCTION(SDL_CreateTextureFromSurface);
 PHP_FUNCTION(SDL_CreateTexture);
 PHP_FUNCTION(SDL_GetTextureSize);
 PHP_FUNCTION(SDL_SetRenderTarget);
+PHP_FUNCTION(SDL_SetTextureColorMod);
+PHP_FUNCTION(SDL_SetRenderTargetWindow);
+PHP_FUNCTION(SDL_SetRenderDrawBlendMode);
 PHP_FUNCTION(SDL_CreateRenderer);
 PHP_FUNCTION(SDL_CreateSoftwareRenderer);
 PHP_FUNCTION(SDL_RenderTexture);

@@ -430,9 +430,9 @@ static PHP_METHOD(SDL_MessageBoxData, __construct)
 		n = 0;
 		ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(z_colors), ppzval)
 		{
-			if (SDL_MESSAGEBOX_COLOR_MAX == n)
+			if (SDL_MESSAGEBOX_COLOR_COUNT == n)
 			{
-				php_error_docref(NULL, E_NOTICE, "Ignore button, only %d accepted", SDL_MESSAGEBOX_COLOR_MAX);
+				php_error_docref(NULL, E_NOTICE, "Ignore button, only %d accepted", SDL_MESSAGEBOX_COLOR_COUNT);
 			}
 			else if (zval_to_sdl_messageboxcolor(ppzval, &colors->colors[n]))
 			{
@@ -446,9 +446,9 @@ static PHP_METHOD(SDL_MessageBoxData, __construct)
 		ZEND_HASH_FOREACH_END();
 		if (n)
 		{
-			if (SDL_MESSAGEBOX_COLOR_MAX != n)
+			if (SDL_MESSAGEBOX_COLOR_COUNT != n)
 			{
-				php_error_docref(NULL, E_NOTICE, "%d SDL_MessageBoxColors expected", SDL_MESSAGEBOX_COLOR_MAX);
+				php_error_docref(NULL, E_NOTICE, "%d SDL_MessageBoxColors expected", SDL_MESSAGEBOX_COLOR_COUNT);
 			}
 			intern->data->colorScheme = colors;
 		}
@@ -651,7 +651,7 @@ PHP_MINIT_FUNCTION(sdl_messagebox)
 	REGISTER_MESSAGEBOX_CLASS_CONST_LONG("COLOR_", "BUTTON_BORDER", SDL_MESSAGEBOX_COLOR_BUTTON_BORDER, php_sdl_messageboxcolor_ce);
 	REGISTER_MESSAGEBOX_CLASS_CONST_LONG("COLOR_", "BUTTON_BACKGROUND", SDL_MESSAGEBOX_COLOR_BUTTON_BACKGROUND, php_sdl_messageboxcolor_ce);
 	REGISTER_MESSAGEBOX_CLASS_CONST_LONG("COLOR_", "BUTTON_SELECTED", SDL_MESSAGEBOX_COLOR_BUTTON_SELECTED, php_sdl_messageboxcolor_ce);
-	REGISTER_MESSAGEBOX_CLASS_CONST_LONG("COLOR_", "MAX", SDL_MESSAGEBOX_COLOR_MAX, php_sdl_messageboxcolor_ce);
+	REGISTER_MESSAGEBOX_CLASS_CONST_LONG("COLOR_", "MAX", SDL_MESSAGEBOX_COLOR_COUNT, php_sdl_messageboxcolor_ce);
 
 	return SUCCESS;
 }
