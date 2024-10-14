@@ -1,18 +1,14 @@
-ARG_ENABLE('sdl', 'Whether to enable SDL2 support', 'no');
+ARG_ENABLE('sdl', 'Whether to enable SDL3 support', 'no');
 
 if(PHP_SDL != 'no') {
-    CHECK_LIB("SDL2.lib", "sdl", PHP_SDL);
-    CHECK_LIB("SDL2_ttf.lib", "sdl", PHP_SDL);
-    CHECK_LIB("SDL2main.lib", "sdl", PHP_SDL);
-    CHECK_LIB("SDL2test.lib", "sdl", PHP_SDL);
 
-    var sdl_sources = 'php_sdl.c version.c sdl.c messagebox.c window.c glcontext.c rect.c surface.c color.c render.c event.c ttf_font.c ttf.c iostream.c';
+    var sdl_sources = 'php_sdl.c version.c sdl.c window.c messagebox.c glcontext.c render.c event.c ttf.c ttf_font.c color.c surface.c rect.c iostream.c image.c';
 
     EXTENSION('sdl', sdl_sources, null, '/DZEND_ENABLE_STATIC_TSRMLS_CACHE=1');
 
-    PHP_INSTALL_HEADERS("ext/sdl", "version.h sdl.h messagebox.h window.h glcontext.h rect.h surface.h color.h render.h event.h ttf_font.h ttf.h iostream.h");
+    PHP_INSTALL_HEADERS("ext/sdl", "version.h sdl.h window.h messagebox.h glcontext.h render.h event.h ttf.h ttf_font.h color.h surface.h rect.h iostream.h image.h");
 
-	ADD_FLAG("LIBS_SDL", "gdi32.lib imm32.lib version.lib winmm.lib cfgmgr32.lib OleAut32.lib Setupapi.lib SDL3.lib SDL3_ttf.lib freetype.lib")
+	ADD_FLAG("LIBS_SDL", "gdi32.lib imm32.lib version.lib winmm.lib cfgmgr32.lib OleAut32.lib Setupapi.lib SDL3-static.lib SDL3_ttf-static.lib SDL3_image-static.lib freetype.lib")
 
     AC_DEFINE('HAVE_SDL', 1);
 }
