@@ -385,7 +385,7 @@ PHP_FUNCTION(SDL_SetRenderLogicalPresentation)
 
     renderer = (SDL_Renderer*)zend_fetch_resource(Z_RES_P(z_renderer), SDL_RENDERER_RES_NAME, le_sdl_renderer);
 
-	RETURN_LONG(SDL_SetRenderLogicalPresentation(renderer, w, h, SDL_LOGICAL_PRESENTATION_DISABLED, SDL_SCALEMODE_NEAREST));
+	RETURN_LONG(SDL_SetRenderLogicalPresentation(renderer, w, h, SDL_LOGICAL_PRESENTATION_DISABLED));
 }
 
 PHP_FUNCTION(SDL_GetCurrentRenderOutputSize)
