@@ -5,6 +5,8 @@
 
 PHP_FUNCTION(SDL_GetVersion)
 {
+
+
 	RETURN_LONG(SDL_GetVersion());
 }
 

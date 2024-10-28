@@ -17,6 +17,7 @@
 #include "ttf_font.h"
 #include "ttf.h"
 #include "image.h"
+#include "systray.h"
 
 static const zend_function_entry sdl_functions[] = {
     // Core
