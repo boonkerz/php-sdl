@@ -69,8 +69,25 @@ PHP_RINIT_FUNCTION(sdl)
 
 PHP_MINFO_FUNCTION(sdl)
 {
-	php_info_print_table_start();
-	php_info_print_table_row(2, "SDL support", "enabled");
+    int compiled = SDL_VERSION;
+    int linked = SDL_GetVersion();
+    char compiled_version_str[32];
+    char linked_version_str[32];
+
+    php_info_print_table_start();
+    php_info_print_table_header(2, "SDL support", "enabled");
+
+    php_info_print_table_row(2, "SDL module version", PHP_SDL_VERSION);
+
+    snprintf(compiled_version_str, sizeof(compiled_version_str), "%d.%d.%d",
+             SDL_VERSIONNUM_MAJOR(compiled), SDL_VERSIONNUM_MINOR(compiled), SDL_VERSIONNUM_MICRO(compiled));
+    php_info_print_table_row(2, "SDL headers version", compiled_version_str);
+
+    snprintf(linked_version_str, sizeof(linked_version_str), "%d.%d.%d",
+             SDL_VERSIONNUM_MAJOR(linked), SDL_VERSIONNUM_MINOR(linked), SDL_VERSIONNUM_MICRO(linked));
+    php_info_print_table_row(2, "SDL library version", linked_version_str);
+
+    php_info_print_table_end();
 }
 
 /* {{{ php_sdl_check_overflow */
