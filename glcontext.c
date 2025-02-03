@@ -107,7 +107,7 @@ static zend_object *php_sdl_glcontext_new(zend_class_entry *class_type)
 
  *  \brief Return true if an OpenGL extension is supported for the current
  *         context.
- extern DECLSPEC SDL_bool SDLCALL SDL_GL_ExtensionSupported(const char
+ extern DECLSPEC bool SDLCALL SDL_GL_ExtensionSupported(const char
 															*extension);
  */
 PHP_FUNCTION(SDL_GL_ExtensionSupported)
@@ -126,7 +126,7 @@ PHP_FUNCTION(SDL_GL_ExtensionSupported)
 /* {{{ proto int SDL_GL_SetAttribute(int attr, int value)
 
  *  \brief Set an OpenGL window attribute before window creation.
- extern DECLSPEC int SDLCALL SDL_GL_SetAttribute(SDL_GLattr attr, int value);
+ extern DECLSPEC int SDLCALL SDL_GL_SetAttribute(SDL_GLAttr attr, int value);
  */
 PHP_FUNCTION(SDL_GL_SetAttribute)
 {
@@ -136,14 +136,14 @@ PHP_FUNCTION(SDL_GL_SetAttribute)
 	{
 		return;
 	}
-	RETVAL_LONG(SDL_GL_SetAttribute((SDL_GLattr)attr, (int)value));
+	RETVAL_LONG(SDL_GL_SetAttribute((SDL_GLAttr)attr, (int)value));
 }
 /* }}} */
 
 /* {{{ proto int SDL_GL_GetAttribute(int attr, int &value)
 
  *  \brief Get the actual value for an attribute from the current context.
- extern DECLSPEC int SDLCALL SDL_GL_GetAttribute(SDL_GLattr attr, int *value);
+ extern DECLSPEC int SDLCALL SDL_GL_GetAttribute(SDL_GLAttr attr, int *value);
  */
 PHP_FUNCTION(SDL_GL_GetAttribute)
 {
@@ -155,7 +155,7 @@ PHP_FUNCTION(SDL_GL_GetAttribute)
 	{
 		return;
 	}
-	ret = SDL_GL_GetAttribute((SDL_GLattr)attr, &value);
+	ret = SDL_GL_GetAttribute((SDL_GLAttr)attr, &value);
 	if (ret == 0)
 	{
 		zval_dtor(z_value);
@@ -338,7 +338,7 @@ PHP_FUNCTION(SDL_GL_GetCurrentContext)
  *  \param h        Pointer to variable for storing the height, may be NULL
  *
  * This may differ from SDL_GetWindowSize if we're rendering to a high-DPI
- * drawable, i.e. the window was created with SDL_WINDOW_ALLOW_HIGHDPI on a
+ * drawable, i.e. the window was created with SDL_WINDOW_HIGH_PIXEL_DENSITY on a
  * platform with high-DPI support (Apple calls this "Retina"), and not disabled
  * by the SDL_HINT_VIDEO_HIGHDPI_DISABLED hint.
  *
@@ -466,7 +466,7 @@ PHP_MINIT_FUNCTION(sdl_glcontext)
 	php_sdl_glcontext_handlers.free_obj = php_sdl_glcontext_free;
 	php_sdl_glcontext_handlers.offset = XtOffsetOf(struct php_sdl_glcontext, zo);
 
-	/* typedef enum SDL_GLattr; */
+	/* typedef enum SDL_GLAttr; */
 	REGISTER_GL_CLASS_CONST_LONG("RED_SIZE", SDL_GL_RED_SIZE);
 	REGISTER_GL_CLASS_CONST_LONG("GREEN_SIZE", SDL_GL_GREEN_SIZE);
 	REGISTER_GL_CLASS_CONST_LONG("BLUE_SIZE", SDL_GL_BLUE_SIZE);
@@ -492,12 +492,12 @@ PHP_MINIT_FUNCTION(sdl_glcontext)
 	REGISTER_GLCONTEXT_CLASS_CONST_LONG("FLAGS", SDL_GL_CONTEXT_FLAGS);
 	REGISTER_GLCONTEXT_CLASS_CONST_LONG("PROFILE_MASK", SDL_GL_CONTEXT_PROFILE_MASK);
 
-	/* typedef enum SDL_GLprofile; */
+	/* typedef enum SDL_GLProfile; */
 	REGISTER_GLCONTEXT_CLASS_CONST_LONG("PROFILE_CORE", SDL_GL_CONTEXT_PROFILE_CORE);
 	REGISTER_GLCONTEXT_CLASS_CONST_LONG("PROFILE_COMPATIBILITY", SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
 	REGISTER_GLCONTEXT_CLASS_CONST_LONG("PROFILE_ES", SDL_GL_CONTEXT_PROFILE_ES);
 
-	/* typedef enum SDL_GLcontextFlag; */
+	/* typedef enum SDL_GLContextFlag; */
 	REGISTER_GLCONTEXT_CLASS_CONST_LONG("DEBUG_FLAG", SDL_GL_CONTEXT_DEBUG_FLAG);
 	REGISTER_GLCONTEXT_CLASS_CONST_LONG("FORWARD_COMPATIBLE_FLAG", SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
 	REGISTER_GLCONTEXT_CLASS_CONST_LONG("ROBUST_ACCESS_FLAG", SDL_GL_CONTEXT_ROBUST_ACCESS_FLAG);
