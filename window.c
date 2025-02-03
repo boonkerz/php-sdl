@@ -641,13 +641,13 @@ PHP_FUNCTION(SDL_GetWindowMaximumSize)
  *  window's border already matches the requested state.
  *
  *  \param window The window of which to change the border state.
- *  \param bordered SDL_FALSE to remove border, SDL_TRUE to add border.
+ *  \param bordered false to remove border, true to add border.
  *
  *  \note You can't change the border state of a fullscreen window.
  *
  *  \sa SDL_GetWindowFlags()
  extern DECLSPEC void SDLCALL SDL_SetWindowBordered(SDL_Window * window,
-													SDL_bool bordered);
+													bool bordered);
  */
 PHP_FUNCTION(SDL_SetWindowBordered)
 {
@@ -934,11 +934,11 @@ PHP_FUNCTION(SDL_UpdateWindowSurfaceRects)
  *  \brief Set a window's input grab mode.
  *
  *  \param window The window for which the input grab mode should be set.
- *  \param grabbed This is SDL_TRUE to grab input, and SDL_FALSE to release input.
+ *  \param grabbed This is true to grab input, and false to release input.
  *
  *  \sa SDL_GetWindowGrab()
  extern DECLSPEC void SDLCALL SDL_SetWindowGrab(SDL_Window * window,
-												SDL_bool grabbed);
+												bool grabbed);
  */
 PHP_FUNCTION(SDL_SetWindowGrab)
 {
@@ -960,10 +960,10 @@ PHP_FUNCTION(SDL_SetWindowGrab)
 
  *  \brief Get a window's input grab mode.
  *
- *  \return This returns SDL_TRUE if input is grabbed, and SDL_FALSE otherwise.
+ *  \return This returns true if input is grabbed, and false otherwise.
  *
  *  \sa SDL_SetWindowGrab()
- extern DECLSPEC SDL_bool SDLCALL SDL_GetWindowGrab(SDL_Window * window);
+ extern DECLSPEC bool SDLCALL SDL_GetWindowGrab(SDL_Window * window);
  */
 PHP_FUNCTION(SDL_GetWindowGrab)
 {
@@ -1178,9 +1178,9 @@ PHP_FUNCTION(SDL_SetWindowTitle)
  *
  * \param window The window to query for being shaped.
  *
- * \return SDL_TRUE if the window is a window that can be shaped, SDL_FALSE if the window is unshaped or NULL.
+ * \return true if the window is a window that can be shaped, false if the window is unshaped or NULL.
  * \sa SDL_CreateShapedWindow
-extern DECLSPEC SDL_bool SDLCALL SDL_IsShapedWindow(const SDL_Window *window);
+extern DECLSPEC bool SDLCALL SDL_IsShapedWindow(const SDL_Window *window);
  */
 /*PHP_FUNCTION(SDL_IsShapedWindow)
 {
