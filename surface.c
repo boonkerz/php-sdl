@@ -108,7 +108,7 @@ PHP_FUNCTION(SDL_CreateSurface)
 }
 /* }}} */
 
-/* {{{ proto SDL_Surface SDL_LoadBMP_RW(SDL_IOStream src, int freesrc)
+/* {{{ proto SDL_Surface SDL_LoadBMP_IO(SDL_IOStream src, int freesrc)
 
  *  Load a surface from a seekable SDL data stream (memory or file).
  *
@@ -117,10 +117,10 @@ PHP_FUNCTION(SDL_CreateSurface)
  *  The new surface should be freed with SDL_DestroySurface().
  *
  *  \return the new surface, or NULL if there was an error.
- extern DECLSPEC SDL_Surface *SDLCALL SDL_LoadBMP_RW(SDL_IOStream * src,
+ extern DECLSPEC SDL_Surface *SDLCALL SDL_LoadBMP_IO(SDL_IOStream * src,
 													 int freesrc);
  */
-PHP_FUNCTION(SDL_LoadBMP_RW)
+PHP_FUNCTION(SDL_LoadBMP_IO)
 {
 	zval *z_iostream;
 	zend_long freesrc;
@@ -150,7 +150,7 @@ PHP_FUNCTION(SDL_LoadBMP_RW)
  *  Load a surface from a file.
  *
  *  Convenience macro.
- define SDL_LoadBMP(file)   SDL_LoadBMP_RW(SDL_RWFromFile(file, "rb"), 1)
+ define SDL_LoadBMP(file)   SDL_LoadBMP_IO(SDL_IOFromFile(file, "rb"), 1)
  */
 PHP_FUNCTION(SDL_LoadBMP)
 {
@@ -237,17 +237,17 @@ static PHP_METHOD(SDL_Surface, __toString)
 }
 /* }}} */
 
-/* {{{ proto int SDL_SaveBMP_RW(SDL_Surface surface, SDL_IOStream &dst, int freedst)
+/* {{{ proto int SDL_SaveBMP_IO(SDL_Surface surface, SDL_IOStream &dst, int freedst)
 
  *  Save a surface to a seekable SDL data stream (memory or file).
  *
  *  If \c freedst is non-zero, the stream will be closed after being written.
  *
  *  \return 0 if successful or -1 if there was an error.
- extern DECLSPEC int SDLCALL SDL_SaveBMP_RW
+ extern DECLSPEC int SDLCALL SDL_SaveBMP_IO
 	 (SDL_Surface * surface, SDL_IOStream * dst, int freedst);
  */
-PHP_FUNCTION(SDL_SaveBMP_RW)
+PHP_FUNCTION(SDL_SaveBMP_IO)
 {
 	struct php_sdl_surface *intern;
 	zval *z_surface, *z_iostream;
@@ -286,7 +286,7 @@ PHP_FUNCTION(SDL_SaveBMP_RW)
 	PHP note: stream are "partially" supported (only when PHP_STREAM_AS_STDIO)
 
  define SDL_SaveBMP(surface, file) \
-		 SDL_SaveBMP_IO(surface, SDL_RWFromFile(file, "wb"), 1)
+		 SDL_SaveBMP_IO(surface, SDL_IOFromFile(file, "wb"), 1)
 
  */
 PHP_FUNCTION(SDL_SaveBMP)
@@ -652,12 +652,12 @@ PHP_FUNCTION(SDL_BlitSurfaceUnchecked)
 
 /* {{{ proto void SDL_BlitSurfaceScaled(SDL_Surface src, SDL_rect &srcrect, SDL_Surface dst [, SDL_rect &dstrect])
 
- *  This is the public scaled blit function, SDL_BlitScaled(), and it performs
+ *  This is the public scaled blit function, SDL_BlitSurfaceScaled(), and it performs
  *  rectangle validation and clipping before passing it to SDL_BlitSurfaceUncheckedScaled()
  extern DECLSPEC int SDLCALL SDL_BlitSurfaceScaled
 	 (SDL_Surface * src, const SDL_Rect * srcrect,
 	 SDL_Surface * dst, SDL_Rect * dstrect);
- define SDL_BlitScaled SDL_BlitSurfaceScaled
+ define SDL_BlitSurfaceScaled SDL_BlitSurfaceScaled
  */
 PHP_FUNCTION(SDL_BlitSurfaceScaled)
 {
@@ -1041,13 +1041,13 @@ PHP_FUNCTION(SDL_GetSurfaceBlendMode)
  *  If the clip rectangle is NULL, clipping will be disabled.
  *
  *  If the clip rectangle doesn't intersect the surface, the function will
- *  return SDL_FALSE and blits will be completely clipped.  Otherwise the
- *  function returns SDL_TRUE and blits to the surface will be clipped to
+ *  return false and blits will be completely clipped.  Otherwise the
+ *  function returns true and blits to the surface will be clipped to
  *  the intersection of the surface area and the clipping rectangle.
  *
  *  Note that blits are automatically clipped to the edges of the source
  *  and destination surfaces.
- extern DECLSPEC SDL_bool SDLCALL SDL_SetSurfaceClipRect(SDL_Surface * surface,
+ extern DECLSPEC bool SDLCALL SDL_SetSurfaceClipRect(SDL_Surface * surface,
 												  const SDL_Rect * rect);
  */
 PHP_FUNCTION(SDL_SetSurfaceClipRect)
@@ -1100,7 +1100,7 @@ PHP_FUNCTION(SDL_GetSurfaceClipRect)
 
 /* we need to undefine this macros to avoid substitution in list behind */
 #undef SDL_BlitSurface
-#undef SDL_BlitScaled
+#undef SDL_BlitSurfaceScaled
 
 static const zend_function_entry php_sdl_surface_methods[] = {
 	PHP_ME(SDL_Surface, __construct, arginfo_SDL_CreateSurface, ZEND_ACC_CTOR | ZEND_ACC_PUBLIC)
@@ -1119,7 +1119,7 @@ static const zend_function_entry php_sdl_surface_methods[] = {
 	PHP_FALIAS(BlitScaled, SDL_BlitSurfaceScaled, arginfo_SDL_Surface_UpperBlit)
 	PHP_FALIAS(UpperBlitScaled, SDL_BlitSurfaceScaled, arginfo_SDL_Surface_UpperBlit)
 	PHP_FALIAS(LowerBlitScaled, SDL_BlitSurfaceUncheckedScaled, arginfo_SDL_Surface_LowerBlit)
-	PHP_FALIAS(SaveBMP_RW, SDL_SaveBMP_RW, arginfo_SDL_Surface_SaveBMP_RW)
+	PHP_FALIAS(SaveBMP_RW, SDL_SaveBMP_IO, arginfo_SDL_Surface_SaveBMP_RW)
 	PHP_FALIAS(SaveBMP, SDL_SaveBMP, arginfo_SDL_Surface_SaveBMP)
 	PHP_FALIAS(SetRLE, SDL_SetSurfaceRLE, arginfo_SDL_Surface_SetRLE)
 	PHP_FALIAS(SetColorKey, SDL_SetSurfaceColorKey, arginfo_SDL_Surface_SetColorKey)
@@ -1134,7 +1134,7 @@ static const zend_function_entry php_sdl_surface_methods[] = {
 	PHP_FALIAS(GetClipRect, SDL_GetSurfaceClipRect, arginfo_SDL_Surface_GetClipRect)
 
 	/* static methods */
-	ZEND_FENTRY(LoadRW, ZEND_FN(SDL_LoadBMP_RW), arginfo_SDL_LoadBMP_RW, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
+	ZEND_FENTRY(LoadRW, ZEND_FN(SDL_LoadBMP_IO), arginfo_SDL_LoadBMP_RW, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
 	ZEND_FENTRY(LoadBMP, ZEND_FN(SDL_LoadBMP), arginfo_SDL_LoadBMP, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
 
 	PHP_FE_END};
