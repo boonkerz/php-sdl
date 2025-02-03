@@ -353,7 +353,7 @@ PHP_METHOD(SDL_FPoint, __toString)
 /* {{{ proto bool SDL_RectEmpty(SDL_Rect rect)
 
  *  \brief Returns true if the rectangle has no area.
- SDL_FORCE_INLINE SDL_bool SDL_RectEmpty(const SDL_Rect *r)
+ SDL_FORCE_INLINE bool SDL_RectEmpty(const SDL_Rect *r)
  */
 PHP_FUNCTION(SDL_RectEmpty)
 {
@@ -370,7 +370,7 @@ PHP_FUNCTION(SDL_RectEmpty)
 }
 /* }}} */
 
-PHP_FUNCTION(SDL_FRectEmpty)
+PHP_FUNCTION(SDL_RectEmptyFloat)
 {
 	zval *object;
 	SDL_FRect rect;
@@ -387,7 +387,7 @@ PHP_FUNCTION(SDL_FRectEmpty)
 /* {{{ proto bool SDL_RectsEqual(SDL_Rect a, SDL_Rect b)
 
  *  \brief Returns true if the two rectangles are equal.
- SDL_FORCE_INLINE SDL_bool SDL_RectsEqual(const SDL_Rect *a, const SDL_Rect *b)
+ SDL_FORCE_INLINE bool SDL_RectsEqual(const SDL_Rect *a, const SDL_Rect *b)
  */
 PHP_FUNCTION(SDL_RectsEqual)
 {
@@ -409,8 +409,8 @@ PHP_FUNCTION(SDL_RectsEqual)
 
  *  \brief Determine whether two rectangles intersect.
  *
- *  \return SDL_TRUE if there is an intersection, SDL_FALSE otherwise.
- extern DECLSPEC SDL_bool SDLCALL SDL_HasRectIntersection(const SDL_Rect * A,
+ *  \return true if there is an intersection, false otherwise.
+ extern DECLSPEC bool SDLCALL SDL_HasRectIntersection(const SDL_Rect * A,
 													  const SDL_Rect * B);
  */
 PHP_FUNCTION(SDL_HasRectIntersection)
@@ -487,8 +487,8 @@ PHP_FUNCTION(SDL_HasRectIntersectionF)
 
  *  \brief Calculate the intersection of two rectangles.
  *
- *  \return SDL_TRUE if there is an intersection, SDL_FALSE otherwise.
- extern DECLSPEC SDL_bool SDLCALL SDL_GetRectIntersection(const SDL_Rect * A,
+ *  \return true if there is an intersection, false otherwise.
+ extern DECLSPEC bool SDLCALL SDL_GetRectIntersection(const SDL_Rect * A,
 													const SDL_Rect * B,
 													SDL_Rect * result);
  */
@@ -513,7 +513,7 @@ PHP_FUNCTION(SDL_GetRectIntersection)
 }
 /* }}} */
 
-PHP_FUNCTION(SDL_IntersectFRect)
+PHP_FUNCTION(SDL_GetRectIntersectionFloat)
 {
 	zval *obj1, *obj2, *result;
 	SDL_FRect A, B, resultRect;
@@ -526,7 +526,7 @@ PHP_FUNCTION(SDL_IntersectFRect)
 	zval_to_sdl_frect(obj1, &A);
 	zval_to_sdl_frect(obj2, &B);
 
-	/** SDL_IntersectFRect does not exists (SDL <= 2.0.20) */
+	/** SDL_GetRectIntersectionFloat does not exists (SDL <= 2.0.20) */
 	/* Special cases for empty rects */
 	if ((A.w <= 0.0f) || (A.h <= 0.0f) || (B.w <= 0.0f) || (B.h <= 0.0f))
 	{
@@ -564,7 +564,7 @@ PHP_FUNCTION(SDL_IntersectFRect)
 	resultRect.h = Amax - Amin;
 
 	if (!((resultRect.w <= 0.0f) || (resultRect.h <= 0.0f)))
-	{ // !SDL_FRectEmpty
+	{ // !SDL_RectEmptyFloat
 		zval_ptr_dtor(result);
 		sdl_frect_to_zval(&resultRect, result);
 
@@ -602,8 +602,8 @@ PHP_FUNCTION(SDL_GetRectUnion)
 
  *  \brief Calculate a minimal rectangle enclosing a set of points
  *
- *  \return SDL_TRUE if any points were within the clipping rect
- extern DECLSPEC SDL_bool SDLCALL SDL_GetRectEnclosingPoints(const SDL_Point * points,
+ *  \return true if any points were within the clipping rect
+ extern DECLSPEC bool SDLCALL SDL_GetRectEnclosingPoints(const SDL_Point * points,
 													int count,
 													const SDL_Rect * clip,
 													SDL_Rect * result);
