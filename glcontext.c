@@ -126,7 +126,7 @@ PHP_FUNCTION(SDL_GL_ExtensionSupported)
 /* {{{ proto int SDL_GL_SetAttribute(int attr, int value)
 
  *  \brief Set an OpenGL window attribute before window creation.
- extern DECLSPEC int SDLCALL SDL_GL_SetAttribute(SDL_GLattr attr, int value);
+ extern DECLSPEC int SDLCALL SDL_GL_SetAttribute(SDL_GLAttr attr, int value);
  */
 PHP_FUNCTION(SDL_GL_SetAttribute)
 {
@@ -136,14 +136,14 @@ PHP_FUNCTION(SDL_GL_SetAttribute)
 	{
 		return;
 	}
-	RETVAL_LONG(SDL_GL_SetAttribute((SDL_GLattr)attr, (int)value));
+	RETVAL_LONG(SDL_GL_SetAttribute((SDL_GLAttr)attr, (int)value));
 }
 /* }}} */
 
 /* {{{ proto int SDL_GL_GetAttribute(int attr, int &value)
 
  *  \brief Get the actual value for an attribute from the current context.
- extern DECLSPEC int SDLCALL SDL_GL_GetAttribute(SDL_GLattr attr, int *value);
+ extern DECLSPEC int SDLCALL SDL_GL_GetAttribute(SDL_GLAttr attr, int *value);
  */
 PHP_FUNCTION(SDL_GL_GetAttribute)
 {
@@ -155,7 +155,7 @@ PHP_FUNCTION(SDL_GL_GetAttribute)
 	{
 		return;
 	}
-	ret = SDL_GL_GetAttribute((SDL_GLattr)attr, &value);
+	ret = SDL_GL_GetAttribute((SDL_GLAttr)attr, &value);
 	if (ret == 0)
 	{
 		zval_dtor(z_value);
