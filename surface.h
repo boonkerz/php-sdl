@@ -28,12 +28,12 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_SaveBMP_RW, 0, 0, 2)
        ZEND_ARG_OBJ_INFO(0, surface, SDL_Surface, 0)
-       ZEND_ARG_OBJ_INFO(1, rwops, SDL_RWops, 0)
+       ZEND_ARG_OBJ_INFO(1, rwops, SDL_IOStream, 0)
        ZEND_ARG_INFO(0, freedst)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface_SaveBMP_RW, 0, 0, 1)
-       ZEND_ARG_OBJ_INFO(1, rwops, SDL_RWops, 0)
+       ZEND_ARG_OBJ_INFO(1, rwops, SDL_IOStream, 0)
        ZEND_ARG_INFO(0, freedst)
 ZEND_END_ARG_INFO()
 
@@ -265,14 +265,14 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_Surface, 0, 0, 1)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_SDL_LoadBMP_RW, 0, 0, 2)
-       ZEND_ARG_OBJ_INFO(1, RWops, SDL_RWops, 0)
+       ZEND_ARG_OBJ_INFO(1, RWops, SDL_IOStream, 0)
        ZEND_ARG_INFO(0, freesrc)
 ZEND_END_ARG_INFO()
 
 PHP_FUNCTION(SDL_CreateSurface);
-PHP_FUNCTION(SDL_LoadBMP_RW);
+PHP_FUNCTION(SDL_LoadBMP_IO);
 PHP_FUNCTION(SDL_LoadBMP);
-PHP_FUNCTION(SDL_SaveBMP_RW);
+PHP_FUNCTION(SDL_SaveBMP_IO);
 PHP_FUNCTION(SDL_SaveBMP);
 PHP_FUNCTION(SDL_DestroySurface);
 PHP_FUNCTION(SDL_FillSurfaceRect);

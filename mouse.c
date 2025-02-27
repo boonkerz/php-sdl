@@ -383,7 +383,7 @@ PHP_FUNCTION(SDL_GetMouseFocus)
  *  \brief Retrieve the current state of the mouse.
  *
  *  The current button state is returned as a button bitmask, which can
- *  be tested using the SDL_BUTTON(X) macros, and x and y are set to the
+ *  be tested using the SDL_BUTTON_MASK(X) macros, and x and y are set to the
  *  mouse cursor position relative to the focus window for the currently
  *  selected mouse.  You can pass NULL for either x or y.
  extern DECLSPEC Uint32 SDLCALL SDL_GetMouseState(int *x, int *y);
@@ -418,7 +418,7 @@ PHP_FUNCTION(SDL_GetMouseState)
  *  \brief Retrieve the relative state of the mouse.
  *
  *  The current button state is returned as a button bitmask, which can
- *  be tested using the SDL_BUTTON(X) macros, and x and y are set to the
+ *  be tested using the SDL_BUTTON_MASK(X) macros, and x and y are set to the
  *  mouse deltas since the last call to SDL_GetRelativeMouseState().
  extern DECLSPEC Uint32 SDLCALL SDL_GetRelativeMouseState(int *x, int *y);
  */
@@ -497,7 +497,7 @@ PHP_FUNCTION(SDL_WarpMouseInWindow)
  *  \note This function will flush any pending mouse motion.
  *
  *  \sa SDL_GetRelativeMouseMode()
- extern DECLSPEC int SDLCALL SDL_SetRelativeMouseMode(SDL_bool enabled);
+ extern DECLSPEC int SDLCALL SDL_SetRelativeMouseMode(bool enabled);
  */
 PHP_FUNCTION(SDL_SetRelativeMouseMode)
 {
@@ -516,7 +516,7 @@ PHP_FUNCTION(SDL_SetRelativeMouseMode)
  *  \brief Query whether relative mouse mode is enabled.
  *
  *  \sa SDL_SetRelativeMouseMode()
-extern DECLSPEC SDL_bool SDLCALL SDL_GetRelativeMouseMode(void);
+extern DECLSPEC bool SDLCALL SDL_GetRelativeMouseMode(void);
  */
 PHP_FUNCTION(SDL_GetRelativeMouseMode)
 {
@@ -580,8 +580,8 @@ PHP_MINIT_FUNCTION(sdl_mouse)
 	REGISTER_CURSOR_CLASS_CONST_LONG("NO", SDL_SYSTEM_CURSOR_NOT_ALLOWED);
 	REGISTER_CURSOR_CLASS_CONST_LONG("POINTER", SDL_SYSTEM_CURSOR_POINTER);
 
-	REGISTER_LONG_CONSTANT("SDL_NUM_SYSTEM_CURSORS", SDL_NUM_SYSTEM_CURSORS, CONST_CS | CONST_PERSISTENT);
-	zend_declare_class_constant_long(php_sdl_cursor_ce, ZEND_STRL("NUM_SYSTEM"), SDL_NUM_SYSTEM_CURSORS);
+	REGISTER_LONG_CONSTANT("SDL_SYSTEM_CURSOR_COUNT", SDL_SYSTEM_CURSOR_COUNT, CONST_CS | CONST_PERSISTENT);
+	zend_declare_class_constant_long(php_sdl_cursor_ce, ZEND_STRL("NUM_SYSTEM"), SDL_SYSTEM_CURSOR_COUNT);
 
 	/*
 	 *  Used as a mask when testing buttons in buttonstate.

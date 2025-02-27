@@ -329,7 +329,7 @@ PHP_FUNCTION(SDL_GetClosestFullscreenDisplayMode)
  *
  *  \sa SDL_EnableScreenSaver()
  *  \sa SDL_DisableScreenSaver()
- extern DECLSPEC SDL_bool SDLCALL SDL_ScreenSaverEnabled(void);
+ extern DECLSPEC bool SDLCALL SDL_ScreenSaverEnabled(void);
  */
 PHP_FUNCTION(SDL_ScreenSaverEnabled)
 {

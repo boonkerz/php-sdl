@@ -69,8 +69,30 @@ PHP_RINIT_FUNCTION(sdl)
 
 PHP_MINFO_FUNCTION(sdl)
 {
-	php_info_print_table_start();
-	php_info_print_table_row(2, "SDL support", "enabled");
+    int sdl_linked = SDL_GetVersion();
+	int img_linked = IMG_Version();
+	int ttf_linked = TTF_Version();
+    char buff[32];
+
+    php_info_print_table_start();
+	
+    php_info_print_table_header(2, "SDL support", "enabled");
+
+    php_info_print_table_row(2, "SDL module version", PHP_SDL_VERSION);
+
+    snprintf(buff, sizeof(buff), "%d.%d.%d",
+             SDL_VERSIONNUM_MAJOR(sdl_linked), SDL_VERSIONNUM_MINOR(sdl_linked), SDL_VERSIONNUM_MICRO(sdl_linked));
+    php_info_print_table_row(2, "SDL library version", buff);
+	
+    snprintf(buff, sizeof(buff), "%d.%d.%d",
+             SDL_VERSIONNUM_MAJOR(img_linked), SDL_VERSIONNUM_MINOR(img_linked), SDL_VERSIONNUM_MICRO(img_linked));
+    php_info_print_table_row(2, "SDL_image library version", buff);
+	
+    snprintf(buff, sizeof(buff), "%d.%d.%d",
+             SDL_VERSIONNUM_MAJOR(ttf_linked), SDL_VERSIONNUM_MINOR(ttf_linked), SDL_VERSIONNUM_MICRO(ttf_linked));
+    php_info_print_table_row(2, "SDL_ttf library version", buff);
+
+    php_info_print_table_end();
 }
 
 /* {{{ php_sdl_check_overflow */
